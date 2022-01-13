@@ -25,8 +25,9 @@ dependencies {
     
     // https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit
 	implementation group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '6.0.0.202111291000-r'
-
-    
+	
+	// https://mvnrepository.com/artifact/commons-cli/commons-cli
+	implementation group: 'commons-cli', name: 'commons-cli', version: '1.5.0'
 }
 
 application {
