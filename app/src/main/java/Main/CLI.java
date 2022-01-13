@@ -10,7 +10,7 @@ import org.apache.commons.cli.ParseException;
 
 public class CLI {
 	public Options options;
-	public String CLI(String[] args) {
+	public String CommonCLI(String[] args) {
 		options = new Options();
 		
 		Option help = Option.builder("h")

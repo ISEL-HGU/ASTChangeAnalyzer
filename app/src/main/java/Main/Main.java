@@ -7,9 +7,7 @@ public class Main {
 
     public static void main(String[] args) {
     	CLI cli = new CLI();
-        String github_url = cli.CLI(args);
-        if (github_url.length()==0) {
-        	System.exit(0);
-        }
+        String github_url = cli.CommonCLI(args);
+        System.out.print(github_url);
     }
 }
