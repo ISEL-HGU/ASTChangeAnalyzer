@@ -4,6 +4,9 @@
 package ASTChangeAnalyzer;
 
 import org.junit.Test;
+
+import Main.Main;
+
 import static org.junit.Assert.*;
 
 public class AppTest {
