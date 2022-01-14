@@ -3,11 +3,18 @@
  */
 package Main;
 
-public class Main {
+import java.util.regex.Pattern;
 
+import CommitMiner.CommitMine;
+
+
+public class Main {
+	
     public static void main(String[] args) {
     	CLI cli = new CLI();
         String github_url = cli.CommonCLI(args);
-        System.out.print(github_url);
+        String pattern = " ((git|ssh|http(s)?)|(git@[\\w\\.]+))(:(//)?)([\\w\\.@\\:/\\-~]+)(\\.git)(/)?";
+        
+        CommitMine commitmine = new CommitMine(github_url);
     }
 }
