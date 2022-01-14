@@ -7,14 +7,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.InvalidRemoteException;
+import org.eclipse.jgit.api.errors.TransportException;
+
 import RepoMiner.CommitMiner;
 
 
 public class Main {
 	
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
     	CLI cli = new CLI();
-        String localPath = cli.CommonCLI(args);
-        CommitMiner commitmine = new CommitMiner(localPath);
+    	String path = cli.CommonCLI(args);
+
+        CommitMiner commitmine = new CommitMiner(path, cli.isLocalPath);
+
     }
 }
