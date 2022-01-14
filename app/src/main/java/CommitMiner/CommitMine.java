@@ -1,6 +1,7 @@
 package CommitMiner;
 
 import java.io.File;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.jgit.api.Git;
@@ -17,31 +18,33 @@ public class CommitMine {
 	
 	public CommitMine(String url){
 		
-		String pattern = " ((git|ssh|http(s)?)|(git@[\\w\\.]+))(:(//)?)([\\w\\.@\\:/\\-~]+)(\\.git)(/)?";
+		Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com()(.*?)$");
+		Matcher matcher = pattern.matcher(url);
+		File file=null;
+		if (matcher.find()) {
+			file = new File("/Users/nayeawon/Desktop/" + matcher.group(3));
+		}
 		
-		//String name = Pattern.compile(pattern).matcher(url).toString();
-		System.out.println(Pattern.matches(pattern, url));	
 //		File file = new File("C:\\Users\\Zack CG Lee\\OneDrive\\Desktop\\log");
-//		file.exists();
-//		Git git;
-//		try {
-//			git = Git.cloneRepository()
-//					.setURI(url)
-//					.setDirectory(file).call();
-//			log = git.log().call();
-//			for(RevCommit a : log) {
-//				System.out.println(a.getFullMessage());
-//			}
-//		} catch (InvalidRemoteException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (TransportException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (GitAPIException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		Git git;
+		try {
+			git = Git.cloneRepository()
+					.setURI(url)
+					.setDirectory(file).call();
+			log = git.log().call();
+			for(RevCommit a : log) {
+				System.out.println(a.getFullMessage());
+			}
+		} catch (InvalidRemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransportException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GitAPIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 		
