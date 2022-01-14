@@ -3,18 +3,18 @@
  */
 package Main;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
-import CommitMiner.CommitMine;
+import RepoMiner.CommitMiner;
 
 
 public class Main {
 	
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
     	CLI cli = new CLI();
-        String github_url = cli.CommonCLI(args);
-        
-        
-        CommitMine commitmine = new CommitMine(github_url);
+        String localPath = cli.CommonCLI(args);
+        CommitMiner commitmine = new CommitMiner(localPath);
     }
 }
