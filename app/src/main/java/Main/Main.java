@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
     	CLI cli = new CLI();
         String github_url = cli.CommonCLI(args);
-        String pattern = " ((git|ssh|http(s)?)|(git@[\\w\\.]+))(:(//)?)([\\w\\.@\\:/\\-~]+)(\\.git)(/)?";
+        
         
         CommitMine commitmine = new CommitMine(github_url);
     }
