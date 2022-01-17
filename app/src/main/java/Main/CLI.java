@@ -10,6 +10,7 @@ import org.apache.commons.cli.ParseException;
 
 public class CLI {
 	public Options options;
+	public boolean isLocalPath;
 	public String CommonCLI(String[] args) {
 		options = new Options();
 		
@@ -21,9 +22,14 @@ public class CLI {
 		Option url = Option.builder("u").longOpt("url")
 				.argName("url")
 				.hasArg(true)
-				.required(true)
 				.desc("set github url").build();
 		options.addOption(url);
+		
+		Option defaultOption = Option.builder("lp").longOpt("localPath")
+				.argName("")
+				.hasArg(true) 
+				.desc("default option").build();
+		options.addOption(defaultOption);
 		
 		CommandLineParser cli_parser = new DefaultParser();
         try {
@@ -33,7 +39,12 @@ public class CLI {
         		formatter.printHelp("ASTChangeAnalyzer", options);
         	}
         	else if (line.hasOption("u")) {
+        		isLocalPath = false;
         		return(line.getOptionValue("u"));
+        	}
+        	else if(line.hasOption("lp")) {
+        		isLocalPath = true;
+        		return(line.getOptionValue("lp"));
         	}
         	else {
         		System.out.println("unknown option: " );
