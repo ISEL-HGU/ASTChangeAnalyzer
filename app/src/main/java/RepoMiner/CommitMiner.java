@@ -2,6 +2,8 @@ package RepoMiner;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,12 +28,11 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 
 public class CommitMiner {
 	
-	private Iterable<RevCommit> log;
+	private Iterable<RevCommit> commitList;
 	private File file = null;
 	private Git git;
-	private String commitId;
 	
-	public CommitMiner(String path,boolean isLocalPath) throws IOException, InvalidRemoteException, TransportException, GitAPIException{
+	public CommitMiner(String path, boolean isLocalPath) throws IOException, InvalidRemoteException, TransportException, GitAPIException{
 		
 		if(isLocalPath) {
 			file = new File(path + "/.git");
@@ -42,32 +43,33 @@ public class CommitMiner {
 		else {
 			Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com()(.*?)$");
 			Matcher matcher = pattern.matcher(path);
+			String desktopPath = "";
 			if (matcher.find()) {
-				//file = new File("/Users/nayeawon/Desktop/" + matcher.group(3));
-				file = new File("C:\\Users\\Zack CG Lee\\OneDrive\\Desktop\\" + matcher.group(3));
+				try{
+					desktopPath = System.getProperty("user.home") + "/Desktop";
+					if (desktopPath.contains("\\")) {
+						desktopPath = desktopPath.replace("/", "\\");
+					}
+				} catch (Exception e){
+					System.out.println(e.getMessage());
+				}
+				
+				file = new File(desktopPath + "/" + matcher.group(3));
 			}
+			
 			git = Git.cloneRepository()
 					.setURI(path)
 					.setDirectory(file).call();	
 		}
 		
-		log = git.log().call();
-		for(RevCommit a : log) {
-			String [] commits = a.getId().toString().split(" ");
-			commitId = commits[1];
-			System.out.println(a);
-			//gitIDExtrct(commitId, git);
-		}
+		commitList = git.log().call();
+		CodeMiner.collect(commitList);
 		
 	}
 	
 	public File getRepoPath() {
     	return file;
     }
-	
-	public String getCommitId(){
-		return this.commitId;
-	}
 	
 	public void gitIDExtrct(String Id, Git git) throws IOException {
         
