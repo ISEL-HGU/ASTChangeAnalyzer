@@ -28,6 +28,15 @@ dependencies {
 	
 	// https://mvnrepository.com/artifact/commons-cli/commons-cli
 	implementation group: 'commons-cli', name: 'commons-cli', version: '1.5.0'
+	
+    implementation 'com.github.gumtreediff:core:3.0.0'
+    
+    // https://mvnrepository.com/artifact/com.github.gumtreediff/client
+	implementation group: 'com.github.gumtreediff', name: 'client', version: '3.0.0'
+    
+	// https://mvnrepository.com/artifact/com.github.gumtreediff/gen.jdt
+	implementation group: 'com.github.gumtreediff', name: 'gen.jdt', version: '3.0.0'
+	
 }
 
 application {
