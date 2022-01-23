@@ -1,4 +1,4 @@
-package Main;
+package edu.handong.csee.isel.Main;
 
 import java.io.IOException;
 import java.util.List;
@@ -70,6 +70,7 @@ public class Utils {
 			// .. and narrow it down to the single file's path
 			TreeWalk treewalk = TreeWalk.forPath(reader, path, tree);
 			if (treewalk != null) {
+				
 				// use the blob id to read the file's data
 				byte[] data = reader.open(treewalk.getObjectId(0)).getBytes();
 				reader.close();
@@ -80,6 +81,7 @@ public class Utils {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return "";
 	}
 }

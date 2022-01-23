@@ -1,4 +1,4 @@
-package Main;
+package edu.handong.csee.isel.Main;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
