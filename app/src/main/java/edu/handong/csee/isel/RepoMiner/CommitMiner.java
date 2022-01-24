@@ -33,42 +33,36 @@ public class CommitMiner {
 	private File file = null;
 	private Git git;
 	
-	public CommitMiner(String path, boolean isLocalPath) throws IOException, InvalidRemoteException, TransportException, GitAPIException{
+	public CommitMiner(String path) throws IOException, InvalidRemoteException, TransportException, GitAPIException{
 		
-		if(isLocalPath) {
-			file = new File(path + "/.git");
-			git = Git.open(file);
-			
-		}
+		Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com()(.*?)$");
+		Matcher matcher = pattern.matcher(path);
+		String desktopPath = "";
 		
-		else {
-			Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com()(.*?)$");
-			Matcher matcher = pattern.matcher(path);
-			String desktopPath = "";
-			if (matcher.find()) {
-				try{
-					desktopPath = System.getProperty("user.home") + "/Desktop";
-					if (desktopPath.contains("\\")) {
-						desktopPath = desktopPath.replace("/", "\\");
-					}
-				} catch (Exception e){
-					System.out.println(e.getMessage());
+		if (matcher.find()) {
+			try{
+				desktopPath = System.getProperty("user.home") + "/Desktop";
+				if (desktopPath.contains("\\")) {
+					desktopPath = desktopPath.replace("/", "\\");
 				}
-				
-				file = new File(desktopPath + "/" + matcher.group(3));
+			} catch (Exception e){
+				System.out.println(e.getMessage());
 			}
 			
+			file = new File(desktopPath + "/" + matcher.group(3));
 			git = Git.cloneRepository()
 					.setURI(path)
 					.setDirectory(file).call();	
 		}
 		
-		Iterable<RevCommit> walk = git.log().call();
-		List<RevCommit> commitList = IterableUtils.toList(walk);
+		else {
+			
+			file = new File(path + "/.git");
+			git = Git.open(file);
+		}
 		
-		CodeMiner cm = new CodeMiner();
-		cm.setRepo(git.getRepository());
-		cm.collect(commitList);
+		Iterable<RevCommit> walk = git.log().call();
+		commitList = IterableUtils.toList(walk);
 		
 	}
 	
@@ -76,8 +70,13 @@ public class CommitMiner {
     	return file;
     }
 	
+	public List<RevCommit> getCommitList() {
+		return commitList;
+	}
 	
-
+	public Repository getRepo() {
+		return git.getRepository();
+	}
     
 }
 

@@ -27,17 +27,35 @@ import edu.handong.csee.isel.Main.Utils;
 
 public class CodeMiner {
 	
-	private static String commitId;
-	private static Repository repo;
-	private static List<String> bicList = null;
-	private static String referencePath;
-	private static String projectName;
+	private String commitId;
+	private Repository repo;
+	private List<String> bicList = null;
+	private String referencePath;
+	private String projectName;
+	private String language;
+	private String Java = ".java";
+	private String Python = ".py";
 	
 	public void setRepo(Repository repo) {
 		this.repo = repo;
 	}
 	
-	public static void collect(List<RevCommit> commitList) {
+	public void setLang(String language) {
+		this.language = language;
+	}
+	
+	public void collect(List<RevCommit> commitList) {
+		
+		String fileExtension = null;
+		
+		switch(language.toUpperCase()) {
+		case "JAVA":
+			fileExtension = Java;
+			break;
+		case "PYTHON":
+			fileExtension = Python;
+			break;
+		}
 		
 		for (RevCommit commit : commitList) {
 			
@@ -61,7 +79,7 @@ public class CodeMiner {
 				String oldPath = diff.getOldPath();
 				String newPath = diff.getNewPath();
 
-				if (newPath.indexOf("Test") >= 0 || !newPath.endsWith(".java"))
+				if (newPath.indexOf("Test") >= 0 || !newPath.endsWith(fileExtension))
 					continue;
 
 				key = Utils.getKeyName(commit.getName(), newPath);
@@ -88,7 +106,7 @@ public class CodeMiner {
 		}
 	}
 	
-	public static EditScript getCharacteristicVector(String prevFileSource, String fileSource) throws IOException {
+	public EditScript getCharacteristicVector(String prevFileSource, String fileSource) throws IOException {
 
 		Run.initGenerators(); // registers the available parsers
 		
@@ -121,4 +139,7 @@ public class CodeMiner {
 		
 		return actions;
 	}
+	
 }
+
+

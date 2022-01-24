@@ -17,10 +17,34 @@ import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
 public class Main {
 	
-    public static void main(String[] args) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
-    	CLI cli = new CLI();
-    	String path = cli.CommonCLI(args);
+    public static void main(String[] args) {
+    	
+    	Main main = new Main();
+    	main.run(args);
+		
+    }
+    
+    private void run(String[] args) {
+    	
+    	CLI option = new CLI();
+    	String value = option.CommonCLI(args);
+    	
+    	if (value.length()==0)
+    		return;
 
-        CommitMiner commitmine = new CommitMiner(path, cli.isLocalPath);
+        CommitMiner commitMine;
+        CodeMiner codeMine = new CodeMiner();
+        
+		try {
+			
+			commitMine = new CommitMiner(value);
+			codeMine.setRepo(commitMine.getRepo());
+			codeMine.setLang(option.getLanguage());
+			codeMine.collect(commitMine.getCommitList());
+			
+		} catch (IOException | GitAPIException e) {
+			e.printStackTrace();
+		}
+		
     }
 }
