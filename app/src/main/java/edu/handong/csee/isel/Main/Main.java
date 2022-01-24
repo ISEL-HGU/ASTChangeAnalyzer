@@ -11,6 +11,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.TransportException;
 
+import edu.handong.csee.isel.RepoMiner.CodeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
 
@@ -21,6 +22,5 @@ public class Main {
     	String path = cli.CommonCLI(args);
 
         CommitMiner commitmine = new CommitMiner(path, cli.isLocalPath);
-
     }
 }

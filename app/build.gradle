@@ -46,3 +46,5 @@ application {
     // Define the main class for the application.
     mainClass = 'ASTChangeAnalyzer.App'
 }
+
+compile project(':gen.srcml')
