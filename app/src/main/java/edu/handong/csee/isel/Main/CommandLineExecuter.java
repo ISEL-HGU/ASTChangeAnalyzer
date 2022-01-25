@@ -9,7 +9,8 @@ import java.util.List;
 
 public class CommandLineExecuter {
 	
-	public static void execute() {
+	public static String execute(File file) {
+		
         Process process = null;
         Runtime runtime = Runtime.getRuntime();
         StringBuffer successOutput = new StringBuffer(); // 성공 스트링 버퍼
@@ -30,8 +31,7 @@ public class CommandLineExecuter {
         }
         // Setting commands
 //        cmdList.add("pip3 install -r /Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer/ASTChangeAnalyzer/app/pythonparser/requirements.txt");
-        cmdList.add("/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer/ASTChangeAnalyzer/app/pythonparser/pythonparser /Users/nayeawon/VisualStudioCode/etc/algo_0118/2.py");
-//        cmdList.add("/Users/nayeawon/VisualStudioCode/etc/algo_0118/2.py");
+        cmdList.add(new File("").getAbsolutePath() + "/pythonparser/pythonparser " + file.getAbsolutePath());
         String[] array = cmdList.toArray(new String[cmdList.size()]);
  
         try {
@@ -57,19 +57,21 @@ public class CommandLineExecuter {
  
             // when shell execution completes
             if (process.exitValue() == 0) {
+            	
                 System.out.println("completed");
-                System.out.println(successOutput.toString());
+                msg = successOutput.toString();
+//                System.out.println(successOutput.toString());
+                
             } else {
                 // when shell execution fails with exceptions
                 System.out.println("failed");
                 System.out.println(errorOutput.toString());
+                msg = "";
             }
  
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
+        }  finally {
             try {
                 process.destroy();
                 if (successBufferReader != null) successBufferReader.close();
@@ -78,5 +80,6 @@ public class CommandLineExecuter {
                 e1.printStackTrace();
             }
         }
+        return msg;
     }
 }

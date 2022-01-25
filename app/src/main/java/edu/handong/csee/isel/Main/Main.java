@@ -3,15 +3,10 @@
  */
 package edu.handong.csee.isel.Main;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.api.errors.TransportException;
 
-import edu.handong.csee.isel.RepoMiner.ASTExtracter;
 import edu.handong.csee.isel.RepoMiner.CodeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
@@ -33,10 +28,7 @@ public class Main {
     	if (value.length()==0)
     		return;
     	
-    	CommandLineExecuter executer = new CommandLineExecuter();
-    	executer.execute();
-    	
-//    	System.setProperty("gt.pp.path", "/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer/ASTChangeAnalyzer/app/pythonparser");
+    	System.setProperty("gt.pp.path", "/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer/ASTChangeAnalyzer/app/pythonparser/pythonparser");
 //    	ASTExtracter ast = new ASTExtracter();
 //    	
 //    	try {
@@ -45,18 +37,18 @@ public class Main {
 //			e.printStackTrace();
 //		}
 
-//        CommitMiner commitMine;
-//        CodeMiner codeMine = new CodeMiner();
-//        
-//		try {
-//			commitMine = new CommitMiner(value);
-//			codeMine.setRepo(commitMine.getRepo());
-//			codeMine.setLang(option.getLanguage());
-//			codeMine.collect(commitMine.getCommitList());
-//			
-//		} catch (IOException | GitAPIException e) {
-//			e.printStackTrace();
-//		}
+        CommitMiner commitMine;
+        CodeMiner codeMine = new CodeMiner();
+        
+		try {
+			commitMine = new CommitMiner(value);
+			codeMine.setRepo(commitMine.getRepo());
+			codeMine.setLang(option.getLanguage());
+			codeMine.collect(commitMine.getCommitList());
+			
+		} catch (IOException | GitAPIException e) {
+			e.printStackTrace();
+		}
 		
     }
 }

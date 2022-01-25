@@ -68,24 +68,25 @@ public class CodeMiner {
 				EditScript editscript = null;
 				List<Action> actionList = null;
 				
-				ASTExtracter ASTExtract = new ASTExtracter();
+				ASTExtractor ASTExtract = new ASTExtractor();
 				
 				try {
 					if (fileExtension.equals(Java)) {
-						editscript = ASTExtract.JavaASTDiffMine(srcFileSource, dstFileSource, fileExtension);
+						editscript = ASTExtract.JavaASTDiffMine(srcFileSource, dstFileSource);
 					}
 					else if (fileExtension.equals(Python)) {
-						
+						editscript = ASTExtract.PythonASTDiffMine(srcFileSource, dstFileSource);
 					}
-					actionList = editscript.asList();
+					
+					if (editscript!=null)
+						actionList = editscript.asList();
 					
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				
 				for (Action action : actionList) {
-					// prints diff result
-					System.out.println(action);
+					System.out.println(action.getName() +"@" + action.getNode().getType() + "\n" + action + "\n##################################");
 				}
 			}
 		}
