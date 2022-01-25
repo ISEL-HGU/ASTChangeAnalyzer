@@ -5,6 +5,7 @@ A modulizable code differencing and AST extracting tool through mining Git commi
 ## Description
 
 ASTChangeAnalyzer is a tool that mines commit IDs from a designated URL or a local path to extract two ASTs (Abstract Syntax Tree) of before and after the point of the commit.
+ASTChangeAnalyzer mines repositories using JGit and parse codes using GumTree
 
 It has the following features:
 * mining diff commits and extract source code
@@ -14,6 +15,13 @@ It has the following features:
 
 ## Documentation
 
-To use ASTChangeAnalyzer, you can start by consulting the [Getting Started](https://github.com/GumTreeDiff/gumtree/wiki/Getting-Started) page from our [wiki](https://github.com/GumTreeDiff/gumtree/wiki).
+* Execution
+
+Required Options :
+1. -p option : provide a local path for the repository (absolute path)
+                        or
+   -u option : provide a URL to create a clone of the repository (root/Desktop)
+
+2. -lang option : choose java or python
 
 
