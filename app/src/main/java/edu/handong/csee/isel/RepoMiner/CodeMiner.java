@@ -71,7 +71,12 @@ public class CodeMiner {
 				ASTExtracter ASTExtract = new ASTExtracter();
 				
 				try {
-					editscript = ASTExtract.ASTDiffMine(srcFileSource, dstFileSource, fileExtension);
+					if (fileExtension.equals(Java)) {
+						editscript = ASTExtract.JavaASTDiffMine(srcFileSource, dstFileSource, fileExtension);
+					}
+					else if (fileExtension.equals(Python)) {
+						
+					}
 					actionList = editscript.asList();
 					
 				} catch (IOException e) {
