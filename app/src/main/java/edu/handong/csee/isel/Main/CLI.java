@@ -14,8 +14,10 @@ public class CLI {
 	private boolean lang;
 	public boolean isLocal=true;
 	private boolean help=false;
+	public boolean input=false;
 	private String address = "";
 	private String language;
+	private String inputCsv;
 	
 	public String CommonCLI (String[] args) {
 		
@@ -29,7 +31,9 @@ public class CLI {
 		}
 		return address;
 	}
-	
+	public String getInputCsv() {
+		return inputCsv;
+	}
 	public String getAddress() {
 		return address;
 	}
@@ -60,7 +64,9 @@ public class CLI {
 			lang = cmd.hasOption("lang");
 			if (lang)
 				language = cmd.getOptionValue("lang");
-			
+			input = cmd.hasOption("i");
+			if (input)
+				inputCsv = cmd.getOptionValue("i");
 			help = cmd.hasOption("h");
 
 		} catch (Exception e) {
@@ -99,6 +105,11 @@ public class CLI {
 		        .desc("Help")
 		        .build());
 
+		options.addOption(Option.builder("i").longOpt("input")
+				.hasArg()
+				.argName("inputcsv")
+				.build());
+		
 		return options;
 	}
 	

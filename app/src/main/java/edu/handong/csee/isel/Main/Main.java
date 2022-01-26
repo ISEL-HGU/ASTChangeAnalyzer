@@ -28,9 +28,11 @@ public class Main {
     	checkOS();
     	CLI option = new CLI();
     	String value = option.CommonCLI(args);
+    	if(option.input) {
+    		ChangeClassifier cc = new ChangeClassifier();
+        	cc.csvReader(option.getInputCsv());
+    	}
     	
-    	ChangeClassifier cc = new ChangeClassifier();
-    	cc.csvReader();
 //    	if (value.length()==0)
 //    		return;
 //    

@@ -14,13 +14,14 @@ import org.apache.commons.csv.CSVRecord;
 
 public class ChangeClassifier {
 
-	public ArrayList<String> csvReader() throws IOException {
+	public ArrayList<String> csvReader(String inputpath) throws IOException {
 		ArrayList<String> name_URL = new ArrayList<String>();
 		try {
 			int URLColumnNumber = 0;
 			int ProjectNameColumnNumber = 0;
-            Reader in = new FileReader(new File("").getAbsolutePath() +File.separator +"ProjectList.csv");
-
+            Reader in = new FileReader(inputpath);
+			//Reader in = new FileReader(new File("").getAbsolutePath() +File.separator +"ProjectList.csv");
+            
             CSVParser parser = CSVFormat.EXCEL.parse(in);
 
             for (CSVRecord record : parser) {
@@ -48,11 +49,13 @@ public class ChangeClassifier {
         } catch( Exception e ){
             e.printStackTrace();
         }
+		System.out.println(new File("").getAbsolutePath());
 		return name_URL;
 	}
 	
 }
     
     
+
 
 
