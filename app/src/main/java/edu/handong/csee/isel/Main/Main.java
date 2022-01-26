@@ -3,6 +3,7 @@
  */
 package edu.handong.csee.isel.Main;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -28,14 +29,7 @@ public class Main {
     	if (value.length()==0)
     		return;
     	
-    	System.setProperty("gt.pp.path", "/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer/ASTChangeAnalyzer/app/pythonparser/pythonparser");
-//    	ASTExtracter ast = new ASTExtracter();
-//    	
-//    	try {
-//			ast.PythonASTExtract("/Users/nayeawon/VisualStudioCode/etc/algo_0118/2.py");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+    	System.setProperty("gt.pp.path", new File("").getAbsolutePath() + "/pythonparser/pythonparser");
 
         CommitMiner commitMine;
         CodeMiner codeMine = new CodeMiner();

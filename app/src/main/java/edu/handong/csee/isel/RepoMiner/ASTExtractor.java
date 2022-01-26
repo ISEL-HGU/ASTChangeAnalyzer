@@ -10,6 +10,7 @@ import com.github.gumtreediff.actions.EditScriptGenerator;
 import com.github.gumtreediff.actions.SimplifiedChawatheScriptGenerator;
 import com.github.gumtreediff.client.Run;
 import com.github.gumtreediff.gen.TreeGenerators;
+import com.github.gumtreediff.gen.python.PythonTreeGenerator;
 import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
@@ -127,11 +128,13 @@ public class ASTExtractor {
 			e.printStackTrace();
 		}
 		
-		String srcStr = CommandLineExecuter.execute(srcFile);
-		TreeContext srcTC = TreeIoUtils.fromXml().generateFrom().string(srcStr);
+//		String srcStr = CommandLineExecuter.execute(srcFile);
+//		TreeContext srcTC = TreeIoUtils.fromXml().generateFrom().string(srcStr);
+//		String dstStr = CommandLineExecuter.execute(dstFile);
+//		TreeContext dstTC = TreeIoUtils.fromXml().generateFrom().string(dstStr);
 		
-		String dstStr = CommandLineExecuter.execute(dstFile);
-		TreeContext dstTC = TreeIoUtils.fromXml().generateFrom().string(dstStr);
+		TreeContext srcTC = new PythonTreeGenerator().generateFrom().string(srcFileSource);
+		TreeContext dstTC = new PythonTreeGenerator().generateFrom().string(dstFileSource);
 		
 		EditScript actions = null;
 
