@@ -34,7 +34,10 @@ public class CommitMiner {
 		
 		if (matcher.find()) {
 			try{
-				System.out.print("Cloned repository absolute path (default: " + System.getProperty("user.home") + "/Desktop): ");
+				if(System.getProperty("user.home").contains("\\"))
+					System.out.print("Cloned repository absolute path (default: " + System.getProperty("user.home") + "\\Desktop): ");
+				else
+					System.out.print("Cloned repository absolute path (default: " + System.getProperty("user.home") + "/Desktop): ");
 				repoPath = scanner.nextLine();
 				System.out.println();
 				//wrong path

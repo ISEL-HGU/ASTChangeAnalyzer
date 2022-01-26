@@ -62,6 +62,9 @@ public class CommandLineExecuter {
                 System.out.println("\nSettings Failed\n");
                 if (errorOutput!=null)
                 	System.out.println(errorOutput.toString());
+                else {
+                	cmdList.add("pip3 install -r " + new File("").getAbsolutePath() + "\\pythonparser\\requirements.txt");
+                }
             }
  
         } catch (IOException | InterruptedException e) {
