@@ -8,47 +8,70 @@ import java.io.IOException;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 
+import edu.handong.csee.isel.ChangeAnalysis.ChangeClassifier;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
 
 public class Main {
+	private static boolean isWindows;
 	
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
     	
     	Main main = new Main();
     	main.run(args);
 		
     }
     
-    private void run(String[] args) {
+    private void run(String[] args) throws IOException {
     	
+    	checkOS();
     	CLI option = new CLI();
     	String value = option.CommonCLI(args);
     	
-    	if (value.length()==0)
-    		return;
-    
-    	System.setProperty("gt.pp.path", new File("").getAbsolutePath() + "/pythonparser/pythonparser");
-    	CommandLineExecuter cli = new CommandLineExecuter();
-    	cli.executeSettings();
-
-        CommitMiner commitMine;
-        ChangeMiner changeMine = new ChangeMiner();
-        
-		try {
-			commitMine = new CommitMiner(value);
-			changeMine.setRepo(commitMine.getRepo());
-			changeMine.setLang(option.getLanguage());
-			changeMine.collect(commitMine.getCommitList());
-			
-			if (commitMine.getErase()) {
-				cli.executeDeletion(commitMine.getRepoPath().getParentFile());
-			}
-			
-		} catch (IOException | GitAPIException e) {
-			e.printStackTrace();
-		}
+    	ChangeClassifier cc = new ChangeClassifier();
+    	cc.csvReader();
+//    	if (value.length()==0)
+//    		return;
+//    
+//    	System.setProperty("gt.pp.path", new File("").getAbsolutePath() +File.separator +"pythonparser"+File.separator+"pythonparser");
+//    	CommandLineExecuter cli = new CommandLineExecuter();
+//    	cli.executeSettings(); 
+//
+//        CommitMiner commitMine;
+//        ChangeMiner changeMine = new ChangeMiner();
+//        
+//		try {
+//			commitMine = new CommitMiner(value);
+//			changeMine.setRepo(commitMine.getRepo());
+//			changeMine.setLang(option.getLanguage());
+//			changeMine.collect(commitMine.getCommitList());
+//			
+//			if (commitMine.getErase()) {
+//				cli.executeDeletion(commitMine.getRepoPath().getParentFile());
+//			}
+//			
+//		} catch (IOException | GitAPIException e) {
+//			e.printStackTrace();
+//		}
 		
     }
+    
+    private void checkOS() {
+    	if (System.getProperty("os.name").indexOf("Windows") > -1) {
+            Main.setWindows(true);
+        } else {
+            Main.setWindows(false);
+        }
+    }
+
+	public static boolean isWindows() {
+		return isWindows;
+	}
+
+	public static void setWindows(boolean isWindows) {
+		Main.isWindows = isWindows;
+	}
+    
 }
+

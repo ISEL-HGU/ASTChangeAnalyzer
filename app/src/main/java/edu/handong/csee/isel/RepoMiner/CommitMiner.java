@@ -30,7 +30,7 @@ public class CommitMiner {
 		Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com()(.*?)$");
 		Matcher matcher = pattern.matcher(path);
 		String repoPath = "";
-		Scanner scanner = new Scanner(System.in);;
+		Scanner scanner = new Scanner(System.in);
 		
 		if (matcher.find()) {
 			try{
