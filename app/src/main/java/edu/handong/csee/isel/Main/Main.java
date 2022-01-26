@@ -28,21 +28,22 @@ public class Main {
     	
     	if (value.length()==0)
     		return;
-    	
+    
     	System.setProperty("gt.pp.path", new File("").getAbsolutePath() + "/pythonparser/pythonparser");
+    	CommandLineExecuter cli = new CommandLineExecuter();
+    	cli.executeSettings();
 
         CommitMiner commitMine;
         CodeMiner codeMine = new CodeMiner();
         
 		try {
-			
 			commitMine = new CommitMiner(value);
 			codeMine.setRepo(commitMine.getRepo());
 			codeMine.setLang(option.getLanguage());
 			codeMine.collect(commitMine.getCommitList());
 			
 			if (commitMine.getErase()) {
-				new CommandLineExecuter().executeDeletion(commitMine.getRepoPath().getParentFile());
+				cli.executeDeletion(commitMine.getRepoPath().getParentFile());
 			}
 			
 		} catch (IOException | GitAPIException e) {

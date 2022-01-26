@@ -41,23 +41,25 @@ public class CommandLineExecuter {
             successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
  
             while ((msg = successBufferReader.readLine()) != null) {
-                successOutput.append(msg + System.getProperty("line.separator"));
+            	if (successOutput!=null)
+            		successOutput.append(msg + System.getProperty("line.separator"));
             }
  
             errorBufferReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "EUC-KR"));
             while ((msg = errorBufferReader.readLine()) != null) {
-                errorOutput.append(msg + System.getProperty("line.separator"));
+            	if (errorOutput!=null)
+            		errorOutput.append(msg + System.getProperty("line.separator"));
             }
 
             process.waitFor();
  
             if (process.exitValue() == 0) {
-                System.out.println("Settings Completed");
+                System.out.println("\nSettings Completed\n");
                 if (successOutput!=null)
                 	System.out.println(successOutput.toString());
                 
             } else {
-                System.out.println("Settings Failed");
+                System.out.println("\nSettings Failed\n");
                 if (errorOutput!=null)
                 	System.out.println(errorOutput.toString());
             }
@@ -87,24 +89,26 @@ public class CommandLineExecuter {
             successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
  
             while ((msg = successBufferReader.readLine()) != null) {
-                successOutput.append(msg + System.getProperty("line.separator"));
+            	if (successOutput!=null)
+            		successOutput.append(msg + System.getProperty("line.separator"));
             }
             
             errorBufferReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "EUC-KR"));
             while ((msg = errorBufferReader.readLine()) != null) {
-                errorOutput.append(msg + System.getProperty("line.separator"));
+            	if (errorOutput!=null)
+            		errorOutput.append(msg + System.getProperty("line.separator"));
             }
             
             process.waitFor();
  
             if (process.exitValue() == 0) {
-                System.out.println("File Deletion Completed");
+                System.out.println("\nFile Deletion Completed\n");
                 if (successOutput!=null)
                 	System.out.println(successOutput.toString());
                 
             } else {
                 // when shell execution fails with exceptions
-                System.out.println("File Deletion Failed");
+                System.out.println("\nFile Deletion Failed\n");
                 if (errorOutput!=null)
                 	System.out.println(errorOutput.toString());
             }
@@ -146,12 +150,12 @@ public class CommandLineExecuter {
             process.waitFor();
  
             if (process.exitValue() == 0) {
-                System.out.println("Parsing Python Completed");
+                System.out.println("Parsing Python Completed\n");
                 if (successOutput!=null)
                 	msg = successOutput.toString();
                 
             } else {
-                System.out.println("Parsing Python Failed");
+                System.out.println("Parsing Python Failed\n");
                 if (errorOutput!=null)
                 	System.out.println(errorOutput.toString());
                 msg = "";

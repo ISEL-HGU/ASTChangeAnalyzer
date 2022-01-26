@@ -84,6 +84,7 @@ public class CodeMiner {
 						actionList = editscript.asList();
 					
 				} catch (SyntaxException e) {
+					System.err.print("\nThis change has a syntatic error: "); e.printStackTrace();
 					continue;
 				} catch (IOException e) {
 					e.printStackTrace();
