@@ -35,10 +35,15 @@ public class Main {
         CodeMiner codeMine = new CodeMiner();
         
 		try {
+			
 			commitMine = new CommitMiner(value);
 			codeMine.setRepo(commitMine.getRepo());
 			codeMine.setLang(option.getLanguage());
 			codeMine.collect(commitMine.getCommitList());
+			
+			if (commitMine.getErase()) {
+				new CommandLineExecuter().executeDeletion(commitMine.getRepoPath().getParentFile());
+			}
 			
 		} catch (IOException | GitAPIException e) {
 			e.printStackTrace();

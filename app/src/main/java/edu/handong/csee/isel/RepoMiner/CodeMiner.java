@@ -8,6 +8,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.actions.EditScript;
 
 import edu.handong.csee.isel.Main.Utils;
@@ -71,6 +72,7 @@ public class CodeMiner {
 				ASTExtractor ASTExtract = new ASTExtractor();
 				
 				try {
+					
 					if (fileExtension.equals(Java)) {
 						editscript = ASTExtract.JavaASTDiffMine(srcFileSource, dstFileSource);
 					}
@@ -81,6 +83,8 @@ public class CodeMiner {
 					if (editscript!=null)
 						actionList = editscript.asList();
 					
+				} catch (SyntaxException e) {
+					continue;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

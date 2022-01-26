@@ -9,63 +9,151 @@ import java.util.List;
 
 public class CommandLineExecuter {
 	
-	public static String execute(File file) {
-		
-        Process process = null;
-        Runtime runtime = Runtime.getRuntime();
-        StringBuffer successOutput = new StringBuffer(); // 성공 스트링 버퍼
-        StringBuffer errorOutput = new StringBuffer(); // 오류 스트링 버퍼
-        BufferedReader successBufferReader = null; // 성공 버퍼
-        BufferedReader errorBufferReader = null; // 오류 버퍼
-        String msg = null; // 메시지
- 
-        List<String> cmdList = new ArrayList<String>();
- 
-        //distinguish Operating System (window, not window then always linux)
-        if (System.getProperty("os.name").indexOf("Windows") > -1) {
+	private static Process process = null;
+    private static Runtime runtime = Runtime.getRuntime();
+    private static StringBuffer successOutput;
+    private static StringBuffer errorOutput;
+    private static BufferedReader successBufferReader = null; // 성공 버퍼
+    private static BufferedReader errorBufferReader = null; // 오류 버퍼
+    private static String msg = null; // 메시지
+    private static List<String> cmdList;
+    
+    public CommandLineExecuter() {
+    	cmdList = new ArrayList<String>();
+    	if (System.getProperty("os.name").indexOf("Windows") > -1) {
             cmdList.add("cmd");
             cmdList.add("/c");
         } else {
             cmdList.add("/bin/sh");
             cmdList.add("-c");
         }
+    }
+	
+	public void executeSettings() {
+    	
         // Setting commands
-//        cmdList.add("pip3 install -r /Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer/ASTChangeAnalyzer/app/pythonparser/requirements.txt");
-        cmdList.add(new File("").getAbsolutePath() + "/pythonparser/pythonparser " + file.getAbsolutePath());
+        cmdList.add("pip3 install -r " + new File("").getAbsolutePath() + "/pythonparser/requirements.txt");
         String[] array = cmdList.toArray(new String[cmdList.size()]);
- 
+        
         try {
- 
-            // Execute the command
             process = runtime.exec(array);
- 
-            // when shell executes properly
+            
             successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
  
             while ((msg = successBufferReader.readLine()) != null) {
                 successOutput.append(msg + System.getProperty("line.separator"));
             }
  
-            // error occurred while executing shell
             errorBufferReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "EUC-KR"));
             while ((msg = errorBufferReader.readLine()) != null) {
                 errorOutput.append(msg + System.getProperty("line.separator"));
             }
- 
-            // wait until process finish
+
             process.waitFor();
  
-            // when shell execution completes
             if (process.exitValue() == 0) {
-            	
-                System.out.println("completed");
-                msg = successOutput.toString();
-//                System.out.println(successOutput.toString());
+                System.out.println("Settings Completed");
+                if (successOutput!=null)
+                	System.out.println(successOutput.toString());
+                
+            } else {
+                System.out.println("Settings Failed");
+                if (errorOutput!=null)
+                	System.out.println(errorOutput.toString());
+            }
+ 
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }  finally {
+            try {
+                process.destroy();
+                if (successBufferReader != null) successBufferReader.close();
+                if (errorBufferReader != null) errorBufferReader.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+	}
+	
+	public void executeDeletion(File file) {
+        
+        // Setting commands
+        cmdList.add("rm -rf " + file.getAbsolutePath());
+        String[] array = cmdList.toArray(new String[cmdList.size()]);
+        
+        try {
+            process = runtime.exec(array);
+            
+            successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
+ 
+            while ((msg = successBufferReader.readLine()) != null) {
+                successOutput.append(msg + System.getProperty("line.separator"));
+            }
+            
+            errorBufferReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "EUC-KR"));
+            while ((msg = errorBufferReader.readLine()) != null) {
+                errorOutput.append(msg + System.getProperty("line.separator"));
+            }
+            
+            process.waitFor();
+ 
+            if (process.exitValue() == 0) {
+                System.out.println("File Deletion Completed");
+                if (successOutput!=null)
+                	System.out.println(successOutput.toString());
                 
             } else {
                 // when shell execution fails with exceptions
-                System.out.println("failed");
-                System.out.println(errorOutput.toString());
+                System.out.println("File Deletion Failed");
+                if (errorOutput!=null)
+                	System.out.println(errorOutput.toString());
+            }
+ 
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }  finally {
+            try {
+                process.destroy();
+                if (successBufferReader != null) successBufferReader.close();
+                if (errorBufferReader != null) errorBufferReader.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+	}
+	
+	public String executePythonParser(File file) {
+        
+        // Setting commands
+        cmdList.add("pip3 install -r " + new File("").getAbsolutePath() + "/pythonparser/requirements.txt");
+        cmdList.add(new File("").getAbsolutePath() + "/pythonparser/pythonparser " + file.getAbsolutePath());
+        String[] array = cmdList.toArray(new String[cmdList.size()]);
+ 
+        try {
+            process = runtime.exec(array);
+ 
+            successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
+ 
+            while ((msg = successBufferReader.readLine()) != null) {
+                successOutput.append(msg + System.getProperty("line.separator"));
+            }
+            
+            errorBufferReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "EUC-KR"));
+            while ((msg = errorBufferReader.readLine()) != null) {
+                errorOutput.append(msg + System.getProperty("line.separator"));
+            }
+            
+            process.waitFor();
+ 
+            if (process.exitValue() == 0) {
+                System.out.println("Parsing Python Completed");
+                if (successOutput!=null)
+                	msg = successOutput.toString();
+                
+            } else {
+                System.out.println("Parsing Python Failed");
+                if (errorOutput!=null)
+                	System.out.println(errorOutput.toString());
                 msg = "";
             }
  

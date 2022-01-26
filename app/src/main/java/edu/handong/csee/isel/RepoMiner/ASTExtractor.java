@@ -9,16 +9,15 @@ import com.github.gumtreediff.actions.EditScript;
 import com.github.gumtreediff.actions.EditScriptGenerator;
 import com.github.gumtreediff.actions.SimplifiedChawatheScriptGenerator;
 import com.github.gumtreediff.client.Run;
+import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.gen.python.PythonTreeGenerator;
-import com.github.gumtreediff.io.TreeIoUtils;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
-import edu.handong.csee.isel.Main.CommandLineExecuter;
 
 public class ASTExtractor {
 	
@@ -95,8 +94,7 @@ public class ASTExtractor {
 			e.printStackTrace();
 		}
 		
-		String str = CommandLineExecuter.execute(file);
-		TreeContext fileTC = TreeIoUtils.fromXml().generateFrom().string(str);
+		TreeContext fileTC = new PythonTreeGenerator().generateFrom().string(fileSource);
 		if (fileTC!=null) {
 			Tree src = fileTC.getRoot();
 			System.out.println(src.toTreeString());
@@ -108,7 +106,7 @@ public class ASTExtractor {
 	}
 	
 	
-	public EditScript PythonASTDiffMine(String srcFileSource, String dstFileSource) throws IOException {
+	public EditScript PythonASTDiffMine(String srcFileSource, String dstFileSource) throws IOException, SyntaxException {
 		
 		Run.initGenerators(); // registers the available parsers
 		

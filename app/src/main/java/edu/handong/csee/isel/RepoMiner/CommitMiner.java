@@ -20,6 +20,7 @@ public class CommitMiner {
 	private List<RevCommit> commitList;
 	private File file = null;
 	private Git git;
+	private boolean erase = false;
 	
 	public CommitMiner(String path) throws IOException, InvalidRemoteException, TransportException, GitAPIException{
 		
@@ -34,13 +35,14 @@ public class CommitMiner {
 					desktopPath = desktopPath.replace("/", "\\");
 				}
 			} catch (Exception e){
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
 			
 			file = new File(desktopPath + "/" + matcher.group(3));
 			git = Git.cloneRepository()
 					.setURI(path)
 					.setDirectory(file).call();	
+			erase = true;
 		}
 		
 		else {
@@ -64,6 +66,10 @@ public class CommitMiner {
 	
 	public Repository getRepo() {
 		return git.getRepository();
+	}
+	
+	public boolean getErase() {
+		return erase;
 	}
     
 }
