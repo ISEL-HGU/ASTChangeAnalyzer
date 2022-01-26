@@ -55,12 +55,6 @@ That being said, most of the examples do work as expected. If you face any troub
 
 
 def generate_code_block(statements, output):
-    """
-    Generates a code block that executes the given statements.
-
-    :param statements: The list of statements to execute.
-    :type statements: list(str)
-    """
     global sequence_num
     result = {
         "type": "code",
@@ -73,9 +67,6 @@ def generate_code_block(statements, output):
 
 
 def generate_markdown_block(lines):
-    """
-    Generates a markdown block from a list of lines.
-    """
     global sequence_num
     result = {
         "type": "markdown",
@@ -94,12 +85,6 @@ def is_interactive_statement(line):
 
 
 def parse_example_parts(lines, title, current_line):
-    """
-    Parse the given lines and return a dictionary with two keys:
-    build_up, which contains all the text before an H4 (explanation) is encountered,
-    and
-    explanation, which contains all the text after build_up until --- or another H3 is encountered.
-    """
     parts = {
         "build_up": [],
         "explanation": []
@@ -206,14 +191,6 @@ def remove_from_beginning(tokens, line):
 
 
 def inspect_and_sanitize_code_lines(lines):
-    """
-    Remove lines from the beginning of a code block that are not statements.
-
-    :param lines: A list of strings, each representing a line in the code block.
-    :returns is_print_present, sanitized_lines: A boolean indicating whether print was present in the original code and a list of strings representing
-    sanitized lines.  The latter may be an empty list if all input lines were removed as comments or whitespace (and thus did not contain any statements).
-    This function does not remove blank lines at the end of `lines`.
-    """
     tokens_to_remove = STATEMENT_PREFIXES
     result = []
     is_print_present = False
@@ -226,23 +203,6 @@ def inspect_and_sanitize_code_lines(lines):
 
 
 def convert_to_cells(cell_contents, read_only):
-    """
-    Converts a list of dictionaries containing markdown and code cells into a Jupyter notebook.
-
-    :param cell_contents: A list of dictionaries, each
-    dictionary representing either a markdown or code cell. Each dictionary should have the following keys: "type", which is either "markdown" or "code",
-    and "value". The value for type = 'markdown' is the content as string, whereas the value for type = 'code' is another dictionary with two keys,
-    statements and output. The statements key contains all lines in between ```py\n``` (including) until ```\n```, while output contains all lines after
-    ```.output py\n```. 
-    :type cell_contents: List[Dict]
-
-        :param read_only (optional): If True then only print outputs are included in converted
-    cells. Default False
-        :type read_only (optional): bool
-
-        :returns A Jupyter notebook containing all cells from input parameter `cell_contents`.
-    Each converted cell has metadata attribute collapsed set to true if it's code-cell otherwise None if it's markdow-cell.
-    """
     cells = []
     for stuff in cell_contents:
         if stuff["type"] == "markdown":
@@ -309,9 +269,6 @@ def convert_to_cells(cell_contents, read_only):
 
 
 def convert_to_notebook(pre_examples_content, parsed_json, post_examples_content):
-    """
-    Convert a JSON file containing the examples to a Jupyter Notebook.
-    """
     result = {
         "cells": [],
         "metadata": {},
@@ -339,7 +296,7 @@ def convert_to_notebook(pre_examples_content, parsed_json, post_examples_content
 
     #pprint.pprint(result, indent=2)
     with open(notebook_path, "w") as f:
-        json.dump(result, f, indent=2)
+        json.dump(result, f)
 
 
 with open(fpath, 'r+', encoding="utf-8") as f:

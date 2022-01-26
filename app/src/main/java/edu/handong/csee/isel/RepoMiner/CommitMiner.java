@@ -36,6 +36,7 @@ public class CommitMiner {
 			try{
 				System.out.print("Cloned repository absolute path (default: " + System.getProperty("user.home") + "/Desktop): ");
 				repoPath = scanner.nextLine();
+				System.out.println();
 				//wrong path
 				if (!repoPath.matches("^((?:\\/[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*(?:\\-[a-zA-Z0-9]+)*(?:.+))+)$"))
 					repoPath = System.getProperty("user.home") + "/Desktop";

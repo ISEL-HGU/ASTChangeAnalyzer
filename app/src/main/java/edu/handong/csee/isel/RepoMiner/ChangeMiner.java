@@ -13,7 +13,7 @@ import com.github.gumtreediff.actions.EditScript;
 
 import edu.handong.csee.isel.Main.Utils;
 
-public class CodeMiner {
+public class ChangeMiner {
 	
 	private Repository repo;
 	private String language;

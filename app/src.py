@@ -34,7 +34,7 @@ STATEMENT_PREFIXES = ["...", ">>> ", "$ "]
 
 HOSTED_NOTEBOOK_INSTRUCTIONS = """
 
-## Hosted notebook instructions
+# Hosted notebook instructions
 
 This is just an experimental attempt of browsing wtfpython through jupyter notebooks. Some examples are read-only because, 
 - they either require a version of Python that's not supported in the hosted runtime.
@@ -48,7 +48,7 @@ The expected outputs are already present in collapsed cells following the code c
 # Prints out Python version here.
 ```
 
-That being said, most of the examples do work as expected. If you face any trouble, feel free to consult the original content on wtfpython and create an issue in the repo. Have fun!
+That being said, most of tbe examples do work as expected. If you face any trouble, feel free to consult the original content on wtfpython and create an issue in the repo. Have fun!
 
 ---
 """
@@ -296,7 +296,7 @@ def convert_to_notebook(pre_examples_content, parsed_json, post_examples_content
 
     #pprint.pprint(result, indent=2)
     with open(notebook_path, "w") as f:
-        json.dump(result, f, indent=2)
+        json.dump(result, f)
 
 
 with open(fpath, 'r+', encoding="utf-8") as f:
@@ -350,5 +350,4 @@ with open(fpath, 'r+', encoding="utf-8") as f:
     except StopIteration as e:
         #pprint.pprint(result, indent=2)
         pre_stuff.append(HOSTED_NOTEBOOK_INSTRUCTIONS)
-        result.sort(key = lambda x: x["read_only"])
         convert_to_notebook(pre_stuff, result, post_stuff)

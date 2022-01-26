@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 
-import edu.handong.csee.isel.RepoMiner.CodeMiner;
+import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
 
@@ -34,13 +34,13 @@ public class Main {
     	cli.executeSettings();
 
         CommitMiner commitMine;
-        CodeMiner codeMine = new CodeMiner();
+        ChangeMiner changeMine = new ChangeMiner();
         
 		try {
 			commitMine = new CommitMiner(value);
-			codeMine.setRepo(commitMine.getRepo());
-			codeMine.setLang(option.getLanguage());
-			codeMine.collect(commitMine.getCommitList());
+			changeMine.setRepo(commitMine.getRepo());
+			changeMine.setLang(option.getLanguage());
+			changeMine.collect(commitMine.getCommitList());
 			
 			if (commitMine.getErase()) {
 				cli.executeDeletion(commitMine.getRepoPath().getParentFile());
