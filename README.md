@@ -18,10 +18,10 @@ It has the following features:
 * Execution
 
 Required Options :
-1. -p option : provide a local path for the repository (absolute path)
+1. `-p` option : provide a local path for the repository (absolute path)
                         or
-   -u option : provide a URL to create a clone of the repository (root/Desktop)
+   `-u` option : provide a URL to create a clone of the repository (root/Desktop)
 
-2. -lang option : choose java or python
+2. `-lang` option : choose java or python
 
 
