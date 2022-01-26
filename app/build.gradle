@@ -16,6 +16,9 @@ repositories {
     mavenCentral()
 }
 
+apply plugin: 'application'
+mainClassName = "edu.handong.csee.isel.Main.Main"
+
 dependencies {
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13.1'
@@ -43,11 +46,11 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
 	implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
 	
-	implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.8'
+	compile group: 'org.apache.commons', name: 'commons-csv', version: '1.8'
 	
 }
 
-application {
+//application {
     // Define the main class for the application.
-    mainClass = 'edu.handong.csee.isel.Main.Main'
-}
+    //mainClass = 'edu.handong.csee.isel.Main.Main'
+//}
