@@ -29,26 +29,31 @@ public class CommitMiner {
 		
 		Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com()(.*?)$");
 		Matcher matcher = pattern.matcher(path);
-		String desktopPath = "";
+		String repoPath = "";
+		Scanner scanner = new Scanner(System.in);;
 		
 		if (matcher.find()) {
 			try{
-				desktopPath = System.getProperty("user.home") + "/Desktop";
-				if (desktopPath.contains("\\")) {
-					desktopPath = desktopPath.replace("/", "\\");
+				System.out.print("Cloned repository absolute path (default: " + System.getProperty("user.home") + "/Desktop): ");
+				repoPath = scanner.nextLine();
+				//wrong path
+				if (!repoPath.matches("^((?:\\/[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*(?:\\-[a-zA-Z0-9]+)*(?:.+))+)$"))
+					repoPath = System.getProperty("user.home") + "/Desktop";
+				
+				if (repoPath.contains("\\")) {
+					repoPath = repoPath.replace("/", "\\");
 				}
 			} catch (Exception e){
 				e.printStackTrace();
 			}
 			
-			file = new File(desktopPath + "/" + matcher.group(3));
+			file = new File(repoPath + "/" + matcher.group(3));
 			if (file.exists()) {
 				System.err.println("File(PATH:" +file.toString() + ") already exists\n");
 				System.err.print("Choose the proceeding action :\n"
-						+ "  1: Rewrite the cloned directory to proceed\n"
+						+ "  1: Rewrite the cloned repository to proceed\n"
 						+ "  2: Terminate the program\n"
 						+ "Enter selection (default: Rewrite) [1..2] ");
-				Scanner scanner = new Scanner(System.in);
 				int opt = scanner.nextInt();
 				switch(opt) {
 				case 1:
@@ -65,7 +70,9 @@ public class CommitMiner {
 					.setURI(path)
 					.setDirectory(file).call();
 			
-			System.out.println("\nGit Clone Completed\n");
+			System.out.println("\nGit Clone Completed");
+			System.out.println("L repository path: " + getRepoPath());
+			System.out.println();
 			erase = true;
 		}
 		
