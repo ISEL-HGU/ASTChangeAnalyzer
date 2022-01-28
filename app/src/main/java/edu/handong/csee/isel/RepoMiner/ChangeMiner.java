@@ -11,8 +11,6 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.actions.EditScript;
 
-import edu.handong.csee.isel.Main.Utils;
-
 public class ChangeMiner {
 	
 	private Repository repo;
@@ -53,7 +51,7 @@ public class ChangeMiner {
 			
 			RevCommit parent = commit.getParent(0);
 			
-			List<DiffEntry> diffs = Utils.diff(parent, commit, repo);
+			List<DiffEntry> diffs = RepoUtils.diff(parent, commit, repo);
 			
 			for (DiffEntry diff : diffs) {
 
@@ -63,8 +61,8 @@ public class ChangeMiner {
 				if (newPath.indexOf("Test") >= 0 || !newPath.endsWith(fileExtension))
 					continue;
 
-				String srcFileSource = Utils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
-				String dstFileSource = Utils.fetchBlob(repo, commit.getId().getName(), newPath);
+				String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
+				String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
 
 				EditScript editscript = null;
 				List<Action> actionList = null;
