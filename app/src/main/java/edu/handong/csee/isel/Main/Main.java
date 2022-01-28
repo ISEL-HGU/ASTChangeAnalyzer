@@ -30,8 +30,8 @@ public class Main {
 		if (value.size() == 0)
 			return;
 
-		System.setProperty("gt.pp.path", "/data/CGYW/ASTChangeAnalyzer/app/pythonparser/pythonparser");
-		System.setProperty("gt.cgum.path", "/data/CGYW/ASTChangeAnalyzer/app/cgum/cgum");
+		System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
+		System.setProperty("gt.cgum.path", "../../../..//cgum/cgum");
 
 //		System.setProperty("gt.pp.path", new File("").getAbsolutePath()
 //				+ File.separator + "app"
