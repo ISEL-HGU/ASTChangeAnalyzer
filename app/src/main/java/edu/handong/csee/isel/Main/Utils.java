@@ -5,13 +5,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+
 public class Utils {
+	private HashMap<String,String> url_projectName = new HashMap();
 	public ArrayList<String> csvReader(String inputpath) throws IOException {
 		ArrayList<String> name_URL = new ArrayList<String>();
 		try {
@@ -35,12 +39,10 @@ public class Utils {
 
 					}
 				}
-
-				String data = record.get( ProjectNameColumnNumber ) + "@" +record.get( URLColumnNumber );
+				this.url_projectName.put(record.get(URLColumnNumber),record.get(ProjectNameColumnNumber));
+				String data = record.get( record.get( URLColumnNumber ));
 				System.out.println(data);
 				name_URL.add(data);
-
-
 
 			}
 

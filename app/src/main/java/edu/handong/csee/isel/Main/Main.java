@@ -5,6 +5,7 @@ package edu.handong.csee.isel.Main;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 
@@ -29,36 +30,35 @@ public class Main {
     	checkOS();
 
     	CLI option = new CLI();
-		Utils utils = new Utils();
-    	String value = option.CommonCLI(args);
-    	if (value.length()==0)
+
+    	ArrayList<String> value = option.CommonCLI(args);
+
+    	if (value.size()==0)
     		return;
 
-    	if(option.input) {
-    		utils.csvReader(option.getInputCsv());
-    	}
+    	System.setProperty("gt.pp.path", new File("").getAbsolutePath() +File.separator +"pythonparser"+File.separator+"pythonparser");
+    	CommandLineExecuter cli = new CommandLineExecuter();
+    	cli.executeSettings();
 
-//
-//    	System.setProperty("gt.pp.path", new File("").getAbsolutePath() +File.separator +"pythonparser"+File.separator+"pythonparser");
-//    	CommandLineExecuter cli = new CommandLineExecuter();
-//    	cli.executeSettings();
-//
-//        CommitMiner commitMine;
-//        ChangeMiner changeMine = new ChangeMiner();
-//
-//		try {
-//			commitMine = new CommitMiner(value);
-//			changeMine.setRepo(commitMine.getRepo());
-//			changeMine.setLang(option.getLanguage());
-//			changeMine.collect(commitMine.getCommitList());
-//
-//			if (commitMine.getErase()) {
-//				cli.executeDeletion(commitMine.getRepoPath().getParentFile());
-//			}
-//
-//		} catch (IOException | GitAPIException e) {
-//			e.printStackTrace();
-//		}
+        CommitMiner commitMine;
+        ChangeMiner changeMine = new ChangeMiner();
+
+		try {
+			for (String str : value) {
+				commitMine = new CommitMiner(str);
+				changeMine.setRepo(commitMine.getRepo());
+				changeMine.setLang(option.getLanguage());
+				changeMine.collect(commitMine.getCommitList());
+
+				if (commitMine.getErase()) {
+					cli.executeDeletion(commitMine.getRepoPath().getParentFile());
+				}
+			}
+
+
+		} catch (IOException | GitAPIException e) {
+			e.printStackTrace();
+		}
 
     }
 

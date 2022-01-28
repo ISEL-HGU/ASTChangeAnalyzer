@@ -7,22 +7,25 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class CLI {
 	
 	private boolean path;
-	private boolean url;
+	private boolean inputCsv;
 	private boolean lang;
 	public boolean isLocal=true;
 	private boolean help=false;
-	public boolean input=false;
-	private String address = "";
+	private ArrayList<String> address;
 	private String language;
-	private String inputCsv;
+
 	
-	public String CommonCLI (String[] args) {
+	public ArrayList<String> CommonCLI (String[] args) {
 		
 		Options options = createOptions();
-		
+		address = new ArrayList<>();
+
 		if(parseOptions(options, args)){
 			
 			if (help) {
@@ -31,13 +34,9 @@ public class CLI {
 		}
 		return address;
 	}
-	public String getInputCsv() {
-		return inputCsv;
-	}
-	public String getAddress() {
+	public ArrayList<String> getAddress() {
 		return address;
 	}
-	
 	public String getLanguage() {
 		return language;
 	}
@@ -55,18 +54,18 @@ public class CLI {
 			
 			path = cmd.hasOption("p");
 			if (path)
-				address = cmd.getOptionValue("p");
-			
-			url = cmd.hasOption("u");
-			if (url)
-				address = cmd.getOptionValue("u");
-			
+				address.add(cmd.getOptionValue("p"));
+
+			inputCsv = cmd.hasOption("i");
+			if (inputCsv) {
+				Utils utils = new Utils();
+				address = utils.csvReader(cmd.getOptionValue("i"));
+			}
+
 			lang = cmd.hasOption("lang");
 			if (lang)
 				language = cmd.getOptionValue("lang");
-			input = cmd.hasOption("i");
-			if (input)
-				inputCsv = cmd.getOptionValue("i");
+
 			help = cmd.hasOption("h");
 
 		} catch (Exception e) {
@@ -88,10 +87,10 @@ public class CLI {
 				.argName("Git repository path")
 				.build());
 		
-		options.addOption(Option.builder("u").longOpt("url")
-				.desc("Set a url of a Git respository")
+		options.addOption(Option.builder("i").longOpt("inputCSV")
+				.desc("Set a path of csv file that contains urls")
 				.hasArg()
-				.argName("Git repository url")
+				.argName("csv path")
 				.build());
 		
 		options.addOption(Option.builder("lang").longOpt("language")
@@ -105,10 +104,7 @@ public class CLI {
 		        .desc("Help")
 		        .build());
 
-		options.addOption(Option.builder("i").longOpt("input")
-				.hasArg()
-				.argName("inputcsv")
-				.build());
+
 		
 		return options;
 	}
