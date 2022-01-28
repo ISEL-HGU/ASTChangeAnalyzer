@@ -16,8 +16,10 @@ repositories {
     mavenCentral()
 }
 
-apply plugin: 'application'
-mainClassName = "edu.handong.csee.isel.Main.Main"
+//apply plugin: 'application'
+//mainClassName = "edu.handong.csee.isel.Main.Main"
+
+apply plugin: 'eclipse'
 
 dependencies {
     // Use JUnit test framework.
@@ -50,7 +52,7 @@ dependencies {
 	
 }
 
-//application {
-    // Define the main class for the application.
-    //mainClass = 'edu.handong.csee.isel.Main.Main'
-//}
+application {
+     //Define the main class for the application.
+    mainClass = 'edu.handong.csee.isel.Main.Main'
+}

@@ -14,6 +14,7 @@ import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
 
 public class Main {
+	
 	private static boolean isWindows;
 	
     public static void main(String[] args) throws IOException {
@@ -26,15 +27,17 @@ public class Main {
     private void run(String[] args) throws IOException {
     	
     	checkOS();
+    	
     	CLI option = new CLI();
     	String value = option.CommonCLI(args);
+    	if (value.length()==0)
+    		return;
+    	
     	if(option.input) {
     		ChangeClassifier cc = new ChangeClassifier();
         	cc.csvReader(option.getInputCsv());
     	}
     	
-//    	if (value.length()==0)
-//    		return;
 //    
 //    	System.setProperty("gt.pp.path", new File("").getAbsolutePath() +File.separator +"pythonparser"+File.separator+"pythonparser");
 //    	CommandLineExecuter cli = new CommandLineExecuter();
