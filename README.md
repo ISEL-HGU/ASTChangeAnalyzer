@@ -18,10 +18,10 @@ It has the following features:
 ### Execution
 
 * Required Options :
-1. `-p` option : provide a local path for the repository (absolute path)
+1. `-p` option : provide a local path or URL for the repository (absolute path if local path)
 
                         
-   `-u` option : provide a URL to create a clone of the repository (root/Desktop)
+   `-i` option : provide a path for a csv file that contains lists of github URLs
 
 2. `-lang` option : choose 'java' or 'python'
 
