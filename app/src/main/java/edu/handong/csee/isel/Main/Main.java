@@ -33,6 +33,8 @@ public class Main {
 		System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
 		System.setProperty("gt.cgum.path", "../../../../cgum/cgum");
 
+		System.out.println(System.getProperty("gt.cgum.path"));
+
 //		System.setProperty("gt.pp.path", new File("").getAbsolutePath()
 //				+ File.separator + "app"
 //				+ File.separator + "pythonparser"
