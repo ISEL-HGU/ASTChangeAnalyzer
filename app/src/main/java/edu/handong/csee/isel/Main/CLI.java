@@ -24,7 +24,7 @@ public class CLI {
 	public ArrayList<String> CommonCLI (String[] args) {
 		
 		Options options = createOptions();
-		address = new ArrayList<>();
+		address = new ArrayList<String>();
 
 		if(parseOptions(options, args)){
 			
