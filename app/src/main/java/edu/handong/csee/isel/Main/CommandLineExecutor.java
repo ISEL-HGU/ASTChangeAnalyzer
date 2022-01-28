@@ -33,10 +33,11 @@ public class CommandLineExecutor {
 	public void executeSettings() {
     	
         // Setting commands
-			cmdList.add("pip3 install -r " + new File("").getAbsolutePath()
-                    + File.separator + "app"
-                    + File.separator + "pythonparser"
-                    + File.separator + "requirements.txt");
+            cmdList.add("pip3 install -r ../../../../pythonparser/requirements.txt");
+//			cmdList.add("pip3 install -r " + new File("").getAbsolutePath()
+//                    + File.separator + "app"
+//                    + File.separator + "pythonparser"
+//                    + File.separator + "requirements.txt");
 	        String[] array = cmdList.toArray(new String[cmdList.size()]);
 	        
 	        try {
