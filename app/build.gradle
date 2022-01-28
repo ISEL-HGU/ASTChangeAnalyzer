@@ -19,6 +19,10 @@ repositories {
 apply plugin: 'application'
 mainClassName = "edu.handong.csee.isel.Main.Main"
 
+//application {
+//	mainClass = 'edu.handong.csee.isel.Main.Main'
+//}
+
 dependencies {
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13.1'
@@ -52,7 +56,3 @@ dependencies {
 	implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.8'
 
 }
-
-//application {
-//    mainClass = 'edu.handong.csee.isel.Main.Main'
-//}
