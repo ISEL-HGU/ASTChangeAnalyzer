@@ -31,7 +31,7 @@ public class Main {
 			return;
 
 		System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
-		System.setProperty("gt.cgum.path", "../../../..//cgum/cgum");
+		System.setProperty("gt.cgum.path", "../../../../cgum/cgum");
 
 //		System.setProperty("gt.pp.path", new File("").getAbsolutePath()
 //				+ File.separator + "app"
@@ -42,9 +42,6 @@ public class Main {
 //				+ File.separator + "app"
 //				+ File.separator + "cgum"
 //				+ File.separator + "cgum");
-
-		System.out.println(System.getProperty("gt.pp.path"));
-		System.out.println(System.getProperty("gt.cgum.path"));
 
 		CommandLineExecutor cli = new CommandLineExecutor();
 		cli.executeSettings();
