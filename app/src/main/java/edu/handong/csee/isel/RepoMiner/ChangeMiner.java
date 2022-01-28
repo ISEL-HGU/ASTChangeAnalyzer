@@ -80,16 +80,16 @@ public class ChangeMiner {
 				ASTExtractor ASTExtract = new ASTExtractor();
 				
 				try {
-
 					if (fileExtension.equals(C)) {
 						editscript = ASTExtract.CASTDiffMine(srcFileSource, dstFileSource);
 					}
 					else if (fileExtension.equals(Python)) {
 						editscript = ASTExtract.PythonASTDiffMine(srcFileSource, dstFileSource);
 					}
-					else {
+					else if (fileExtension.equals(Java)){
 						editscript = ASTExtract.JavaASTDiffMine(srcFileSource, dstFileSource);
 					}
+					else continue;
 					
 					if (editscript!=null)
 						actionList = editscript.asList();

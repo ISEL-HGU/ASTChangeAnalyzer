@@ -71,7 +71,7 @@ public class ASTExtractor {
 		
 		EditScriptGenerator editScriptGenerator = new SimplifiedChawatheScriptGenerator(); // instantiates the simplified Chawathe script generator
 		EditScript actions = editScriptGenerator.computeActions(mappings); // computes the edit script
-		
+
 		srcFile.delete();
 		dstFile.delete();
 		
@@ -132,7 +132,6 @@ public class ASTExtractor {
 		EditScript actions = null;
 
 		if (srcTC!= null && dstTC!=null) {
-
 			Tree src = srcTC.getRoot();
 			Tree dst = dstTC.getRoot();
 
