@@ -53,14 +53,12 @@ public class ASTExtractor {
 		File dstFile = new File("dst.java");
 		
 		try {
-			
 			BufferedWriter srcWriter = new BufferedWriter(new FileWriter(srcFile));
 			srcWriter.write(srcFileSource);
 			srcWriter.close();
 			BufferedWriter dstWriter = new BufferedWriter(new FileWriter(dstFile));
 			dstWriter.write(dstFileSource);
 			dstWriter.close();
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

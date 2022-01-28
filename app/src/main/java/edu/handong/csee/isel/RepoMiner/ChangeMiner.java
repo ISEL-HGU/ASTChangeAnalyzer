@@ -1,5 +1,6 @@
 package edu.handong.csee.isel.RepoMiner;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -79,6 +80,7 @@ public class ChangeMiner {
 				ASTExtractor ASTExtract = new ASTExtractor();
 				
 				try {
+
 					if (fileExtension.equals(C)) {
 						editscript = ASTExtract.CASTDiffMine(srcFileSource, dstFileSource);
 					}
@@ -94,6 +96,10 @@ public class ChangeMiner {
 					
 				} catch (SyntaxException e) {
 					System.err.print("\nThis change has a syntatic error: "); e.printStackTrace();
+					File srcFile = new File("src" + fileExtension);
+					File dstFile = new File("dst" + fileExtension);
+					srcFile.delete();
+					dstFile.delete();
 					continue;
 				} catch (IOException e) {
 					e.printStackTrace();
