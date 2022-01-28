@@ -14,54 +14,54 @@ import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
 
 public class Main {
-	
+
 	private static boolean isWindows;
-	
+
     public static void main(String[] args) throws IOException {
-    	
+
     	Main main = new Main();
     	main.run(args);
-		
+
     }
-    
+
     private void run(String[] args) throws IOException {
-    	
+
     	checkOS();
-    	
+
     	CLI option = new CLI();
+		Utils utils = new Utils();
     	String value = option.CommonCLI(args);
     	if (value.length()==0)
     		return;
-    	
+
     	if(option.input) {
-    		ChangeClassifier cc = new ChangeClassifier();
-        	cc.csvReader(option.getInputCsv());
+    		utils.csvReader(option.getInputCsv());
     	}
-    	
-//    
+
+//
 //    	System.setProperty("gt.pp.path", new File("").getAbsolutePath() +File.separator +"pythonparser"+File.separator+"pythonparser");
 //    	CommandLineExecuter cli = new CommandLineExecuter();
-//    	cli.executeSettings(); 
+//    	cli.executeSettings();
 //
 //        CommitMiner commitMine;
 //        ChangeMiner changeMine = new ChangeMiner();
-//        
+//
 //		try {
 //			commitMine = new CommitMiner(value);
 //			changeMine.setRepo(commitMine.getRepo());
 //			changeMine.setLang(option.getLanguage());
 //			changeMine.collect(commitMine.getCommitList());
-//			
+//
 //			if (commitMine.getErase()) {
 //				cli.executeDeletion(commitMine.getRepoPath().getParentFile());
 //			}
-//			
+//
 //		} catch (IOException | GitAPIException e) {
 //			e.printStackTrace();
 //		}
-		
+
     }
-    
+
     private void checkOS() {
     	if (System.getProperty("os.name").indexOf("Windows") > -1) {
             Main.setWindows(true);
@@ -77,6 +77,6 @@ public class Main {
 	public static void setWindows(boolean isWindows) {
 		Main.isWindows = isWindows;
 	}
-    
+
 }
 
