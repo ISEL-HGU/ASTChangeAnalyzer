@@ -9,7 +9,7 @@ ASTChangeAnalyzer mines repositories using JGit and parse codes using GumTree
 
 It has the following features:
 * mining diff commits and extract source code
-* converting a source file into a language-agnostic tree format (Java and Python supported)
+* converting a source file into a language-agnostic tree format (Java, Python, c, and c++ supported)
 * compute the differences between the trees
 * visualize these differences in different abstract levels
 
@@ -23,7 +23,7 @@ It has the following features:
                         
    `-i` option : provide a path for a csv file that contains lists of github URLs
 
-2. `-lang` option : choose 'java' or 'python'
+2. `-lang` option : choose 'java', 'python', 'c', or 'c++(cpp in command).
 
 Example : `-u https://github.com/ISEL-HGU/ASTChangeAnalyzer/ -lang python`
 
@@ -31,6 +31,7 @@ Example : `-u https://github.com/ISEL-HGU/ASTChangeAnalyzer/ -lang python`
 
 Required installation is internally done - no need!
 
+(Currently, Gumtree execution file does not run on Windows environment) 
 
 * User Guide :
 
