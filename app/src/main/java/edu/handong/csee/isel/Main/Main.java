@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 
-import edu.handong.csee.isel.ChangeAnalysis.ChangeClassifier;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
@@ -19,29 +18,33 @@ public class Main {
 	private static boolean isWindows;
 
     public static void main(String[] args) throws IOException {
-
     	Main main = new Main();
     	main.run(args);
-
     }
 
     private void run(String[] args) throws IOException {
+		checkOS();
+		CLI option = new CLI();
+		ArrayList<String> value = option.CommonCLI(args);
 
-    	checkOS();
+		if (value.size() == 0)
+			return;
 
-    	CLI option = new CLI();
+		System.setProperty("gt.pp.path", new File("").getAbsolutePath()
+				+ File.separator + "app"
+				+ File.separator + "pythonparser"
+				+ File.separator + "pythonparser");
 
-    	ArrayList<String> value = option.CommonCLI(args);
+		System.setProperty("gt.cgum.path", new File("").getAbsolutePath()
+				+ File.separator + "app"
+				+ File.separator + "cgum"
+				+ File.separator + "cgum");
 
-    	if (value.size()==0)
-    		return;
+		CommandLineExecutor cli = new CommandLineExecutor();
+		cli.executeSettings();
 
-    	System.setProperty("gt.pp.path", new File("").getAbsolutePath() +File.separator +"pythonparser"+File.separator+"pythonparser");
-    	CommandLineExecuter cli = new CommandLineExecuter();
-    	cli.executeSettings();
-
-        CommitMiner commitMine;
-        ChangeMiner changeMine = new ChangeMiner();
+		CommitMiner commitMine;
+		ChangeMiner changeMine = new ChangeMiner();
 
 		try {
 			for (String str : value) {
@@ -49,13 +52,8 @@ public class Main {
 				changeMine.setRepo(commitMine.getRepo());
 				changeMine.setLang(option.getLanguage());
 				changeMine.collect(commitMine.getCommitList());
-
-				if (commitMine.getErase()) {
-					cli.executeDeletion(commitMine.getRepoPath().getParentFile());
-				}
+				cli.executeDeletion(commitMine.getRepoPath().getParentFile());
 			}
-
-
 		} catch (IOException | GitAPIException e) {
 			e.printStackTrace();
 		}

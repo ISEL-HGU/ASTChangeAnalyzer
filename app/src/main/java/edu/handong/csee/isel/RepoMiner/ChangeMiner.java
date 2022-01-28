@@ -16,8 +16,12 @@ public class ChangeMiner {
 	private Repository repo;
 	private String language;
 	private String fileExtension;
+	private int commitCount = 0;
+	private int diffCount;
+	private int actionCount;
 	private String Java = ".java";
 	private String Python = ".py";
+	private String C = ".c";
 	
 	public void setRepo(Repository repo) {
 		this.repo = repo;
@@ -34,12 +38,14 @@ public class ChangeMiner {
 	public void collect(List<RevCommit> commitList) {
 	
 		switch(language.toUpperCase()) {
-		case "JAVA":
-			fileExtension = Java;
-			break;
-		case "PYTHON":
-			fileExtension = Python;
-			break;
+			case "PYTHON":
+				fileExtension = Python;
+				break;
+			case "C":
+				fileExtension = C;
+				break;
+			default:
+				fileExtension = Java;
 		}
 		
 		for (RevCommit commit : commitList) {
@@ -48,11 +54,13 @@ public class ChangeMiner {
 				System.err.println("WARNING: Parent commit does not exit: " + commit.name());
 				continue;
 			}
+			commitCount++;
 			
 			RevCommit parent = commit.getParent(0);
 			
 			List<DiffEntry> diffs = RepoUtils.diff(parent, commit, repo);
-			
+			diffCount = 0;
+
 			for (DiffEntry diff : diffs) {
 
 				String oldPath = diff.getOldPath();
@@ -61,6 +69,7 @@ public class ChangeMiner {
 				if (newPath.indexOf("Test") >= 0 || !newPath.endsWith(fileExtension))
 					continue;
 
+				diffCount++;
 				String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
 				String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
 
@@ -70,12 +79,14 @@ public class ChangeMiner {
 				ASTExtractor ASTExtract = new ASTExtractor();
 				
 				try {
-					
-					if (fileExtension.equals(Java)) {
-						editscript = ASTExtract.JavaASTDiffMine(srcFileSource, dstFileSource);
+					if (fileExtension.equals(C)) {
+						editscript = ASTExtract.CASTDiffMine(srcFileSource, dstFileSource);
 					}
 					else if (fileExtension.equals(Python)) {
 						editscript = ASTExtract.PythonASTDiffMine(srcFileSource, dstFileSource);
+					}
+					else {
+						editscript = ASTExtract.JavaASTDiffMine(srcFileSource, dstFileSource);
 					}
 					
 					if (editscript!=null)
@@ -87,9 +98,15 @@ public class ChangeMiner {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+				actionCount = 0;
+				System.out.println("\n@" + commit.name());
 				for (Action action : actionList) {
-					System.out.println(action.getName() +"@" + action.getNode().getType() + "\n" + action + "\n##################################");
+					actionCount++;
+					System.out.println(commitCount + "-" + actionCount
+							+ "\n L action name: " + action.getName()
+							+ "\n L action type: " + action.getNode().getType());
+//							+ "\n\t L action: \n"
+//							+ action + "\n");
 				}
 			}
 		}

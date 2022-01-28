@@ -40,7 +40,7 @@ public class Utils {
 					}
 				}
 				this.url_projectName.put(record.get(URLColumnNumber),record.get(ProjectNameColumnNumber));
-				String data = record.get( record.get( URLColumnNumber ));
+				String data = record.get( URLColumnNumber );
 				System.out.println(data);
 				name_URL.add(data);
 

@@ -12,6 +12,7 @@ import com.github.gumtreediff.client.Run;
 import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.gen.python.PythonTreeGenerator;
+import com.github.gumtreediff.gen.c.*;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
@@ -81,27 +82,11 @@ public class ASTExtractor {
 	
 	
 	public void PythonASTExtract(String fileSource) throws IOException {
-		
-		File file = new File("file.py");
-		
-		try {
-			
-			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-			writer.write(fileSource);
-			writer.close();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 		TreeContext fileTC = new PythonTreeGenerator().generateFrom().string(fileSource);
 		if (fileTC!=null) {
 			Tree src = fileTC.getRoot();
 			System.out.println(src.toTreeString());
 		}
-		
-		file.delete();
-		
 		return;
 	}
 	
@@ -110,30 +95,9 @@ public class ASTExtractor {
 		
 		Run.initGenerators(); // registers the available parsers
 		
-		File srcFile = new File("src.py");
-		File dstFile = new File("dst.py");
-		
-		try {
-			
-			BufferedWriter srcWriter = new BufferedWriter(new FileWriter(srcFile));
-			srcWriter.write(srcFileSource);
-			srcWriter.close();
-			BufferedWriter dstWriter = new BufferedWriter(new FileWriter(dstFile));
-			dstWriter.write(dstFileSource);
-			dstWriter.close();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-//		String srcStr = CommandLineExecuter.execute(srcFile);
-//		TreeContext srcTC = TreeIoUtils.fromXml().generateFrom().string(srcStr);
-//		String dstStr = CommandLineExecuter.execute(dstFile);
-//		TreeContext dstTC = TreeIoUtils.fromXml().generateFrom().string(dstStr);
-		
 		TreeContext srcTC = new PythonTreeGenerator().generateFrom().string(srcFileSource);
 		TreeContext dstTC = new PythonTreeGenerator().generateFrom().string(dstFileSource);
-		
+
 		EditScript actions = null;
 
 		if (srcTC!= null && dstTC!=null) {
@@ -147,14 +111,41 @@ public class ASTExtractor {
 			EditScriptGenerator editScriptGenerator = new SimplifiedChawatheScriptGenerator(); // instantiates the simplified Chawathe script generator
 			actions = editScriptGenerator.computeActions(mappings); // computes the edit script
 		}
-		
-		srcFile.delete();
-		dstFile.delete();
-		
 		return actions;
-		
 	}
-	
-	
+
+	public void CASTExtract(String fileSource) throws IOException {
+		TreeContext fileTC = new CTreeGenerator().generateFrom().string(fileSource);
+		if (fileTC!=null) {
+			Tree src = fileTC.getRoot();
+			System.out.println(src.toTreeString());
+		}
+		return;
+	}
+
+
+	public EditScript CASTDiffMine(String srcFileSource, String dstFileSource) throws IOException, SyntaxException {
+
+		Run.initGenerators(); // registers the available parsers
+
+		TreeContext srcTC = new CTreeGenerator().generateFrom().string(srcFileSource);
+		TreeContext dstTC = new CTreeGenerator().generateFrom().string(dstFileSource);
+
+		EditScript actions = null;
+
+		if (srcTC!= null && dstTC!=null) {
+
+			Tree src = srcTC.getRoot();
+			Tree dst = dstTC.getRoot();
+
+			Matcher defaultMatcher = Matchers.getInstance().getMatcher(); // retrieves the default matcher
+			MappingStore mappings = defaultMatcher.match(src, dst); // computes the mappings between the trees
+
+			EditScriptGenerator editScriptGenerator = new SimplifiedChawatheScriptGenerator(); // instantiates the simplified Chawathe script generator
+			actions = editScriptGenerator.computeActions(mappings); // computes the edit script
+		}
+		return actions;
+
+	}
 	
 }

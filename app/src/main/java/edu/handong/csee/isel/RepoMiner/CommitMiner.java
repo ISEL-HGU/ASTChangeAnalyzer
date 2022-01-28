@@ -10,12 +10,10 @@ import java.util.regex.Pattern;
 import org.apache.commons.collections4.IterableUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 
-import edu.handong.csee.isel.Main.CommandLineExecuter;
+import edu.handong.csee.isel.Main.CommandLineExecutor;
 
 
 public class CommitMiner {
@@ -23,9 +21,8 @@ public class CommitMiner {
 	private List<RevCommit> commitList;
 	private File file = null;
 	private Git git;
-	private boolean erase = false;
 	
-	public CommitMiner(String path) throws IOException, InvalidRemoteException, TransportException, GitAPIException{
+	public CommitMiner(String path) throws IOException, GitAPIException{
 		
 		Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com()(.*?)$");
 		Matcher matcher = pattern.matcher(path);
@@ -61,7 +58,7 @@ public class CommitMiner {
 				int opt = scanner.nextInt();
 				switch(opt) {
 				case 1:
-					new CommandLineExecuter().executeDeletion(file);
+					new CommandLineExecutor().executeDeletion(file);
 					break;
 				case 2:
 					System.out.println("\nProgram Terminated\n");
@@ -77,7 +74,6 @@ public class CommitMiner {
 			System.out.println("\nGit Clone Completed");
 			System.out.println("L repository path: " + getRepoPath());
 			System.out.println();
-			erase = true;
 		}
 		
 		else {
@@ -87,7 +83,6 @@ public class CommitMiner {
 		
 		Iterable<RevCommit> walk = git.log().call();
 		commitList = IterableUtils.toList(walk);
-		
 	}
 	
 	public File getRepoPath() {
@@ -100,10 +95,6 @@ public class CommitMiner {
 	
 	public Repository getRepo() {
 		return git.getRepository();
-	}
-	
-	public boolean getErase() {
-		return erase;
 	}
     
 }

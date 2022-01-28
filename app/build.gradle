@@ -44,6 +44,9 @@ dependencies {
 	
 	// https://mvnrepository.com/artifact/com.github.gumtreediff/gen.python
 	implementation group: 'com.github.gumtreediff', name: 'gen.python', version: '3.0.0'
+
+	// https://mvnrepository.com/artifact/com.github.gumtreediff/gen.c
+	implementation group: 'com.github.gumtreediff', name: 'gen.c', version: '3.0.0'
 	
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
 	implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'

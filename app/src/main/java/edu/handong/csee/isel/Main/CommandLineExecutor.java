@@ -6,9 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-public class CommandLineExecuter {
+public class CommandLineExecutor {
 	
 	private static Process process = null;
     private static Runtime runtime = Runtime.getRuntime();
@@ -19,7 +18,7 @@ public class CommandLineExecuter {
     private static String msg = null; // 메시지
     private static List<String> cmdList;
     
-    public CommandLineExecuter() {
+    public CommandLineExecutor() {
     	
     	cmdList = new ArrayList<String>();
     	if (System.getProperty("os.name").indexOf("Windows") > -1) {
@@ -34,7 +33,10 @@ public class CommandLineExecuter {
 	public void executeSettings() {
     	
         // Setting commands
-			cmdList.add("pip3 install -r " + new File("").getAbsolutePath() + File.pathSeparator+"pythonparser"+File.pathSeparator+"requirements.txt");
+			cmdList.add("pip3 install -r " + new File("").getAbsolutePath()
+                    + File.separator + "app"
+                    + File.separator + "pythonparser"
+                    + File.separator + "requirements.txt");
 	        String[] array = cmdList.toArray(new String[cmdList.size()]);
 	        
 	        try {
@@ -78,10 +80,6 @@ public class CommandLineExecuter {
 	            }
 	        }
 		}
-
-        
-
-
 	
 	public void executeDeletion(File file) {
         
@@ -132,11 +130,10 @@ public class CommandLineExecuter {
         }
 	}
 	
-	public String executePythonParser(File file) {
+	public String executeParser(File file) {
         
         // Setting commands
-        cmdList.add("pip3 install -r " + new File("").getAbsolutePath() + File.pathSeparator+"pythonparser"+File.pathSeparator+"requirements.txt");
-        cmdList.add(new File("").getAbsolutePath() + "/pythonparser/pythonparser " + file.getAbsolutePath());
+        cmdList.add(new File("").getAbsolutePath() + "/app/cgum/cgum /Users/nayeawon/HGU/ISEL/Code/cgum/standard.h");
         String[] array = cmdList.toArray(new String[cmdList.size()]);
  
         try {
@@ -145,23 +142,25 @@ public class CommandLineExecuter {
             successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
  
             while ((msg = successBufferReader.readLine()) != null) {
-                successOutput.append(msg + System.getProperty("line.separator"));
+                if (successOutput!=null)
+                    successOutput.append(msg + System.getProperty("line.separator"));
             }
             
             errorBufferReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "EUC-KR"));
             while ((msg = errorBufferReader.readLine()) != null) {
-                errorOutput.append(msg + System.getProperty("line.separator"));
+                if (errorOutput!=null)
+                    errorOutput.append(msg + System.getProperty("line.separator"));
             }
             
             process.waitFor();
  
             if (process.exitValue() == 0) {
-                System.out.println("Parsing Python Completed\n");
+                System.out.println("Parsing Completed\n");
                 if (successOutput!=null)
                 	msg = successOutput.toString();
                 
             } else {
-                System.out.println("Parsing Python Failed\n");
+                System.out.println("Parsing Failed\n");
                 if (errorOutput!=null)
                 	System.out.println(errorOutput.toString());
                 msg = "";
