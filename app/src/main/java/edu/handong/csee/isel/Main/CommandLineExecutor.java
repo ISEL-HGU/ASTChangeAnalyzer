@@ -85,7 +85,8 @@ public class CommandLineExecutor {
 	public void executeDeletion(File file) {
         
         // Setting commands
-        cmdList.add("rm -rf " + file);
+        cmdList.add("rm -rf " + file.getPath());
+        System.out.println(file.getPath());
         String[] array = cmdList.toArray(new String[cmdList.size()]);
         
         try {
