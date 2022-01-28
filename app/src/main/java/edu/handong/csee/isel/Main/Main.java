@@ -29,19 +29,22 @@ public class Main {
 
 		if (value.size() == 0)
 			return;
-		
-		System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
-		System.setProperty("gt.cgum.path", "../../../..//cgum/cgum");
 
-//		System.setProperty("gt.pp.path", new File("").getAbsolutePath()
-//				+ File.separator + "app"
-//				+ File.separator + "pythonparser"
-//				+ File.separator + "pythonparser");
-//
-//		System.setProperty("gt.cgum.path", new File("").getAbsolutePath()
-//				+ File.separator + "app"
-//				+ File.separator + "cgum"
-//				+ File.separator + "cgum");
+//		System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
+//		System.setProperty("gt.cgum.path", "../../../..//cgum/cgum");
+
+		System.setProperty("gt.pp.path", new File("").getAbsolutePath()
+				+ File.separator + "app"
+				+ File.separator + "pythonparser"
+				+ File.separator + "pythonparser");
+
+		System.setProperty("gt.cgum.path", new File("").getAbsolutePath()
+				+ File.separator + "app"
+				+ File.separator + "cgum"
+				+ File.separator + "cgum");
+
+		System.out.println(System.getProperty("gt.pp.path"));
+		System.out.println(System.getProperty("gt.cgum.path"));
 
 		CommandLineExecutor cli = new CommandLineExecutor();
 		cli.executeSettings();

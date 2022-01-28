@@ -85,7 +85,6 @@ public class CommandLineExecutor {
         
         // Setting commands
         cmdList.add("rm -rf " + file.getPath());
-        System.out.println(file.getPath());
         String[] array = cmdList.toArray(new String[cmdList.size()]);
         
         try {
