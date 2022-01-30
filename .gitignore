@@ -34,3 +34,7 @@ hs_err_pid*
 /app/bin/
 /app/build/
 /app/build.gradle
+
+gradle/wrapper/gradle-wrapper.properties
+gradlew
+gradlew.bat
