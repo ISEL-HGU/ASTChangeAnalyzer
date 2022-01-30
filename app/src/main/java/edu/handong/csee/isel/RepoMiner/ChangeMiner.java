@@ -2,9 +2,12 @@ package edu.handong.csee.isel.RepoMiner;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.gumtreediff.tree.Tree;
+import edu.handong.csee.isel.ChangeAnalysis.ChangeClassifier;
+import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -17,6 +20,7 @@ public class ChangeMiner {
 	
 	private Repository repo;
 	private String language;
+	private boolean level;
 	private String fileExtension;
 	private int commitCount = 0;
 	private int diffCount;
@@ -26,6 +30,7 @@ public class ChangeMiner {
 	private String C = ".c";
 	private Tree src;
 	private Tree dst;
+
 	
 	public void setRepo(Repository repo) {
 		this.repo = repo;
@@ -34,12 +39,16 @@ public class ChangeMiner {
 	public void setLang(String language) {
 		this.language = language;
 	}
-	
+
+	public void setLevel(boolean level) { this.level = level; }
+
 	public String getFileExtension() {
 		return fileExtension;
 	}
 	
-	public void collect(List<RevCommit> commitList) {
+	public ArrayList<ChangeInfo> collect(List<RevCommit> commitList) {
+
+		ArrayList<ChangeInfo> changeInfoList = new ArrayList<ChangeInfo>();
 	
 		switch(language.toUpperCase()) {
 			case "PYTHON":
@@ -76,6 +85,8 @@ public class ChangeMiner {
 				diffCount++;
 				String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
 				String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
+
+				ChangeInfo changeInfo = new ChangeInfo(oldPath + "=" + newPath, commit.name());
 
 				EditScript editscript = null;
 				List<Action> actionList = null;
@@ -117,10 +128,15 @@ public class ChangeMiner {
 				System.out.println("\n@" + commit.name());
 				for (Action action : actionList) {
 					actionCount++;
+//					if (level) {
+//						changeInfo.addHunk(action);
+//					}
 					System.out.println("\n" + commitCount + "-" + actionCount
+							+ "\n L diff: " + diff.toString()
 							+ "\n L action name: " + action.getName()
 							+ "\n L action type: " + action.getNode().getType()
-							+ "\n L action Position info: " + action.getNode().getPos() + "-" + action.getNode().getEndPos());
+							+ "\n L action Position info: " + action.getNode().getPos() + "-" + action.getNode().getEndPos()
+							+ "\n L action: " + action);
 					System.out.println("\nsrc: " + src.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos())
 							+ "\n L hash: " + src.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos()).hashCode());
 					System.out.println("\ndst: " + dst.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos())
@@ -128,7 +144,8 @@ public class ChangeMiner {
 				}
 			}
 		}
-	}
+        return changeInfoList;
+    }
 	
 }
 

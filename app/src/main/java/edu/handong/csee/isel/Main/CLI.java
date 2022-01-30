@@ -15,7 +15,7 @@ public class CLI {
 	private boolean path;
 	private boolean inputCsv;
 	private boolean lang;
-	public boolean isLocal=true;
+	private boolean lev;
 	private boolean help=false;
 	private ArrayList<String> address;
 	private String language;
@@ -40,10 +40,7 @@ public class CLI {
 	public String getLanguage() {
 		return language;
 	}
-	
-	public boolean isLocalPath() {
-		return isLocal;
-	}
+	public boolean getLevel() { return lev; }
 	
 	private boolean parseOptions(Options options, String[] args) {
 		CommandLineParser parser = new DefaultParser();
@@ -65,6 +62,8 @@ public class CLI {
 			lang = cmd.hasOption("lang");
 			if (lang)
 				language = cmd.getOptionValue("lang");
+
+			lev = cmd.hasOption("level");
 
 			help = cmd.hasOption("h");
 
@@ -98,6 +97,11 @@ public class CLI {
 				.hasArg()
 				.argName("Expected programming language")
 				.required()
+				.build());
+
+		options.addOption(Option.builder("level").longOpt("level")
+				.desc("Set a level of data classification")
+				.argName("file or hunk")
 				.build());
 		
 		options.addOption(Option.builder("h").longOpt("help")

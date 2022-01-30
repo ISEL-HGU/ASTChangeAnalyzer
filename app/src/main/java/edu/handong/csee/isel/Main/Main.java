@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
@@ -31,7 +32,7 @@ public class Main {
 			return;
 
 		System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
-		System.setProperty("gt.cgum.path", "/data/CGYW/ASTChangeAnalyzer/app/cgum/cgum");	
+		System.setProperty("gt.cgum.path", "/data/CGYW/ASTChangeAnalyzer/app/cgum/cgum");
 
 //		System.setProperty("gt.pp.path", new File("").getAbsolutePath()
 //				+ File.separator + "app"
@@ -54,7 +55,8 @@ public class Main {
 				commitMine = new CommitMiner(str);
 				changeMine.setRepo(commitMine.getRepo());
 				changeMine.setLang(option.getLanguage());
-				changeMine.collect(commitMine.getCommitList());
+				changeMine.setLevel(option.getLevel());
+				ArrayList<ChangeInfo> changeInfoList = changeMine.collect(commitMine.getCommitList());
 				cli = new CommandLineExecutor();
 				cli.executeDeletion(commitMine.getRepoPath().getParentFile());
 			}
