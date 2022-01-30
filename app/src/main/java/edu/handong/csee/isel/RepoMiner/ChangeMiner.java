@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import com.github.gumtreediff.tree.Tree;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -23,6 +24,8 @@ public class ChangeMiner {
 	private String Java = ".java";
 	private String Python = ".py";
 	private String C = ".c";
+	private Tree src;
+	private Tree dst;
 	
 	public void setRepo(Repository repo) {
 		this.repo = repo;
@@ -82,12 +85,18 @@ public class ChangeMiner {
 				try {
 					if (fileExtension.equals(C)) {
 						editscript = ASTExtract.CASTDiffMine(srcFileSource, dstFileSource);
+						src = ASTExtract.CASTExtract(srcFileSource);
+						dst = ASTExtract.CASTExtract(dstFileSource);
 					}
 					else if (fileExtension.equals(Python)) {
 						editscript = ASTExtract.PythonASTDiffMine(srcFileSource, dstFileSource);
+						src = ASTExtract.PythonASTExtract(srcFileSource);
+						dst = ASTExtract.PythonASTExtract(dstFileSource);
 					}
 					else if (fileExtension.equals(Java)){
 						editscript = ASTExtract.JavaASTDiffMine(srcFileSource, dstFileSource);
+						src = ASTExtract.JavaASTExtract(srcFileSource);
+						dst = ASTExtract.JavaASTExtract(dstFileSource);
 					}
 					else continue;
 					
@@ -108,11 +117,14 @@ public class ChangeMiner {
 				System.out.println("\n@" + commit.name());
 				for (Action action : actionList) {
 					actionCount++;
-					System.out.println(commitCount + "-" + actionCount
+					System.out.println("\n" + commitCount + "-" + actionCount
 							+ "\n L action name: " + action.getName()
-							+ "\n L action type: " + action.getNode().getType());
-//							+ "\n\t L action: \n"
-//							+ action + "\n");
+							+ "\n L action type: " + action.getNode().getType()
+							+ "\n L action Position info: " + action.getNode().getPos() + "-" + action.getNode().getEndPos());
+					System.out.println("\nsrc: " + src.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos())
+							+ "\n L hash: " + src.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos()).hashCode());
+					System.out.println("\ndst: " + dst.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos())
+							+ "\n L hash: " + dst.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos()).hashCode());
 				}
 			}
 		}
