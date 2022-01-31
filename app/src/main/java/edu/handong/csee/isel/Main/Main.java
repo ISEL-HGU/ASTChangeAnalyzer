@@ -49,6 +49,7 @@ public class Main {
 
 		CommitMiner commitMine;
 		ChangeMiner changeMine = new ChangeMiner();
+		ArrayList<ChangeInfo> changeInfoList = null;
 
 		try {
 			for (String str : value) {
@@ -56,13 +57,19 @@ public class Main {
 				changeMine.setRepo(commitMine.getRepo());
 				changeMine.setLang(option.getLanguage());
 				changeMine.setLevel(option.getLevel());
-				ArrayList<ChangeInfo> changeInfoList = changeMine.collect(commitMine.getCommitList());
+				changeInfoList = changeMine.collect(commitMine.getCommitList());
 				cli = new CommandLineExecutor();
 				cli.executeDeletion(commitMine.getRepoPath().getParentFile());
 			}
 		} catch (IOException | GitAPIException e) {
 			e.printStackTrace();
 		}
+		System.out.println("\nChange Mining Completed\n");
+
+		for (ChangeInfo change : changeInfoList) {
+			change.printChange();
+		}
+
 
     }
 

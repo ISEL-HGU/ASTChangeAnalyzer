@@ -74,6 +74,8 @@ public class ChangeMiner {
 			List<DiffEntry> diffs = RepoUtils.diff(parent, commit, repo);
 			diffCount = 0;
 
+			ChangeInfo changeInfo = null;
+
 			for (DiffEntry diff : diffs) {
 
 				String oldPath = diff.getOldPath();
@@ -86,7 +88,7 @@ public class ChangeMiner {
 				String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
 				String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
 
-				ChangeInfo changeInfo = new ChangeInfo(oldPath + "=" + newPath, commit.name());
+				changeInfo = new ChangeInfo(oldPath, newPath, commit.name());
 
 				EditScript editscript = null;
 				List<Action> actionList = null;
@@ -128,9 +130,10 @@ public class ChangeMiner {
 				System.out.println("\n@" + commit.name());
 				for (Action action : actionList) {
 					actionCount++;
-//					if (level) {
-//						changeInfo.addHunk(action);
-//					}
+					if (level) {
+						changeInfo.addHunk(action);
+						continue;
+					}
 					System.out.println("\n" + commitCount + "-" + actionCount
 							+ "\n L diff: " + diff.toString()
 							+ "\n L action name: " + action.getName()
@@ -142,6 +145,7 @@ public class ChangeMiner {
 					System.out.println("\ndst: " + dst.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos())
 							+ "\n L hash: " + dst.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos()).hashCode());
 				}
+				changeInfoList.add(changeInfo);
 			}
 		}
         return changeInfoList;
