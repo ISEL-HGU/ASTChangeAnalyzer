@@ -4,10 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import com.github.gumtreediff.tree.Tree;
-import edu.handong.csee.isel.ChangeAnalysis.ChangeClassifier;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
+import edu.handong.csee.isel.Main.CommandLineExecutor;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -88,8 +89,8 @@ public class ChangeMiner {
 					continue;
 
 				diffCount++;
-				String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
-				String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
+				String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath).replaceAll("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)","");
+				String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath).replaceAll("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*\n)","");
 
 				changeInfo = new ChangeInfo(oldPath, newPath, commit.name());
 
@@ -140,8 +141,7 @@ public class ChangeMiner {
 							+ "\n L diff: " + diff.toString()
 							+ "\n L action name: " + action.getName()
 							+ "\n L action type: " + action.getNode().getType()
-							+ "\n L action Position info: " + action.getNode().getPos() + "-" + action.getNode().getEndPos()
-							+ "\n L action: " + action);
+							+ "\n L action Position info: " + action.getNode().getPos() + "-" + action.getNode().getEndPos());
 					System.out.println("\nsrc: " + src.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos())
 							+ "\n L hash: " + src.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos()).hashCode());
 					System.out.println("\ndst: " + dst.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos())
