@@ -60,7 +60,9 @@ public class ChangeMiner {
 			default:
 				fileExtension = Java;
 		}
-		
+
+		System.out.println("\nGit Change Mining Started");
+
 		for (RevCommit commit : commitList) {
 
 			if (commit.getParentCount() < 1) {
@@ -68,7 +70,8 @@ public class ChangeMiner {
 				continue;
 			}
 			commitCount++;
-			
+			System.out.println(" L change mined commitID: " + commit.name());
+
 			RevCommit parent = commit.getParent(0);
 			
 			List<DiffEntry> diffs = RepoUtils.diff(parent, commit, repo);
@@ -127,7 +130,6 @@ public class ChangeMiner {
 					e.printStackTrace();
 				}
 				actionCount = 0;
-				System.out.println("\n@" + commit.name());
 				for (Action action : actionList) {
 					actionCount++;
 					if (level) {
@@ -148,6 +150,10 @@ public class ChangeMiner {
 				changeInfoList.add(changeInfo);
 			}
 		}
+		if (changeInfoList.size()!=0)
+			System.out.println("\nChange Mining Completed\n");
+		else
+			System.out.println("\nChange Mining Failed\n");
         return changeInfoList;
     }
 	

@@ -64,8 +64,7 @@ public class Main {
 		} catch (IOException | GitAPIException e) {
 			e.printStackTrace();
 		}
-		System.out.println("\nChange Mining Completed\n");
-
+		System.out.println("\nChange Information\n");
 		for (ChangeInfo change : changeInfoList) {
 			change.printChange();
 		}

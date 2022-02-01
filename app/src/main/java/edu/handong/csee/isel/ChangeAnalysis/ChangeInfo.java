@@ -30,9 +30,13 @@ public class ChangeInfo {
                 + "\n L file path: "
                 + "\n\t src: " + srcFilePath
                 + "\n\t dst: " + dstFilePath
-                + "\n L hunk info: ");
+                + "\n L hunk info");
+        int hunks=0;
         for (HunkInfo hunk : hunkInfo) {
-            System.out.println("\t" + hunk.getActionName() + "@" + hunk.getActionType());
+            System.out.println("\t#" + ++hunks);
+            System.out.println("\thunk name: " + hunk.getActionName()
+                    + "\n\thunk type: " + hunk.getActionType()
+                    + "\n\thunk position: " + hunk.getActionPos());
         }
         System.out.println();
     }
@@ -40,10 +44,14 @@ public class ChangeInfo {
     class HunkInfo {
         private String actionName;
         private String actionType;
+        private String actionPos;
+        private Action action;
 
         public HunkInfo(Action action) {
             actionName = action.getName();
             actionType = action.getNode().getType().toString();
+            actionPos = action.getNode().getPos() + "-" + action.getNode().getEndPos();
+            this.action = action;
         }
 
         public String getActionName() {
@@ -52,6 +60,14 @@ public class ChangeInfo {
 
         public String getActionType() {
             return actionType;
+        }
+
+        public String getActionPos() {
+            return actionPos;
+        }
+
+        public Action getAction() {
+            return action;
         }
     }
 }
