@@ -61,12 +61,12 @@ public class CommandLineExecutor {
 	            if (process.exitValue() == 0) {
 	                System.out.println("\nSettings Completed\n");
 	                if (successOutput!=null)
-	                	System.out.println(successOutput.toString());
+	                	System.out.println(successOutput);
 	                
 	            } else {
 	                System.out.println("\nSettings Failed\n");
 	                if (errorOutput!=null)
-	                	System.out.println(errorOutput.toString());
+	                	System.out.println(errorOutput);
 	            }
 	            
 	        } catch (IOException | InterruptedException e) {

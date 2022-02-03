@@ -3,15 +3,14 @@
  */
 package edu.handong.csee.isel.Main;
 
+import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
+import edu.handong.csee.isel.RepoMiner.ChangeMiner;
+import edu.handong.csee.isel.RepoMiner.CommitMiner;
+import org.eclipse.jgit.api.errors.GitAPIException;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
-import org.eclipse.jgit.api.errors.GitAPIException;
-
-import edu.handong.csee.isel.RepoMiner.ChangeMiner;
-import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
 
 public class Main {
@@ -31,18 +30,18 @@ public class Main {
 		if (value.size() == 0)
 			return;
 
-		System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
-		System.setProperty("gt.cgum.path", "/data/CGYW/ASTChangeAnalyzer/app/cgum/cgum");
+//		System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
+//		System.setProperty("gt.cgum.path", "/data/CGYW/ASTChangeAnalyzer/app/cgum/cgum");
 
-//		System.setProperty("gt.pp.path", new File("").getAbsolutePath()
-//				+ File.separator + "app"
-//				+ File.separator + "pythonparser"
-//				+ File.separator + "pythonparser");
-//
-//		System.setProperty("gt.cgum.path", new File("").getAbsolutePath()
-//				+ File.separator + "app"
-//				+ File.separator + "cgum"
-//				+ File.separator + "cgum");
+		System.setProperty("gt.pp.path", new File("").getAbsolutePath()
+				+ File.separator + "app"
+				+ File.separator + "pythonparser"
+				+ File.separator + "pythonparser");
+
+		System.setProperty("gt.cgum.path", new File("").getAbsolutePath()
+				+ File.separator + "app"
+				+ File.separator + "cgum"
+				+ File.separator + "cgum");
 
 		CommandLineExecutor cli = new CommandLineExecutor();
 		cli.executeSettings();
@@ -54,9 +53,12 @@ public class Main {
 		try {
 			for (String str : value) {
 				commitMine = new CommitMiner(str);
+
 				changeMine.setRepo(commitMine.getRepo());
 				changeMine.setLang(option.getLanguage());
 				changeMine.setLevel(option.getLevel());
+				changeMine.setDiffTool(option.getDiffTool());
+
 				changeInfoList = changeMine.collect(commitMine.getCommitList());
 				cli = new CommandLineExecutor();
 				cli.executeDeletion(commitMine.getRepoPath().getParentFile());
