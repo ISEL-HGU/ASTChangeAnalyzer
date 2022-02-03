@@ -20,7 +20,7 @@ public class GumTree {
     private Tree dst;
 
 
-    public GumTree(boolean level, String fileExtension, String srcFileSource, String dstFileSource) {
+    public GumTree (boolean level, String fileExtension, String srcFileSource, String dstFileSource) {
         this.level = level;
         this.fileExtension = fileExtension;
         this.srcFileSource = srcFileSource;

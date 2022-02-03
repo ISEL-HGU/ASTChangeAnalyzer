@@ -37,15 +37,11 @@ public class CLI {
 				Scanner scanner = new Scanner(System.in);
 				System.out.print("\nChoose the differencing tool for Java :\n"
 						+ "  1: gumtree (https://github.com/GumTreeDiff/gumtree)\n"
-						+ "  2: gumtree-spoon (https://github.com/SpoonLabs/gumtree-spoon-ast-diff)\n"
-						+ "  3: LAS (https://github.com/thwak/LAS)\n"
-						+ "Enter selection (default: gumtree) [1..3] ");
+						+ "  2: LAS (https://github.com/thwak/LAS)\n"
+						+ "Enter selection (default: gumtree) [1..2] ");
 				int opt = scanner.nextInt();
 				switch (opt) {
 					case 2:
-						DiffTool = "SPOON";
-						break;
-					case 3:
 						DiffTool = "LAS";
 						break;
 					default:

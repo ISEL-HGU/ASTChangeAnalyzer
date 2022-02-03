@@ -8,6 +8,7 @@ import java.util.List;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import com.github.gumtreediff.tree.Tree;
 import edu.handong.csee.isel.DiffTools.GumTree;
+import edu.handong.csee.isel.DiffTools.LAS;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -97,8 +98,8 @@ public class ChangeMiner {
 
 				switch (DiffTool) {
 					case "LAS":
-						break;
-					case "SPOON":
+						LAS las = new LAS(level, fileExtension, srcFileSource, dstFileSource);
+						changeInfo = las.constructChange(changeInfo);
 						break;
 					default:
 						GumTree gumtree = new GumTree(level, fileExtension, srcFileSource, dstFileSource);

@@ -20,7 +20,7 @@ public class LAS {
     private Tree dst;
 
 
-    public LAS(boolean level, String fileExtension, String srcFileSource, String dstFileSource) {
+    public LAS (boolean level, String fileExtension, String srcFileSource, String dstFileSource) {
         this.level = level;
         this.fileExtension = fileExtension;
         this.srcFileSource = srcFileSource;
