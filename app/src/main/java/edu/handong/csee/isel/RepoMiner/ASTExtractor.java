@@ -42,6 +42,10 @@ public class ASTExtractor {
 		Run.initGenerators();
 		File srcFile = new File("src.java");
 		File dstFile = new File("dst.java");
+		/* checking
+		File srcTree = new File("srcTree_" + srcFileSource.length() + ".txt");
+		File dstTree = new File("dstTree_" + dstFileSource.length() + ".txt");
+		*/
 		try {
 			BufferedWriter srcWriter = new BufferedWriter(new FileWriter(srcFile));
 			srcWriter.write(srcFileSource);
@@ -52,11 +56,31 @@ public class ASTExtractor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Tree src = TreeGenerators.getInstance().getTree(srcFile.getPath()).getRoot(); // retrieves and applies the default parser for the file 
+		Tree src = TreeGenerators.getInstance().getTree(srcFile.getPath()).getRoot(); // retrieves and applies the default parser for the file
 		Tree dst = TreeGenerators.getInstance().getTree(dstFile.getPath()).getRoot(); // retrieves and applies the default parser for the file
-
+		/*
+		try {
+			BufferedWriter srcWriter = new BufferedWriter(new FileWriter(srcTree));
+			srcWriter.write(src.toTreeString());
+			srcWriter.close();
+			BufferedWriter dstWriter = new BufferedWriter(new FileWriter(dstTree));
+			dstWriter = new BufferedWriter(new FileWriter(dstTree));
+			dstWriter.write(dst.toTreeString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		*/
 		Matcher defaultMatcher = Matchers.getInstance().getMatcher(); // retrieves the default matcher
 		MappingStore mappings = defaultMatcher.match(src, dst); // computes the mappings between the trees
+		/*
+		try {
+			BufferedWriter srcWriter = new BufferedWriter(new FileWriter("mapping" + mappings.toString().length() + ".txt"));
+			srcWriter.write(mappings.toString());
+			srcWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		 */
 
 		EditScriptGenerator editScriptGenerator = new SimplifiedChawatheScriptGenerator(); // instantiates the simplified Chawathe script generator
 		EditScript actions = editScriptGenerator.computeActions(mappings); // computes the edit script

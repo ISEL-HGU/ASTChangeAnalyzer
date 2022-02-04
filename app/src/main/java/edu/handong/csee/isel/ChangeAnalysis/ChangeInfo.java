@@ -34,7 +34,7 @@ public class ChangeInfo {
         int hunks=0;
         for (HunkInfo hunk : hunkInfo) {
             System.out.println("\t#" + ++hunks);
-            System.out.println("\thunk name: " + hunk.getActionName()
+            System.out.println("\thunk name: \n" + hunk.getAction()
                     + "\n\thunk type: " + hunk.getActionType()
                     + "\n\thunk position: " + hunk.getActionPos());
         }
