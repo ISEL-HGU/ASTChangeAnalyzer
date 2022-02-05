@@ -7,11 +7,12 @@ import com.github.gumtreediff.tree.Tree;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import edu.handong.csee.isel.RepoMiner.ASTExtractor;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class LAS {
+public class LASTool {
     private boolean level;
     private String fileExtension;
     private String srcFileSource;
@@ -20,7 +21,7 @@ public class LAS {
     private Tree dst;
 
 
-    public LAS (boolean level, String fileExtension, String srcFileSource, String dstFileSource) {
+    public LASTool(boolean level, String fileExtension, String srcFileSource, String dstFileSource) {
         this.level = level;
         this.fileExtension = fileExtension;
         this.srcFileSource = srcFileSource;
