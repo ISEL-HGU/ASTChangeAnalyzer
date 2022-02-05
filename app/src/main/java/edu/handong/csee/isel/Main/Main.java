@@ -45,9 +45,6 @@ public class Main {
 		} catch (IOException | GitAPIException e) {
 			e.printStackTrace();
 		}
-		for (ChangeInfo change : changeInfoList) {
-			change.printChange();
-		}
     }
 
     private void checkOS() {

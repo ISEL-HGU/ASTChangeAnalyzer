@@ -13,9 +13,8 @@ import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.gen.TreeGenerators;
 import com.github.gumtreediff.gen.python.PythonTreeGenerator;
 import com.github.gumtreediff.gen.c.*;
+import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
 
@@ -42,10 +41,6 @@ public class ASTExtractor {
 		Run.initGenerators();
 		File srcFile = new File("src.java");
 		File dstFile = new File("dst.java");
-		/* checking
-		File srcTree = new File("srcTree_" + srcFileSource.length() + ".txt");
-		File dstTree = new File("dstTree_" + dstFileSource.length() + ".txt");
-		*/
 		try {
 			BufferedWriter srcWriter = new BufferedWriter(new FileWriter(srcFile));
 			srcWriter.write(srcFileSource);
@@ -58,29 +53,8 @@ public class ASTExtractor {
 		}
 		Tree src = TreeGenerators.getInstance().getTree(srcFile.getPath()).getRoot(); // retrieves and applies the default parser for the file
 		Tree dst = TreeGenerators.getInstance().getTree(dstFile.getPath()).getRoot(); // retrieves and applies the default parser for the file
-		/*
-		try {
-			BufferedWriter srcWriter = new BufferedWriter(new FileWriter(srcTree));
-			srcWriter.write(src.toTreeString());
-			srcWriter.close();
-			BufferedWriter dstWriter = new BufferedWriter(new FileWriter(dstTree));
-			dstWriter = new BufferedWriter(new FileWriter(dstTree));
-			dstWriter.write(dst.toTreeString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
-		Matcher defaultMatcher = Matchers.getInstance().getMatcher(); // retrieves the default matcher
-		MappingStore mappings = defaultMatcher.match(src, dst); // computes the mappings between the trees
-		/*
-		try {
-			BufferedWriter srcWriter = new BufferedWriter(new FileWriter("mapping" + mappings.toString().length() + ".txt"));
-			srcWriter.write(mappings.toString());
-			srcWriter.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		 */
+
+		MappingStore mappings = new CompositeMatchers.SimpleGumtree().match(src, dst); // computes the mappings between the trees
 
 		EditScriptGenerator editScriptGenerator = new SimplifiedChawatheScriptGenerator(); // instantiates the simplified Chawathe script generator
 		EditScript actions = editScriptGenerator.computeActions(mappings); // computes the edit script
@@ -110,10 +84,7 @@ public class ASTExtractor {
 		if (srcTC!= null && dstTC!=null) {
 			Tree src = srcTC.getRoot();
 			Tree dst = dstTC.getRoot();
-
-			Matcher defaultMatcher = Matchers.getInstance().getMatcher(); // retrieves the default matcher
-			MappingStore mappings = defaultMatcher.match(src, dst); // computes the mappings between the trees
-
+			MappingStore mappings = new CompositeMatchers.SimpleGumtree().match(src, dst); // computes the mappings between the trees
 			EditScriptGenerator editScriptGenerator = new SimplifiedChawatheScriptGenerator(); // instantiates the simplified Chawathe script generator
 			actions = editScriptGenerator.computeActions(mappings); // computes the edit script
 		}
@@ -137,10 +108,7 @@ public class ASTExtractor {
 		if (srcTC!= null && dstTC!=null) {
 			Tree src = srcTC.getRoot();
 			Tree dst = dstTC.getRoot();
-
-			Matcher defaultMatcher = Matchers.getInstance().getMatcher(); // retrieves the default matcher
-			MappingStore mappings = defaultMatcher.match(src, dst); // computes the mappings between the trees
-
+			MappingStore mappings = new CompositeMatchers.SimpleGumtree().match(src, dst); // computes the mappings between the trees
 			EditScriptGenerator editScriptGenerator = new SimplifiedChawatheScriptGenerator(); // instantiates the simplified Chawathe script generator
 			actions = editScriptGenerator.computeActions(mappings); // computes the edit script
 		}
