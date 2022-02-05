@@ -28,7 +28,8 @@ public class CommitMiner {
 		Matcher matcher = pattern.matcher(path);
 		
 		if (matcher.find()) {
-			file = new File("/Users/nayeawon/Desktop/" + matcher.group(3));
+//			file = new File("/Users/nayeawon/Desktop/" + matcher.group(3));
+			file = new File("/home/zackcglee/Documents/projects/ISEL/ASTAnalyzer/clones/" + matcher.group(3));
 //			file = new File("/data/CGYW/clones/" + matcher.group(3));
 			if (file.exists()) {
 				file = new File(file + "/.git");
