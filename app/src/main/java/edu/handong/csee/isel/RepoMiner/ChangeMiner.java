@@ -1,7 +1,5 @@
 package edu.handong.csee.isel.RepoMiner;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +52,7 @@ public class ChangeMiner {
 				fileExtension = Java;
 		}
 
-		System.out.println("\nGit Change Mining Started");
+		System.out.println("Git Change Mining Started");
 
 		for (RevCommit commit : commitList) {
 
@@ -80,7 +78,7 @@ public class ChangeMiner {
 				String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath).replaceAll("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)","");
 				String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath).replaceAll("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*\n)","");
 
-				changeInfo = new ChangeInfo(oldPath, newPath, repo.toString(), commit.name());
+				changeInfo = new ChangeInfo(oldPath, newPath, repo.getDirectory().getParent(), commit.name());
 
 				switch (DiffTool) {
 					case "LAS":
