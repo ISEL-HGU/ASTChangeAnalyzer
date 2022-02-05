@@ -7,7 +7,6 @@ import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
-import org.checkerframework.checker.units.qual.C;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.File;
@@ -24,7 +23,8 @@ public class Main {
     }
 
 	private String os;
-	private HashMap<String, String> fileHash;
+	private HashMap<String, ArrayList<String>> fileHash;
+	private HashMap<String, ArrayList<String>> hunkHash;
 
     private void run(String[] args) throws IOException {
 		checkOS();
@@ -52,13 +52,42 @@ public class Main {
 		}
 
 		ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer();
-		fileHash = new HashMap<String, String>();
+		fileHash = new HashMap<String, ArrayList<String>>();
+		hunkHash = new HashMap<String, ArrayList<String>>();
 		for (ChangeInfo changeInfo : changeInfoList) {
-			fileHash.put(changeAnalyzer.computeSHA256Hash(changeInfo.getHunks()),
-					changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+			String fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithName());
+			if (fileHash.containsKey(fkey))
+				fileHash.get(fkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+			else {
+				ArrayList<String> fileList = new ArrayList<String>();
+				fileList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+				fileHash.put(fkey, fileList);
+			}
+
+			String hkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithType());
+			if (hunkHash.containsKey(hkey))
+				hunkHash.get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+			else {
+				ArrayList<String> hunkList = new ArrayList<String>();
+				hunkList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+				hunkHash.put(hkey, hunkList);
+			}
 		}
 
-		System.out.println("HashMap(file level) size: " + fileHash.size());
+		System.out.println("\nHashMap(file level) size: " + fileHash.size());
+		for (String str : fileHash.keySet()) {
+			if (fileHash.get(str).size()>1) {
+				System.out.println(fileHash.get(str).size());
+			}
+		}
+
+		System.out.println("\nHashMap(hunk level) size: " + hunkHash.size());
+		for (String str : hunkHash.keySet()) {
+			if (hunkHash.get(str).size()>1) {
+				System.out.println(hunkHash.get(str).size());
+			}
+		}
+
     }
 
     private void checkOS() {

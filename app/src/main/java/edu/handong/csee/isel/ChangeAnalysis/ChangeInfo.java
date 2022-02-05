@@ -9,13 +9,13 @@ public class ChangeInfo {
     private String srcFilePath;
     private String dstFilePath;
     private ArrayList<Action> hunkInfo;
-    private HashMap<String, String> fileHash;
-    private HashMap<String, String> hunkHash;
     private String projectName;
     private String commitID;
-    private String hunks;
+    private String actionsWithName;
+    private String actionsWithType;
 
-    public String getHunks() { return hunks; }
+    public String getActionsWithName() { return actionsWithName; }
+    public String getActionsWithType() { return actionsWithType; }
     public String getProjectName() { return projectName; }
     public String getCommitID() { return commitID; }
 
@@ -25,17 +25,15 @@ public class ChangeInfo {
         this.projectName = projectName;
         this.commitID = commitId;
         hunkInfo = new ArrayList<Action>();
-        fileHash = new HashMap<String, String>();
-        hunkHash = new HashMap<String, String>();
-        hunks = "";
+        actionsWithName = "";
+        actionsWithType = "";
     }
 
     public void addHunk(Action action) {
-        ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer();
         hunkInfo.add(action);
-//        hunkHash.put(changeAnalyzer.computeSHA256Hash(action.toString()), projectName + " | " + commitID);
-        hunks = hunks + action.getName() + "|" ;
-        System.out.println(hunks);
+        actionsWithName = actionsWithName + action.getName() + "|";
+        actionsWithType = actionsWithType + action.getName() + "@" + action.getNode().getType().toString().replaceAll("\\:\s\\S$", "")
+                .replaceAll("[0-9+,+0-9]", "").replaceAll("\\[", "").replaceAll("\\]","") + "|";
     }
 
     public void printChange() {

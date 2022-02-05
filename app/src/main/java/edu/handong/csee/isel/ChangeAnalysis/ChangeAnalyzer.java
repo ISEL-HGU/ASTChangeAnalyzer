@@ -15,7 +15,6 @@ public class ChangeAnalyzer {
 
     public String computeSHA256Hash(String hashString) {
         MessageDigest md;
-        hashString = hashString.replaceAll("[0-9+,+0-9]", "").replaceAll("\\[", "").replaceAll("\\]","");
         try {
             md = MessageDigest.getInstance("SHA-256");
             md.update(hashString.getBytes());

@@ -6,7 +6,7 @@ import com.github.gumtreediff.gen.SyntaxException;
 import com.github.gumtreediff.tree.Tree;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import edu.handong.csee.isel.RepoMiner.ASTExtractor;
-
+import main.LAS;
 
 import java.io.File;
 import java.io.IOException;

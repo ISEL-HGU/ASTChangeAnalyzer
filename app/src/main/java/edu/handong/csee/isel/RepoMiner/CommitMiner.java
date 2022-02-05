@@ -37,6 +37,7 @@ public class CommitMiner {
 				git = Git.cloneRepository()
 						.setURI(path)
 						.setDirectory(file).call();
+				System.out.println("\nRepository Cloning Completed\n");
 			}
 		} else {
 			file = new File(path + "/.git");
