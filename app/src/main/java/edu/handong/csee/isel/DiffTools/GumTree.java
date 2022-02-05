@@ -63,21 +63,8 @@ public class GumTree {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        int actionCount = 0;
         for (Action action : actionList) {
-            actionCount++;
-            if (level) {
-                changeInfo.addHunk(action);
-                continue;
-            }
-            System.out.println("\n#" + actionCount
-                    + "\n L action name: " + action.getName()
-                    + "\n L action type: " + action.getNode().getType()
-                    + "\n L action Position info: " + action.getNode().getPos() + "-" + action.getNode().getEndPos());
-            System.out.println("\nsrc: " + src.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos())
-                    + "\n L hash: " + src.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos()).hashCode());
-            System.out.println("\ndst: " + dst.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos())
-                    + "\n L hash: " + dst.getTreesBetweenPositions(action.getNode().getPos(), action.getNode().getEndPos()).hashCode());
+            if (level) { changeInfo.addHunk(action); }
         }
         return changeInfo;
     }

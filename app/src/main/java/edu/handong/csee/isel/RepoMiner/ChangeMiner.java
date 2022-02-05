@@ -13,10 +13,6 @@ import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 
-import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.gen.SyntaxException;
-import com.github.gumtreediff.actions.EditScript;
-
 public class ChangeMiner {
 	
 	private Repository repo;
@@ -24,9 +20,6 @@ public class ChangeMiner {
 	private boolean level;
 	private String DiffTool;
 	private String fileExtension;
-	private int commitCount = 0;
-	private int diffCount;
-	private int actionCount;
 	private String Java = ".java";
 	private String Python = ".py";
 	private String C = ".c";
@@ -45,10 +38,6 @@ public class ChangeMiner {
 	public void setLevel(boolean level) { this.level = level; }
 
 	public void setDiffTool(String DiffTool) { this.DiffTool = DiffTool; }
-
-	public String getFileExtension() {
-		return fileExtension;
-	}
 	
 	public ArrayList<ChangeInfo> collect(List<RevCommit> commitList) {
 
@@ -73,13 +62,10 @@ public class ChangeMiner {
 				System.err.println("WARNING: Parent commit does not exit: " + commit.name());
 				continue;
 			}
-			commitCount++;
-			System.out.println(" L change mined commitID: " + commit.name());
 
 			RevCommit parent = commit.getParent(0);
 			
 			List<DiffEntry> diffs = RepoUtils.diff(parent, commit, repo);
-			diffCount = 0;
 
 			ChangeInfo changeInfo = null;
 
@@ -94,7 +80,7 @@ public class ChangeMiner {
 				String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath).replaceAll("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)","");
 				String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath).replaceAll("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*\n)","");
 
-				changeInfo = new ChangeInfo(oldPath, newPath, commit.name());
+				changeInfo = new ChangeInfo(oldPath, newPath, repo.toString(), commit.name());
 
 				switch (DiffTool) {
 					case "LAS":

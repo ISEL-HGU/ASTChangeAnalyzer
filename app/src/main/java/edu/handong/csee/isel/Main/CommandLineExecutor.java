@@ -30,14 +30,10 @@ public class CommandLineExecutor {
         }
     }
 	
-	public void executeSettings() {
+	public void executeSettings(String cmd) {
     	
         // Setting commands
-//            cmdList.add("pip3 install -r ../../../../pythonparser/requirements.txt");
-			cmdList.add("pip3 install -r " + new File("").getAbsolutePath()
-                    + File.separator + "app"
-                    + File.separator + "pythonparser"
-                    + File.separator + "requirements.txt");
+            cmdList.add(cmd);
 	        String[] array = cmdList.toArray(new String[cmdList.size()]);
 	        
 	        try {
@@ -130,54 +126,4 @@ public class CommandLineExecutor {
             }
         }
 	}
-	
-	public String executeParser(File file) {
-        
-        // Setting commands
-        cmdList.add(new File("").getAbsolutePath() + "/app/cgum/cgum /Users/nayeawon/HGU/ISEL/Code/cgum/standard.h");
-        String[] array = cmdList.toArray(new String[cmdList.size()]);
- 
-        try {
-            process = runtime.exec(array);
- 
-            successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
- 
-            while ((msg = successBufferReader.readLine()) != null) {
-                if (successOutput!=null)
-                    successOutput.append(msg + System.getProperty("line.separator"));
-            }
-            
-            errorBufferReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "EUC-KR"));
-            while ((msg = errorBufferReader.readLine()) != null) {
-                if (errorOutput!=null)
-                    errorOutput.append(msg + System.getProperty("line.separator"));
-            }
-            
-            process.waitFor();
- 
-            if (process.exitValue() == 0) {
-                System.out.println("Parsing Completed\n");
-                if (successOutput!=null)
-                	msg = successOutput.toString();
-                
-            } else {
-                System.out.println("Parsing Failed\n");
-                if (errorOutput!=null)
-                	System.out.println(errorOutput.toString());
-                msg = "";
-            }
- 
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }  finally {
-            try {
-                process.destroy();
-                if (successBufferReader != null) successBufferReader.close();
-                if (errorBufferReader != null) errorBufferReader.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-        return msg;
-    }
 }

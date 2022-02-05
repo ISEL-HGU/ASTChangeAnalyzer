@@ -26,68 +26,25 @@ public class CommitMiner {
 		
 		Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com()(.*?)$");
 		Matcher matcher = pattern.matcher(path);
-		String repoPath = "";
-		Scanner scanner = new Scanner(System.in);
 		
 		if (matcher.find()) {
-			try{
-				if(System.getProperty("user.home").contains("\\"))
-					System.out.print("Cloned repository absolute path (default: " + System.getProperty("user.home") + "\\Desktop): ");
-				else
-					System.out.print("Cloned repository absolute path (default: " + System.getProperty("user.home") + "/Desktop): ");
-				repoPath = scanner.nextLine();
-				System.out.println();
-				//wrong path
-				if (!repoPath.matches("^((?:\\/[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*(?:\\-[a-zA-Z0-9]+)*(?:.+))+)$"))
-					repoPath = System.getProperty("user.home") + "/Desktop";
-				
-				if (repoPath.contains("\\")) {
-					repoPath = repoPath.replace("/", "\\");
-				}
-			} catch (Exception e){
-				e.printStackTrace();
-			}
-			
-			file = new File(repoPath + "/" + matcher.group(3));
+			file = new File("/Users/nayeawon/Desktop/" + matcher.group(3));
+//			file = new File("/data/CGYW/clones/" + matcher.group(3));
 			if (file.exists()) {
-				System.err.println("File(PATH:" +file.toString() + ") already exists\n");
-				System.err.print("Choose the proceeding action :\n"
-						+ "  1: Rewrite the cloned repository to proceed\n"
-						+ "  2: Terminate the program\n"
-						+ "Enter selection (default: Rewrite) [1..2] ");
-				int opt = scanner.nextInt();
-				switch(opt) {
-				case 1:
-					new CommandLineExecutor().executeDeletion(file);
-					break;
-				case 2:
-					System.out.println("\nProgram Terminated\n");
-					System.exit(0);
-					return;
-				}
+				file = new File(file + "/.git");
+				git = Git.open(file);
+			} else {
+				git = Git.cloneRepository()
+						.setURI(path)
+						.setDirectory(file).call();
 			}
-			
-			git = Git.cloneRepository()
-					.setURI(path)
-					.setDirectory(file).call();
-			
-			System.out.println("\nGit Clone Completed");
-			System.out.println("L repository path: " + getRepoPath());
-			System.out.println();
-		}
-		
-		else {
+		} else {
 			file = new File(path + "/.git");
 			git = Git.open(file);
 		}
-		
 		Iterable<RevCommit> walk = git.log().call();
 		commitList = IterableUtils.toList(walk);
 	}
-	
-	public File getRepoPath() {
-    	return file;
-    }
 	
 	public List<RevCommit> getCommitList() {
 		return commitList;

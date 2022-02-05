@@ -15,13 +15,12 @@ import java.util.ArrayList;
 
 public class Main {
 
-	private static boolean isWindows;
-
     public static void main(String[] args) throws IOException {
     	Main main = new Main();
     	main.run(args);
     }
 
+	private String os;
     private void run(String[] args) throws IOException {
 		checkOS();
 		CLI option = new CLI();
@@ -30,22 +29,6 @@ public class Main {
 		if (value.size() == 0)
 			return;
 
-//		System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
-//		System.setProperty("gt.cgum.path", "/data/CGYW/ASTChangeAnalyzer/app/cgum/cgum");
-
-		System.setProperty("gt.pp.path", new File("").getAbsolutePath()
-				+ File.separator + "app"
-				+ File.separator + "pythonparser"
-				+ File.separator + "pythonparser");
-
-		System.setProperty("gt.cgum.path", new File("").getAbsolutePath()
-				+ File.separator + "app"
-				+ File.separator + "cgum"
-				+ File.separator + "cgum");
-
-		CommandLineExecutor cli = new CommandLineExecutor();
-		cli.executeSettings();
-
 		CommitMiner commitMine;
 		ChangeMiner changeMine = new ChangeMiner();
 		ArrayList<ChangeInfo> changeInfoList = null;
@@ -53,41 +36,50 @@ public class Main {
 		try {
 			for (String str : value) {
 				commitMine = new CommitMiner(str);
-
 				changeMine.setRepo(commitMine.getRepo());
 				changeMine.setLang(option.getLanguage());
 				changeMine.setLevel(option.getLevel());
 				changeMine.setDiffTool(option.getDiffTool());
-
 				changeInfoList = changeMine.collect(commitMine.getCommitList());
-				cli = new CommandLineExecutor();
-				cli.executeDeletion(commitMine.getRepoPath().getParentFile());
 			}
 		} catch (IOException | GitAPIException e) {
 			e.printStackTrace();
 		}
-		System.out.println("\nChange Information\n");
 		for (ChangeInfo change : changeInfoList) {
 			change.printChange();
 		}
-
-
     }
 
     private void checkOS() {
-    	if (System.getProperty("os.name").indexOf("Windows") > -1) {
-            Main.setWindows(true);
+		String cmd;
+    	if (System.getProperty("os.name").toUpperCase().contains("MAC")) {
+            setOS("MAC");
+			System.setProperty("gt.pp.path", new File("").getAbsolutePath()
+					+ File.separator + "app"
+					+ File.separator + "pythonparser"
+					+ File.separator + "pythonparser");
+
+			System.setProperty("gt.cgum.path", new File("").getAbsolutePath()
+					+ File.separator + "app"
+					+ File.separator + "cgum"
+					+ File.separator + "cgum");
+
+			cmd = "pip3 install -r " + new File("").getAbsolutePath()
+                    + File.separator + "app"
+                    + File.separator + "pythonparser"
+                    + File.separator + "requirements.txt";
         } else {
-            Main.setWindows(false);
+			setOS("LINUX");
+			System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
+			System.setProperty("gt.cgum.path", "/data/CGYW/ASTChangeAnalyzer/app/cgum/cgum");
+			cmd = "pip3 install -r ../../../../pythonparser/requirements.txt";
         }
+		CommandLineExecutor cli = new CommandLineExecutor();
+		cli.executeSettings(cmd);
     }
 
-	public static boolean isWindows() {
-		return isWindows;
-	}
-
-	public static void setWindows(boolean isWindows) {
-		Main.isWindows = isWindows;
+	public void setOS(String os) {
+		this.os = os;
 	}
 
 }

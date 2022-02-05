@@ -7,9 +7,13 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
+import java.io.File;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class CLI {
 	
@@ -24,35 +28,13 @@ public class CLI {
 
 	
 	public ArrayList<String> CommonCLI (String[] args) {
-		
 		Options options = createOptions();
 		address = new ArrayList<String>();
-
 		if(parseOptions(options, args)){
-			
 			if (help) {
 				printHelp(options);
 			}
-			if (lang) {
-				Scanner scanner = new Scanner(System.in);
-				System.out.print("\nChoose the differencing tool for Java :\n"
-						+ "  1: gumtree (https://github.com/GumTreeDiff/gumtree)\n"
-						+ "  2: LAS (https://github.com/thwak/LAS)\n"
-						+ "Enter selection (default: gumtree) [1..2] ");
-				int opt = scanner.nextInt();
-				switch (opt) {
-					case 2:
-						DiffTool = "LAS";
-						break;
-					default:
-						DiffTool = "GUMTREE";
-						break;
-				}
-			}
 		}
-		return address;
-	}
-	public ArrayList<String> getAddress() {
 		return address;
 	}
 	public String getLanguage() {
@@ -65,22 +47,32 @@ public class CLI {
 		CommandLineParser parser = new DefaultParser();
 
 		try {
-
 			CommandLine cmd = parser.parse(options, args);
-			
 			path = cmd.hasOption("p");
-			if (path)
-				address.add(cmd.getOptionValue("p"));
-
-			inputCsv = cmd.hasOption("i");
-			if (inputCsv) {
-				Utils utils = new Utils();
-				address = utils.csvReader(cmd.getOptionValue("i"));
+			if (path) {
+				String tmp = cmd.getOptionValue("p");
+				if (tmp.endsWith(".csv")) {
+					Utils utils = new Utils();
+					address = utils.csvReader(tmp);
+				} else if (tmp.startsWith("https")) {
+					address.add(tmp);
+				} else {
+					try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(tmp))) {
+						for (Path path : stream) {
+							if (Files.isDirectory(path)) {
+								address.add(path.getFileName().toString());
+							}
+						}
+					}
+				}
 			}
 
-			lang = cmd.hasOption("lang");
-			if (lang)
-				language = cmd.getOptionValue("lang");
+			if (cmd.hasOption("python")) language = "PYTHON";
+			else if (cmd.hasOption("c")) language = "C";
+			else language = "JAVA";
+
+			if (cmd.hasOption("java"))
+				DiffTool = cmd.getOptionValue("java").toUpperCase();
 
 			lev = cmd.hasOption("level");
 
@@ -102,20 +94,23 @@ public class CLI {
 		options.addOption(Option.builder("p").longOpt("path")
 				.desc("Set a path of a directory or a file to display")
 				.hasArg()
-				.argName("Git repository path")
+				.argName("Local path")
 				.build());
 		
-		options.addOption(Option.builder("i").longOpt("inputCSV")
-				.desc("Set a path of csv file that contains urls")
-				.hasArg()
-				.argName("csv path")
-				.build());
-		
-		options.addOption(Option.builder("lang").longOpt("language")
+		options.addOption(Option.builder("java").longOpt("java")
 				.desc("Set a language of a directory or a file")
 				.hasArg()
 				.argName("Expected programming language")
-				.required()
+				.build());
+
+		options.addOption(Option.builder("python").longOpt("python")
+				.desc("Set a language of a directory or a file")
+				.argName("Expected programming language")
+				.build());
+
+		options.addOption(Option.builder("c").longOpt("c")
+				.desc("Set a language of a directory or a file")
+				.argName("Expected programming language")
 				.build());
 
 		options.addOption(Option.builder("level").longOpt("level")
