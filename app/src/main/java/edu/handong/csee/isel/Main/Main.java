@@ -3,14 +3,17 @@
  */
 package edu.handong.csee.isel.Main;
 
+import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
+import org.checkerframework.checker.units.qual.C;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Main {
@@ -21,6 +24,8 @@ public class Main {
     }
 
 	private String os;
+	private HashMap<String, String> fileHash;
+
     private void run(String[] args) throws IOException {
 		checkOS();
 		CLI option = new CLI();
@@ -45,6 +50,15 @@ public class Main {
 		} catch (IOException | GitAPIException e) {
 			e.printStackTrace();
 		}
+
+		ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer();
+		fileHash = new HashMap<String, String>();
+		for (ChangeInfo changeInfo : changeInfoList) {
+			fileHash.put(changeAnalyzer.computeSHA256Hash(changeInfo.getHunks()),
+					changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+		}
+
+		System.out.println("HashMap(file level) size: " + fileHash.size());
     }
 
     private void checkOS() {

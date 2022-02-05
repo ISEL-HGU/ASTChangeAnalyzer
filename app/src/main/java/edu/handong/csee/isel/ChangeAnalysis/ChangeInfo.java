@@ -13,24 +13,29 @@ public class ChangeInfo {
     private HashMap<String, String> hunkHash;
     private String projectName;
     private String commitID;
-    private int hunks;
+    private String hunks;
+
+    public String getHunks() { return hunks; }
+    public String getProjectName() { return projectName; }
+    public String getCommitID() { return commitID; }
 
     public ChangeInfo(String srcFilePath, String dstFilePath, String projectName, String commitId) {
         this.srcFilePath = srcFilePath;
         this.dstFilePath = dstFilePath;
         this.projectName = projectName;
         this.commitID = commitId;
-        hunks = 0;
         hunkInfo = new ArrayList<Action>();
         fileHash = new HashMap<String, String>();
         hunkHash = new HashMap<String, String>();
+        hunks = "";
     }
 
     public void addHunk(Action action) {
         ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer();
         hunkInfo.add(action);
-//        hunkHash.put(changeAnalyzer.computeSHA256Hash(action.toString()), );
-        hunks++;
+//        hunkHash.put(changeAnalyzer.computeSHA256Hash(action.toString()), projectName + " | " + commitID);
+        hunks = hunks + action.getName() + "|" ;
+        System.out.println(hunks);
     }
 
     public void printChange() {
