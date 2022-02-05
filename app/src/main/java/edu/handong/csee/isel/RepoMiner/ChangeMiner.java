@@ -6,7 +6,7 @@ import java.util.List;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import com.github.gumtreediff.tree.Tree;
 import edu.handong.csee.isel.DiffTools.GumTree;
-import edu.handong.csee.isel.DiffTools.LAS;
+import edu.handong.csee.isel.DiffTools.LASTool;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -82,7 +82,7 @@ public class ChangeMiner {
 
 				switch (DiffTool) {
 					case "LAS":
-						LAS las = new LAS(level, fileExtension, srcFileSource, dstFileSource);
+						LASTool las = new LASTool(level, fileExtension, srcFileSource, dstFileSource);
 						changeInfo = las.constructChange(changeInfo);
 						break;
 					default:
