@@ -63,6 +63,7 @@ public class GumTree {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         for (Action action : actionList) {
             if (level) { changeInfo.addHunk(action); }
         }
