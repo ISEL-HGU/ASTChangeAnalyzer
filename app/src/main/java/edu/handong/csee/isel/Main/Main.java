@@ -23,8 +23,9 @@ public class Main {
     }
 
 	private String os;
-	private HashMap<String, ArrayList<String>> fileHash;
-	private HashMap<String, ArrayList<String>> hunkHash;
+	private HashMap<String, ArrayList<String>> fileMap;
+	private HashMap<String, ArrayList<String>> hunkMap;
+	private HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
 
     private void run(String[] args) throws IOException {
 		checkOS();
@@ -35,58 +36,87 @@ public class Main {
 			return;
 
 		CommitMiner commitMine;
-		ChangeMiner changeMine = new ChangeMiner();
-		ArrayList<ChangeInfo> changeInfoList = null;
+		ChangeMiner changeMine;
+		ArrayList<ArrayList<ChangeInfo>> changeInfoList = new ArrayList<ArrayList<ChangeInfo>>();
 
 		try {
 			for (String str : value) {
 				commitMine = new CommitMiner(str);
+				changeMine = new ChangeMiner();
 				changeMine.setRepo(commitMine.getRepo());
 				changeMine.setLang(option.getLanguage());
 				changeMine.setLevel(option.getLevel());
 				changeMine.setDiffTool(option.getDiffTool());
-				changeInfoList = changeMine.collect(commitMine.getCommitList());
+				changeInfoList.add(changeMine.collect(commitMine.getCommitList()));
 			}
 		} catch (IOException | GitAPIException e) {
 			e.printStackTrace();
 		}
 
 		ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer();
-		fileHash = new HashMap<String, ArrayList<String>>();
-		hunkHash = new HashMap<String, ArrayList<String>>();
-		for (ChangeInfo changeInfo : changeInfoList) {
-			String fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithName());
-			if (fileHash.containsKey(fkey))
-				fileHash.get(fkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-			else {
-				ArrayList<String> fileList = new ArrayList<String>();
-				fileList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-				fileHash.put(fkey, fileList);
-			}
 
-			String hkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithType());
-			if (hunkHash.containsKey(hkey))
-				hunkHash.get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-			else {
-				ArrayList<String> hunkList = new ArrayList<String>();
-				hunkList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-				hunkHash.put(hkey, hunkList);
+		fileMap = new HashMap<String, ArrayList<String>>();
+		hunkMap = new HashMap<String, ArrayList<String>>();
+		coreMap = new HashMap<String, HashMap<String, ArrayList<String>>>();
+
+		for (ArrayList<ChangeInfo> changeList : changeInfoList) {
+			for (ChangeInfo changeInfo : changeList) {
+				String fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithName());
+				if (fileMap.containsKey(fkey))
+					fileMap.get(fkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+				else {
+					ArrayList<String> fileList = new ArrayList<String>();
+					fileList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+					fileMap.put(fkey, fileList);
+				}
+
+				String hkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithType());
+				if (hunkMap.containsKey(hkey))
+					hunkMap.get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+				else {
+					ArrayList<String> hunkList = new ArrayList<String>();
+					hunkList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+					hunkMap.put(hkey, hunkList);
+				}
+
+				if (coreMap.containsKey(fkey)) {
+					if (coreMap.get(fkey).containsKey(hkey)) {
+						coreMap.get(fkey).get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+					}
+					else {
+						ArrayList<String> combineList = new ArrayList<String>();
+						combineList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+						coreMap.get(fkey).put(hkey, combineList);
+					}
+				}
+				else {
+					ArrayList<String> combineList = new ArrayList<String>();
+					combineList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+					HashMap <String, ArrayList<String>> newCoreMap = new HashMap <String, ArrayList<String>>();
+					newCoreMap.put(hkey, combineList);
+					coreMap.put(fkey, newCoreMap);
+				}
 			}
 		}
+		int count = 0;
+		for (String key : fileMap.keySet()) {
+			count += fileMap.get(key).size();
+		}
+		System.out.println("\nHashMap(file level) size: " + count);
 
-		System.out.println("\nHashMap(file level) size: " + fileHash.size());
-		for (String str : fileHash.keySet()) {
-			if (fileHash.get(str).size()>1) {
-				System.out.println(fileHash.get(str).size());
+		count = 0;
+		for (String key : hunkMap.keySet()) {
+			count += hunkMap.get(key).size();
+		}
+		System.out.println("\nHashMap(hunk level) size: " + count);
+
+		count=0;
+		for (String strName : coreMap.keySet()) {
+			for (String strType : coreMap.get(strName).keySet()) {
+				count += coreMap.get(strName).get(strType).size();
 			}
 		}
-
-		System.out.println("\nHashMap(hunk level) size: " + hunkHash.size());
-		for (String str : hunkHash.keySet()) {
-			if (hunkHash.get(str).size()>1) {
-				System.out.println(hunkHash.get(str).size());
-			}
-		}
+		System.out.println("\nHashMap(core level) size: " + count);
 
     }
 

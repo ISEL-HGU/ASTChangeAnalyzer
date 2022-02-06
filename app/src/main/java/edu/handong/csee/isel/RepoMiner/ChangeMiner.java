@@ -75,8 +75,8 @@ public class ChangeMiner {
 				if (newPath.indexOf("Test") >= 0 || !newPath.endsWith(fileExtension))
 					continue;
 
-				String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath).replaceAll("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)","");
-				String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath).replaceAll("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*\n)","");
+				String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
+				String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
 
 				changeInfo = new ChangeInfo(oldPath, newPath, repo.getDirectory().getParent(), commit.name());
 
