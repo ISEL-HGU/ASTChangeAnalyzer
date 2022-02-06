@@ -61,7 +61,41 @@ public class Main {
 
 		for (ArrayList<ChangeInfo> changeList : changeInfoList) {
 			for (ChangeInfo changeInfo : changeList) {
-				String fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithName());
+				String fkey;
+				String hkey;
+				switch (option.getDiffTool()) {
+					case "LAS":
+						fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getEditOpWithName());
+						break;
+					default:
+						fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithName());
+						hkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithType());
+						if (hunkMap.containsKey(hkey))
+							hunkMap.get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+						else {
+							ArrayList<String> hunkList = new ArrayList<String>();
+							hunkList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+							hunkMap.put(hkey, hunkList);
+						}
+						if (coreMap.containsKey(fkey)) {
+							if (coreMap.get(fkey).containsKey(hkey)) {
+								coreMap.get(fkey).get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+							}
+							else {
+								ArrayList<String> combineList = new ArrayList<String>();
+								combineList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+								coreMap.get(fkey).put(hkey, combineList);
+							}
+						}
+						else {
+							ArrayList<String> combineList = new ArrayList<String>();
+							combineList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+							HashMap <String, ArrayList<String>> newCoreMap = new HashMap <String, ArrayList<String>>();
+							newCoreMap.put(hkey, combineList);
+							coreMap.put(fkey, newCoreMap);
+						}
+						break;
+				}
 				if (fileMap.containsKey(fkey))
 					fileMap.get(fkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
 				else {
@@ -69,39 +103,10 @@ public class Main {
 					fileList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
 					fileMap.put(fkey, fileList);
 				}
-
-				String hkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithType());
-				if (hunkMap.containsKey(hkey))
-					hunkMap.get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-				else {
-					ArrayList<String> hunkList = new ArrayList<String>();
-					hunkList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-					hunkMap.put(hkey, hunkList);
-				}
-
-				if (coreMap.containsKey(fkey)) {
-					if (coreMap.get(fkey).containsKey(hkey)) {
-						coreMap.get(fkey).get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-					}
-					else {
-						ArrayList<String> combineList = new ArrayList<String>();
-						combineList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-						coreMap.get(fkey).put(hkey, combineList);
-					}
-				}
-				else {
-					ArrayList<String> combineList = new ArrayList<String>();
-					combineList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-					HashMap <String, ArrayList<String>> newCoreMap = new HashMap <String, ArrayList<String>>();
-					newCoreMap.put(hkey, combineList);
-					coreMap.put(fkey, newCoreMap);
-				}
 			}
 		}
 		int count = 0;
-		for (String key : fileMap.keySet()) {
-			count += fileMap.get(key).size();
-		}
+		count = fileMap.size();
 		System.out.println("\nHashMap(file level) size: " + count);
 
 		count = 0;

@@ -17,6 +17,7 @@ public class ChangeInfo {
     private String actionsWithType;
 
     public String getActionsWithName() { return actionsWithName; }
+    public String getEditOpWithName() { return EditOpWithName; }
     public String getActionsWithType() { return actionsWithType; }
     public String getProjectName() { return projectName; }
     public String getCommitID() { return commitID; }
