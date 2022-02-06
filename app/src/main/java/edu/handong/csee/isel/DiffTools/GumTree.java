@@ -65,7 +65,7 @@ public class GumTree {
         }
 
         for (Action action : actionList) {
-            if (level) { changeInfo.addHunk(action); }
+            if (level) { changeInfo.addAction(action); }
         }
         return changeInfo;
     }
