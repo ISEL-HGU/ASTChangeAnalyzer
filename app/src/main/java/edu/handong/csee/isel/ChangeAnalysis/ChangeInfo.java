@@ -1,17 +1,19 @@
 package edu.handong.csee.isel.ChangeAnalysis;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.github.gumtreediff.actions.model.Action;
+import script.model.EditOp;
 
 public class ChangeInfo {
     private String srcFilePath;
     private String dstFilePath;
-    private ArrayList<Action> hunkInfo;
+    private ArrayList<Action> actionInfo;
+    private ArrayList<EditOp> editInfo;
     private String projectName;
     private String commitID;
     private String actionsWithName;
+    private String EditOpWithName;
     private String actionsWithType;
 
     public String getActionsWithName() { return actionsWithName; }
@@ -24,16 +26,23 @@ public class ChangeInfo {
         this.dstFilePath = dstFilePath;
         this.projectName = projectName;
         this.commitID = commitId;
-        hunkInfo = new ArrayList<Action>();
+        actionInfo = new ArrayList<Action>();
+        editInfo = new ArrayList<EditOp>();
         actionsWithName = "";
+        EditOpWithName = "";
         actionsWithType = "";
     }
 
-    public void addHunk(Action action) {
-        hunkInfo.add(action);
+    public void addAction(Action action) {
+        actionInfo.add(action);
         actionsWithName = actionsWithName + action.getName() + "|";
         actionsWithType = actionsWithType + action.getName() + "@" + action.getNode().getType().toString().replaceAll("\\:\s\\S$", "")
                 .replaceAll("[0-9+,+0-9]", "").replaceAll("\\[", "").replaceAll("\\]","") + "|";
+    }
+  
+    public void addEditOp(EditOp op) {
+        editInfo.add(op);
+        EditOpWithName = EditOpWithName + op.getType() + "|" ;
     }
 
     public void printChange() {
@@ -42,7 +51,7 @@ public class ChangeInfo {
                 + "\n\t src: " + srcFilePath
                 + "\n\t dst: " + dstFilePath
                 + "\n L hunk info");
-        for (Action action : hunkInfo) {
+        for (Action action : actionInfo) {
             System.out.println("\thunk name: \n" + action.getName()
                     + "\n\thunk type: " + action.getNode().getType());
         }
