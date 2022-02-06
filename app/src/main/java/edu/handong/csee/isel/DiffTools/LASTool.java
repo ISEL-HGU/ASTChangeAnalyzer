@@ -58,7 +58,8 @@ public class LASTool {
         LAS las = new LAS();
         String [] args = {"srcFile.java","dstFile.java"};
         las.main(args);
-
+        srcFile.delete();
+        dstFile.delete();
 
 //        int actionCount = 0;
 //        for (Action action : actionList) {
