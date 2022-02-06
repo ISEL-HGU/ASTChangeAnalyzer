@@ -12,9 +12,12 @@ public class ChangeInfo {
     private ArrayList<EditOp> editInfo;
     private String projectName;
     private String commitID;
-    private String hunks;
+    private String actionsWithName;
+    private String EditOpWithName;
+    private String actionsWithType;
 
-    public String getHunks() { return hunks; }
+    public String getActionsWithName() { return actionsWithName; }
+    public String getActionsWithType() { return actionsWithType; }
     public String getProjectName() { return projectName; }
     public String getCommitID() { return commitID; }
 
@@ -25,16 +28,21 @@ public class ChangeInfo {
         this.commitID = commitId;
         actionInfo = new ArrayList<Action>();
         editInfo = new ArrayList<EditOp>();
-        hunks = "";
+        actionsWithName = "";
+        EditOpWithName = "";
+        actionsWithType = "";
     }
 
     public void addAction(Action action) {
         actionInfo.add(action);
-        hunks = hunks + action.getName() + "|" ;
+        actionsWithName = actionsWithName + action.getName() + "|";
+        actionsWithType = actionsWithType + action.getName() + "@" + action.getNode().getType().toString().replaceAll("\\:\s\\S$", "")
+                .replaceAll("[0-9+,+0-9]", "").replaceAll("\\[", "").replaceAll("\\]","") + "|";
     }
+  
     public void addEditOp(EditOp op) {
         editInfo.add(op);
-        hunks = hunks + op.getType() + "|" ;
+        EditOpWithName = EditOpWithName + op.getType() + "|" ;
     }
 
     public void printChange() {

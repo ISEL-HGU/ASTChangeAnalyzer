@@ -2,6 +2,8 @@ package edu.handong.csee.isel.DiffTools;
 
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 
+import main.LAS;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

@@ -34,10 +34,11 @@ public class Utils {
 						}
 					}
 				}
-				this.url_projectName.put(record.get(URLColumnNumber),record.get(ProjectNameColumnNumber));
-				String data = record.get( URLColumnNumber );
-				System.out.println(data);
-				name_URL.add(data);
+				if(record.getRecordNumber() > 1) {
+					this.url_projectName.put(record.get(URLColumnNumber), record.get(ProjectNameColumnNumber));
+					String data = record.get(URLColumnNumber);
+					name_URL.add(data);
+				}
 			}
 
 		} catch( Exception e ){

@@ -29,8 +29,8 @@ public class CommitMiner {
 		
 		if (matcher.find()) {
 //			file = new File("/Users/nayeawon/Desktop/" + matcher.group(3));
-			file = new File("/home/zackcglee/Documents/projects/ISEL/ASTAnalyzer/clones/" + matcher.group(3));
-//			file = new File("/data/CGYW/clones/" + matcher.group(3));
+//			file = new File("/home/zackcglee/Documents/projects/ISEL/ASTAnalyzer/clones/" + matcher.group(3));
+			file = new File("/data/CGYW/clones/" + matcher.group(3));
 			if (file.exists()) {
 				file = new File(file + "/.git");
 				git = Git.open(file);
@@ -38,6 +38,7 @@ public class CommitMiner {
 				git = Git.cloneRepository()
 						.setURI(path)
 						.setDirectory(file).call();
+				System.out.println("\nRepository Cloning Completed\n");
 			}
 		} else {
 			file = new File(path + "/.git");
