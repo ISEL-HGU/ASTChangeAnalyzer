@@ -109,10 +109,7 @@ public class Main {
 		count = fileMap.size();
 		System.out.println("\nHashMap(file level) size: " + count);
 
-		count = 0;
-		for (String key : hunkMap.keySet()) {
-			count += hunkMap.get(key).size();
-		}
+		count = hunkMap.size();
 		System.out.println("\nHashMap(hunk level) size: " + count);
 
 		count=0;
