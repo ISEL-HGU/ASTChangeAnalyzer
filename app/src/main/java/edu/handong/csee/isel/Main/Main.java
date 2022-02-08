@@ -9,7 +9,9 @@ import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +61,8 @@ public class Main {
 		hunkMap = new HashMap<String, ArrayList<String>>();
 		coreMap = new HashMap<String, HashMap<String, ArrayList<String>>>();
 
+		int count = 0;
+
 		for (ArrayList<ChangeInfo> changeList : changeInfoList) {
 			for (ChangeInfo changeInfo : changeList) {
 				String fkey;
@@ -103,23 +107,28 @@ public class Main {
 					fileList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
 					fileMap.put(fkey, fileList);
 				}
+				count++;
 			}
 		}
-		int count = 0;
-		count = fileMap.size();
-		System.out.println("\nHashMap(file level) size: " + count);
 
-		count = hunkMap.size();
-		System.out.println("\nHashMap(hunk level) size: " + count);
-
-		count=0;
-		for (String strName : coreMap.keySet()) {
-			for (String strType : coreMap.get(strName).keySet()) {
-				count += coreMap.get(strName).get(strType).size();
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("result.txt"));
+			writer.write("Mined Repository Path : " + option.getOptionValueP());
+			writer.write("\nAnalyzed Change size : " + count);
+			count = fileMap.size();
+			writer.write("\nHashMap(file level) size: " + count);
+			count = hunkMap.size();
+			count=0;
+			for (String strName : coreMap.keySet()) {
+				for (String strType : coreMap.get(strName).keySet()) {
+					count += coreMap.get(strName).get(strType).size();
+				}
 			}
+			writer.write("\nHashMap(core level) size: " + count);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		System.out.println("\nHashMap(core level) size: " + count);
-
     }
 
     private void checkOS() {

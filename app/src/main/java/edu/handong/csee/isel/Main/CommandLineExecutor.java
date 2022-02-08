@@ -60,7 +60,7 @@ public class CommandLineExecutor {
 	                	System.out.println(successOutput);
 	                
 	            } else {
-	                System.out.println("\nSettings Failed\n");
+	                System.err.println("\nSettings Failed\n");
 	                if (errorOutput!=null)
 	                	System.out.println(errorOutput);
 	            }

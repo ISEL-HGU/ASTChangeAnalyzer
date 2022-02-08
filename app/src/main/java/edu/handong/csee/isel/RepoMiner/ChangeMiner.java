@@ -94,9 +94,9 @@ public class ChangeMiner {
 			}
 		}
 		if (changeInfoList.size()!=0)
-			System.out.println("\nChange Mining Completed\n");
+			System.out.println("\nChange Mining Completed");
 		else
-			System.out.println("\nChange Mining Failed\n");
+			System.err.println("\nChange Mining Failed");
         return changeInfoList;
     }
 	

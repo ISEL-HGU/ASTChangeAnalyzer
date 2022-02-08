@@ -18,7 +18,7 @@ public class LASTool {
     private String fileExtension;
     private String srcFileSource;
     private String dstFileSource;
-    private static int commitCount = 0;
+    private int commitCount = 0;
 
 
     public LASTool(boolean level, String fileExtension, String srcFileSource, String dstFileSource) {

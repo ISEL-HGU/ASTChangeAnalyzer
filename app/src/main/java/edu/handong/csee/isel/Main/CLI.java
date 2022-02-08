@@ -18,13 +18,12 @@ import java.util.*;
 public class CLI {
 	
 	private boolean path;
-	private boolean inputCsv;
-	private boolean lang;
 	private boolean lev;
 	private boolean help=false;
 	private ArrayList<String> address;
 	private String language;
 	private String DiffTool;
+	private String optionValueP;
 
 	
 	public ArrayList<String> CommonCLI (String[] args) {
@@ -37,27 +36,30 @@ public class CLI {
 		}
 		return address;
 	}
+
 	public String getLanguage() {
 		return language;
 	}
 	public boolean getLevel() { return lev; }
 	public String getDiffTool() { return DiffTool; }
+	public String getOptionValueP() { return optionValueP; }
 	
 	private boolean parseOptions(Options options, String[] args) {
 		CommandLineParser parser = new DefaultParser();
 
 		try {
 			CommandLine cmd = parser.parse(options, args);
+
 			path = cmd.hasOption("p");
 			if (path) {
-				String tmp = cmd.getOptionValue("p");
-				if (tmp.endsWith(".csv")) {
+				optionValueP = cmd.getOptionValue("p");
+				if (optionValueP.endsWith(".csv")) {
 					Utils utils = new Utils();
-					address = utils.csvReader(tmp);
-				} else if (tmp.startsWith("https")) {
-					address.add(tmp);
+					address = utils.csvReader(optionValueP);
+				} else if (optionValueP.startsWith("https")) {
+					address.add(optionValueP);
 				} else {
-					try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(tmp))) {
+					try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(optionValueP))) {
 						for (Path path : stream) {
 							if (Files.isDirectory(path)) {
 								address.add(path.getFileName().toString());
