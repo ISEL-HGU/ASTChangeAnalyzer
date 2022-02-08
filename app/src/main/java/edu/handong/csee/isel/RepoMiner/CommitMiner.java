@@ -44,7 +44,7 @@ public class CommitMiner {
 			file = new File(path + "/.git");
 			git = Git.open(file);
 		}
-		Iterable<RevCommit> walk = git.log().call();
+		Iterable<RevCommit> walk = git.log().all().call();
 		commitList = IterableUtils.toList(walk);
 	}
 	
