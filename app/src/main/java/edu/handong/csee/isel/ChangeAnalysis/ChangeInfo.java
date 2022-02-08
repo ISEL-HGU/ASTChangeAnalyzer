@@ -37,7 +37,7 @@ public class ChangeInfo {
     public void addAction(Action action) {
         actionInfo.add(action);
         actionsWithName = actionsWithName + action.getName() + "|";
-        actionsWithType = actionsWithType + action.getName() + "@" + action.getNode().getType().toString().replaceAll("\\:\s\\S$", "")
+        actionsWithType = actionsWithType + action.getName() + "@" + action.getNode().getType().toString().replaceAll("\\:\\s\\S$", "")
                 .replaceAll("[0-9+,+0-9]", "").replaceAll("\\[", "").replaceAll("\\]","") + "|";
     }
   
