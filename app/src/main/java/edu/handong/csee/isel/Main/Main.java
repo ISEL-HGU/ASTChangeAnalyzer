@@ -19,11 +19,6 @@ import java.util.HashMap;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-    	Main main = new Main();
-    	main.run(args);
-    }
-
 	private String os;
 	private String language;
 	private String DiffTool;
@@ -31,6 +26,11 @@ public class Main {
 	private HashMap<String, ArrayList<String>> fileMap;
 	private HashMap<String, ArrayList<String>> hunkMap;
 	private HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
+
+    public static void main(String[] args) throws IOException {
+    	Main main = new Main();
+    	main.run(args);
+    }
 
     private void run(String[] args) throws IOException {
 		checkOS();
@@ -66,7 +66,7 @@ public class Main {
 					changeMine.setProperties(commitMine.getRepo(), language, DiffTool);
 					ArrayList<ChangeInfo> changeInfoList = changeMine.collect(commitMine.getCommitList());
 					if (changeInfoList.size() < 1) {
-						System.err.println("Change Mining Failed");
+						System.out.println("Change Mining Failed\n");
 						continue;
 					}
 					for (ChangeInfo changeInfo : changeInfoList) {

@@ -3,7 +3,6 @@ package edu.handong.csee.isel.RepoMiner;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,10 +10,9 @@ import org.apache.commons.collections4.IterableUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.NoHeadException;
+import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
-
-import edu.handong.csee.isel.Main.CommandLineExecutor;
 
 
 public class CommitMiner {
@@ -37,9 +35,14 @@ public class CommitMiner {
 				git = Git.open(file);
 			} else {
 				System.out.print("Repository Cloning...");
-				git = Git.cloneRepository()
-						.setURI(path)
-						.setDirectory(file).call();
+				try {
+					git = Git.cloneRepository()
+							.setURI(path)
+							.setDirectory(file).call();
+				} catch (TransportException e) {
+					System.out.println("no CredentialsProvider(Authentication Problem)\n");
+					return;
+				}
 			}
 		} else {
 			git = Git.open(new File(path + "/.git"));
@@ -50,7 +53,7 @@ public class CommitMiner {
 			commitList = IterableUtils.toList(walk);
 			completed = true;
 		} catch (NoHeadException e) {
-			System.err.println("Empty repo");
+			System.out.println("Empty repo\n");
 			completed = false;
 		}
 		return;
