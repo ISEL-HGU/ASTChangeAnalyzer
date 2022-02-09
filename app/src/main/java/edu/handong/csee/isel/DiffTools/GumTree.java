@@ -55,8 +55,6 @@ public class GumTree {
                 actionList = editscript.asList();
 
         } catch (SyntaxException e) {
-            System.err.print("\nThis change has a syntatic error: ");
-            e.printStackTrace();
             File srcFile = new File("src" + fileExtension);
             File dstFile = new File("dst" + fileExtension);
             srcFile.delete();

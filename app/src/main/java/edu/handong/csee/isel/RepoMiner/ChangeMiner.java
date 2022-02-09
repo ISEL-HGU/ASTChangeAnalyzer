@@ -46,11 +46,7 @@ public class ChangeMiner {
 
 		for (RevCommit commit : commitList) {
 
-			if (commit.getParentCount() < 1) {
-				System.err.println("WARNING: Parent commit does not exit: " + commit.name());
-				continue;
-			}
-
+			if (commit.getParentCount() < 1) { continue; }
 			RevCommit parent = commit.getParent(0);
 			
 			List<DiffEntry> diffs = RepoUtils.diff(parent, commit, repo);

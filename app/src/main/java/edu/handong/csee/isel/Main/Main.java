@@ -57,17 +57,18 @@ public class Main {
 
 		try {
 			for (String str : inputs) {
+				System.out.println(str);
+				System.out.print("ASTChangeAnalyzing...");
 				commitMine = new CommitMiner(str);
 				if (commitMine.isCompleted()) {
-					System.out.println("Change Mining Started, " + str);
+					System.out.print("Change Mining...");
 					changeMine = new ChangeMiner();
 					changeMine.setProperties(commitMine.getRepo(), language, DiffTool);
 					ArrayList<ChangeInfo> changeInfoList = changeMine.collect(commitMine.getCommitList());
 					if (changeInfoList.size() < 1) {
-						System.err.println("\nChange Mining Failed, " + str + "\n");
+						System.err.println("Change Mining Failed");
 						continue;
 					}
-					System.out.println("\nChange Mining Completed, " + str);
 					for (ChangeInfo changeInfo : changeInfoList) {
 						String fkey;
 						String hkey;
@@ -121,6 +122,7 @@ public class Main {
 						}
 						total_count++;
 					}
+					System.out.println("Finish\n");
 				}
 			}
 		} catch (IOException | GitAPIException e) {
