@@ -42,8 +42,7 @@ public class CommitMiner {
 				System.out.println("\nRepository Cloning Completed: " + file + "\n");
 			}
 		} else {
-			file = new File(path + "/.git");
-			git = Git.open(file);
+			git = Git.open(new File(path + "/.git"));
 		}
 		try {
 			Iterable<RevCommit> walk = git.log().all().call();
