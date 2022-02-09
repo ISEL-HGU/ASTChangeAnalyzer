@@ -34,7 +34,7 @@ public class Utils {
 						}
 					}
 				}
-				if(record.getRecordNumber() > 1) {
+				else if(record.getRecordNumber() > 1) {
 					this.url_projectName.put(record.get(URLColumnNumber), record.get(ProjectNameColumnNumber));
 					String data = record.get(URLColumnNumber);
 					name_URL.add(data);
