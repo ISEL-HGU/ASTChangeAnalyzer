@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.collections4.IterableUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 
@@ -43,8 +44,12 @@ public class CommitMiner {
 			file = new File(path + "/.git");
 			git = Git.open(file);
 		}
-		Iterable<RevCommit> walk = git.log().all().call();
-		commitList = IterableUtils.toList(walk);
+		try {
+			Iterable<RevCommit> walk = git.log().all().call();
+			commitList = IterableUtils.toList(walk);
+		} catch (NoHeadException e) {
+			System.out.println("Empty repo, " + path);
+		}
 	}
 	
 	public List<RevCommit> getCommitList() {
