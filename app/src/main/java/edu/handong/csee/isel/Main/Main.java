@@ -44,6 +44,8 @@ public class Main {
 		try {
 			for (String str : value) {
 				commitMine = new CommitMiner(str);
+				if (commitMine.getCommitList().size() < 1)
+					continue;
 				changeMine = new ChangeMiner();
 				changeMine.setRepo(commitMine.getRepo());
 				changeMine.setLang(option.getLanguage());
