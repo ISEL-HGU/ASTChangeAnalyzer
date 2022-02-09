@@ -15,7 +15,6 @@ public class ChangeMiner {
 	
 	private Repository repo;
 	private String language;
-	private boolean level;
 	private String DiffTool;
 	private String fileExtension;
 	private String Java = ".java";
@@ -24,18 +23,11 @@ public class ChangeMiner {
 	private Tree src;
 	private Tree dst;
 
-	
-	public void setRepo(Repository repo) {
+	public void setProperties(Repository repo, String language, String DiffTool) {
 		this.repo = repo;
-	}
-	
-	public void setLang(String language) {
 		this.language = language;
+		this.DiffTool = DiffTool;
 	}
-
-	public void setLevel(boolean level) { this.level = level; }
-
-	public void setDiffTool(String DiffTool) { this.DiffTool = DiffTool; }
 	
 	public ArrayList<ChangeInfo> collect(List<RevCommit> commitList) {
 
@@ -82,11 +74,11 @@ public class ChangeMiner {
 
 				switch (DiffTool) {
 					case "LAS":
-						LASTool las = new LASTool(level, fileExtension, srcFileSource, dstFileSource);
+						LASTool las = new LASTool(fileExtension, srcFileSource, dstFileSource);
 						changeInfo = las.constructChange(changeInfo);
 						break;
 					default:
-						GumTree gumtree = new GumTree(level, fileExtension, srcFileSource, dstFileSource);
+						GumTree gumtree = new GumTree(fileExtension, srcFileSource, dstFileSource);
 						changeInfo = gumtree.constructChange(changeInfo);
 						break;
 				}
@@ -94,9 +86,9 @@ public class ChangeMiner {
 			}
 		}
 		if (changeInfoList.size()!=0)
-			System.out.println("\nChange Mining Completed");
+			System.out.println("\nChange Mining Completed, " + repo.toString());
 		else
-			System.err.println("\nChange Mining Failed");
+			System.err.println("\nChange Mining Failed, " + repo.toString());
         return changeInfoList;
     }
 	

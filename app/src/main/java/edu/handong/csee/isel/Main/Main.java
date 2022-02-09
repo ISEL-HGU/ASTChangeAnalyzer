@@ -25,6 +25,9 @@ public class Main {
     }
 
 	private String os;
+	private String language;
+	private String DiffTool;
+	private String input;
 	private HashMap<String, ArrayList<String>> fileMap;
 	private HashMap<String, ArrayList<String>> hunkMap;
 	private HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
@@ -32,101 +35,95 @@ public class Main {
     private void run(String[] args) throws IOException {
 		checkOS();
 		CLI option = new CLI();
-		ArrayList<String> value = option.CommonCLI(args);
+		ArrayList<String> inputs = option.CommonCLI(args);
+		language = option.getLanguage();
+		DiffTool = option.getDiffTool();
+		input = option.getOptionValueP();
 
-		if (value.size() == 0)
+		if (inputs.size() == 0)
 			return;
 
 		CommitMiner commitMine;
 		ChangeMiner changeMine;
-		ArrayList<ArrayList<ChangeInfo>> changeInfoList = new ArrayList<ArrayList<ChangeInfo>>();
-
-		try {
-			for (String str : value) {
-				commitMine = new CommitMiner(str);
-				if (commitMine.isCompleted()) {
-					changeMine = new ChangeMiner();
-					changeMine.setRepo(commitMine.getRepo());
-					changeMine.setLang(option.getLanguage());
-					changeMine.setLevel(option.getLevel());
-					changeMine.setDiffTool(option.getDiffTool());
-					changeInfoList.add(changeMine.collect(commitMine.getCommitList()));
-				}
-			}
-		} catch (IOException | GitAPIException e) {
-			e.printStackTrace();
-		}
-
 		ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer();
 
 		fileMap = new HashMap<String, ArrayList<String>>();
 		hunkMap = new HashMap<String, ArrayList<String>>();
 		coreMap = new HashMap<String, HashMap<String, ArrayList<String>>>();
-
-		int count = 0;
-
-		for (ArrayList<ChangeInfo> changeList : changeInfoList) {
-			for (ChangeInfo changeInfo : changeList) {
-				String fkey;
-				String hkey;
-				switch (option.getDiffTool()) {
-					case "LAS":
-						fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getEditOpWithName());
-						break;
-					default:
-						fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithName());
-						hkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithType());
-						if (hunkMap.containsKey(hkey))
-							hunkMap.get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-						else {
-							ArrayList<String> hunkList = new ArrayList<String>();
-							hunkList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-							hunkMap.put(hkey, hunkList);
-						}
-						if (coreMap.containsKey(fkey)) {
-							if (coreMap.get(fkey).containsKey(hkey)) {
-								coreMap.get(fkey).get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-							}
-							else {
-								ArrayList<String> combineList = new ArrayList<String>();
-								combineList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-								coreMap.get(fkey).put(hkey, combineList);
-							}
-						}
-						else {
-							ArrayList<String> combineList = new ArrayList<String>();
-							combineList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-							HashMap <String, ArrayList<String>> newCoreMap = new HashMap <String, ArrayList<String>>();
-							newCoreMap.put(hkey, combineList);
-							coreMap.put(fkey, newCoreMap);
-						}
-						break;
-				}
-				if (fileMap.containsKey(fkey))
-					fileMap.get(fkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-				else {
-					ArrayList<String> fileList = new ArrayList<String>();
-					fileList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
-					fileMap.put(fkey, fileList);
-				}
-				count++;
-			}
-		}
+		int total_count = 0;
+		int file_count = 0;
+		int hunk_count = 0;
+		int core_count = 0;
 
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(option.getOptionValueP() + ".txt"));
-			writer.write("Mined Repository Path : " + option.getOptionValueP());
-			writer.write("\nAnalyzed Change size : " + count);
-			count = fileMap.size();
-			writer.write("\nHashMap(file level) size: " + count);
-			count = hunkMap.size();
-			count=0;
-			for (String strName : coreMap.keySet()) {
-				for (String strType : coreMap.get(strName).keySet()) {
-					count += coreMap.get(strName).get(strType).size();
+			for (String str : inputs) {
+				commitMine = new CommitMiner(str);
+				if (commitMine.isCompleted()) {
+					changeMine = new ChangeMiner();
+					changeMine.setProperties(commitMine.getRepo(), language, DiffTool);
+					for (ChangeInfo changeInfo : changeMine.collect(commitMine.getCommitList())) {
+						String fkey;
+						String hkey;
+						switch (language) {
+							case "LAS":
+								fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getEditOpWithName());
+								break;
+							default:
+								fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithName());
+								hkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithType());
+								if (hunkMap.containsKey(hkey)) {
+									hunkMap.get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+									hunk_count++;
+								}
+								else {
+									ArrayList<String> hunkList = new ArrayList<String>();
+									hunkList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+									hunkMap.put(hkey, hunkList);
+								}
+
+								if (coreMap.containsKey(fkey)) {
+									if (coreMap.get(fkey).containsKey(hkey)) {
+										coreMap.get(fkey).get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+										core_count++;
+									}
+									else {
+										ArrayList<String> combineList = new ArrayList<String>();
+										combineList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+										coreMap.get(fkey).put(hkey, combineList);
+									}
+								}
+								else {
+									ArrayList<String> combineList = new ArrayList<String>();
+									combineList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+									HashMap <String, ArrayList<String>> newCoreMap = new HashMap <String, ArrayList<String>>();
+									newCoreMap.put(hkey, combineList);
+									coreMap.put(fkey, newCoreMap);
+								}
+								break;
+						}
+						if (fileMap.containsKey(fkey)) {
+							fileMap.get(fkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+							file_count++;
+						}
+						else {
+							ArrayList<String> fileList = new ArrayList<String>();
+							fileList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+							fileMap.put(fkey, fileList);
+						}
+						total_count++;
+					}
 				}
 			}
-			writer.write("\nHashMap(core level) size: " + count);
+		} catch (IOException | GitAPIException e) {
+			e.printStackTrace();
+		}
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("result.txt"));
+			writer.write("Mined Repository Path : " + input
+					+ "\nAnalyzed Change size : " + total_count
+					+ "\nHashMap(file level) size: " + file_count
+					+ "\nHashMap(hunk level) size: " + hunk_count
+					+ "\nHashMap(core level) size: " + core_count);
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -14,15 +14,13 @@ import script.model.EditOp;
 import tree.TreeBuilder;
 
 public class LASTool {
-    private boolean level;
     private String fileExtension;
     private String srcFileSource;
     private String dstFileSource;
     private int commitCount = 0;
 
 
-    public LASTool(boolean level, String fileExtension, String srcFileSource, String dstFileSource) {
-        this.level = level;
+    public LASTool(String fileExtension, String srcFileSource, String dstFileSource) {
         this.fileExtension = fileExtension;
         this.srcFileSource = srcFileSource;
         this.dstFileSource = dstFileSource;
@@ -70,9 +68,7 @@ public class LASTool {
                System.out.println("########################################");
                System.out.println(dstFileSource);
 
-                if(level) {
-                    changeInfo.addEditOp(op);
-                }
+               changeInfo.addEditOp(op);
 
             }
 //            System.out.println(script.exactMatch);

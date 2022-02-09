@@ -45,17 +45,4 @@ public class ChangeInfo {
         editInfo.add(op);
         EditOpWithName = EditOpWithName + op.getType() + "|" ;
     }
-
-    public void printChange() {
-        System.out.println("\ncommitId: " + commitID
-                + "\n L file path: "
-                + "\n\t src: " + srcFilePath
-                + "\n\t dst: " + dstFilePath
-                + "\n L hunk info");
-        for (Action action : actionInfo) {
-            System.out.println("\thunk name: \n" + action.getName()
-                    + "\n\thunk type: " + action.getNode().getType());
-        }
-        System.out.println();
-    }
 }

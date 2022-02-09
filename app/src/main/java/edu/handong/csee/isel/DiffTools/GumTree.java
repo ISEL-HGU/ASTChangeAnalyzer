@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class GumTree {
-    private boolean level;
     private String fileExtension;
     private String srcFileSource;
     private String dstFileSource;
@@ -30,8 +29,7 @@ public class GumTree {
     private Tree dst;
 
 
-    public GumTree (boolean level, String fileExtension, String srcFileSource, String dstFileSource) {
-        this.level = level;
+    public GumTree (String fileExtension, String srcFileSource, String dstFileSource) {
         this.fileExtension = fileExtension;
         this.srcFileSource = srcFileSource;
         this.dstFileSource = dstFileSource;
@@ -68,7 +66,7 @@ public class GumTree {
             e.printStackTrace();
         }
         for (Action action : actionList) {
-            if (level) { changeInfo.addAction(action); }
+            changeInfo.addAction(action);
         }
         return changeInfo;
     }
