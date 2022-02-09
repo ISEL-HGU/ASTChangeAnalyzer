@@ -1,5 +1,0 @@
-Mined Repository Path : https://github.com/shine-jung/TodoListSQLApp
-Analyzed Change size : 11
-HashMap(file level) size: 0
-HashMap(hunk level) size: 0
-HashMap(core level) size: 0
