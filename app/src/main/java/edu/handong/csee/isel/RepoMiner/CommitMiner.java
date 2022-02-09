@@ -22,6 +22,7 @@ public class CommitMiner {
 	private List<RevCommit> commitList;
 	private File file = null;
 	private Git git;
+	private boolean completed;
 	
 	public CommitMiner(String path) throws IOException, GitAPIException{
 		
@@ -49,7 +50,10 @@ public class CommitMiner {
 			commitList = IterableUtils.toList(walk);
 		} catch (NoHeadException e) {
 			System.out.println("Empty repo, " + path);
+			completed = false;
 		}
+		completed = true;
+		return;
 	}
 	
 	public List<RevCommit> getCommitList() {
@@ -59,6 +63,8 @@ public class CommitMiner {
 	public Repository getRepo() {
 		return git.getRepository();
 	}
+
+	public boolean isCompleted() { return completed; }
     
 }
 
