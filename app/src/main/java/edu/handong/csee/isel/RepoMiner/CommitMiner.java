@@ -48,11 +48,11 @@ public class CommitMiner {
 		try {
 			Iterable<RevCommit> walk = git.log().all().call();
 			commitList = IterableUtils.toList(walk);
+			completed = true;
 		} catch (NoHeadException e) {
 			System.out.println("Empty repo, " + path);
 			completed = false;
 		}
-		completed = true;
 		return;
 	}
 	
