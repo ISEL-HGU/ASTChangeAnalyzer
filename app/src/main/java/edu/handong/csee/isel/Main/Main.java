@@ -114,7 +114,7 @@ public class Main {
 		}
 
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(option.getOptionValueP() + ".txt"));
+			BufferedWriter writer = new BufferedWriter(new FileWriter("result.txt"));
 			writer.write("Mined Repository Path : " + option.getOptionValueP());
 			writer.write("\nAnalyzed Change size : " + count);
 			count = fileMap.size();
