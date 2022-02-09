@@ -39,7 +39,7 @@ public class CommitMiner {
 				git = Git.cloneRepository()
 						.setURI(path)
 						.setDirectory(file).call();
-				System.out.println("\nRepository Cloning Completed: " + file + "\n");
+				System.out.println("\nRepository Cloning Completed: " + path);
 			}
 		} else {
 			git = Git.open(new File(path + "/.git"));
@@ -48,8 +48,9 @@ public class CommitMiner {
 			Iterable<RevCommit> walk = git.log().all().call();
 			commitList = IterableUtils.toList(walk);
 			completed = true;
+			System.out.println("\nCommit Mining Completed: " + path);
 		} catch (NoHeadException e) {
-			System.out.println("Empty repo, " + path + "\n");
+			System.err.println("Empty repo, " + path + "\n");
 			completed = false;
 		}
 		return;

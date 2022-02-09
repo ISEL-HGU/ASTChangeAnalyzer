@@ -59,11 +59,20 @@ public class Main {
 			for (String str : inputs) {
 				commitMine = new CommitMiner(str);
 				if (commitMine.isCompleted()) {
+					System.out.println("Change Mining Started, " + str);
 					changeMine = new ChangeMiner();
 					changeMine.setProperties(commitMine.getRepo(), language, DiffTool);
-					for (ChangeInfo changeInfo : changeMine.collect(commitMine.getCommitList())) {
+					ArrayList<ChangeInfo> changeInfoList = changeMine.collect(commitMine.getCommitList());
+					if (changeInfoList.size() < 1) {
+						System.err.println("\nChange Mining Failed, " + str + "\n");
+						continue;
+					}
+					System.out.println("\nChange Mining Completed, " + str);
+					for (ChangeInfo changeInfo : changeInfoList) {
 						String fkey;
 						String hkey;
+						String projectName = changeInfo.getProjectName();
+						String commitID = changeInfo.getCommitID();
 						switch (language) {
 							case "LAS":
 								fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getEditOpWithName());
@@ -72,29 +81,29 @@ public class Main {
 								fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithName());
 								hkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithType());
 								if (hunkMap.containsKey(hkey)) {
-									hunkMap.get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+									hunkMap.get(hkey).add(projectName + "," + commitID);
 									hunk_count++;
 								}
 								else {
 									ArrayList<String> hunkList = new ArrayList<String>();
-									hunkList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+									hunkList.add(projectName + "," + commitID);
 									hunkMap.put(hkey, hunkList);
 								}
 
 								if (coreMap.containsKey(fkey)) {
 									if (coreMap.get(fkey).containsKey(hkey)) {
-										coreMap.get(fkey).get(hkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+										coreMap.get(fkey).get(hkey).add(projectName + "," + commitID);
 										core_count++;
 									}
 									else {
 										ArrayList<String> combineList = new ArrayList<String>();
-										combineList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+										combineList.add(projectName + "," + commitID);
 										coreMap.get(fkey).put(hkey, combineList);
 									}
 								}
 								else {
 									ArrayList<String> combineList = new ArrayList<String>();
-									combineList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+									combineList.add(projectName + "," + commitID);
 									HashMap <String, ArrayList<String>> newCoreMap = new HashMap <String, ArrayList<String>>();
 									newCoreMap.put(hkey, combineList);
 									coreMap.put(fkey, newCoreMap);
@@ -102,12 +111,12 @@ public class Main {
 								break;
 						}
 						if (fileMap.containsKey(fkey)) {
-							fileMap.get(fkey).add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+							fileMap.get(fkey).add(projectName + "," + commitID);
 							file_count++;
 						}
 						else {
 							ArrayList<String> fileList = new ArrayList<String>();
-							fileList.add(changeInfo.getProjectName() + "," + changeInfo.getCommitID());
+							fileList.add(projectName + "," + commitID);
 							fileMap.put(fkey, fileList);
 						}
 						total_count++;

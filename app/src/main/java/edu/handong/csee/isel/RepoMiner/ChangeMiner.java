@@ -44,8 +44,6 @@ public class ChangeMiner {
 				fileExtension = Java;
 		}
 
-		System.out.println("Git Change Mining Started");
-
 		for (RevCommit commit : commitList) {
 
 			if (commit.getParentCount() < 1) {
@@ -56,8 +54,6 @@ public class ChangeMiner {
 			RevCommit parent = commit.getParent(0);
 			
 			List<DiffEntry> diffs = RepoUtils.diff(parent, commit, repo);
-
-			ChangeInfo changeInfo = null;
 
 			for (DiffEntry diff : diffs) {
 
@@ -70,7 +66,7 @@ public class ChangeMiner {
 				String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
 				String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
 
-				changeInfo = new ChangeInfo(oldPath, newPath, repo.getDirectory().getParent(), commit.name());
+				ChangeInfo changeInfo = new ChangeInfo(oldPath, newPath, repo.getDirectory().getParent(), commit.name());
 
 				switch (DiffTool) {
 					case "LAS":
@@ -85,10 +81,6 @@ public class ChangeMiner {
 				changeInfoList.add(changeInfo);
 			}
 		}
-		if (changeInfoList.size()!=0)
-			System.out.println("\nChange Mining Completed, " + repo.toString());
-		else
-			System.err.println("\nChange Mining Failed, " + repo.toString());
         return changeInfoList;
     }
 	
