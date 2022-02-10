@@ -1,4 +1,0 @@
-Mined Repository Path : GithubList2.csv
-Analyzed Change size : 10
-HashMap(file level) size: 5
-HashMap(core level) size: 0
