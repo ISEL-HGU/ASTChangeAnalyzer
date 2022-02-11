@@ -3,7 +3,6 @@
  */
 package edu.handong.csee.isel.Main;
 
-import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
@@ -72,7 +71,7 @@ public class Main {
 					for (ChangeInfo changeInfo : changeInfoList) {
 						generateMap(changeInfo);
 					}
-					System.out.println("Finish\n");
+					System.out.println("Finished\n");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
