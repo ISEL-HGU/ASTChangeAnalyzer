@@ -15,10 +15,12 @@ public class ChangeInfo {
     private String actionsWithName;
     private String EditOpWithName;
     private String actionsWithType;
+    private String EditOpWithType;
 
     public String getActionsWithName() { return actionsWithName; }
     public String getEditOpWithName() { return EditOpWithName; }
     public String getActionsWithType() { return actionsWithType; }
+    public String getEditOpWithType() { return EditOpWithType; }
     public String getProjectName() { return projectName; }
     public String getCommitID() { return commitID; }
 
@@ -44,5 +46,6 @@ public class ChangeInfo {
     public void addEditOp(EditOp op) {
         editInfo.add(op);
         EditOpWithName = EditOpWithName + op.getType() + "|" ;
+        EditOpWithType = EditOpWithType + op.getNode().getLabel() + "@" + op.getLocation().getLabel() + "|";
     }
 }

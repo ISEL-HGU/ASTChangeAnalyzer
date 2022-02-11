@@ -132,7 +132,7 @@ public class Main {
 		switch (language) {
 			case "LAS":
 				fkey = computeSHA256Hash(changeInfo.getEditOpWithName());
-				hkey = computeSHA256Hash(changeInfo.getActionsWithType());
+				hkey = computeSHA256Hash(changeInfo.getEditOpWithType());
 				break;
 			default:
 				fkey = computeSHA256Hash(changeInfo.getActionsWithName());
