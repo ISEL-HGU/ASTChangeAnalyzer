@@ -7,12 +7,13 @@ import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
-import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,16 +24,20 @@ public class Main {
 	private String language;
 	private String DiffTool;
 	private String input;
+	private int total_count = 0;
+	private int file_count = 0;
+	private int hunk_count = 0;
+	private int core_count = 0;
 	private HashMap<String, ArrayList<String>> fileMap;
 	private HashMap<String, ArrayList<String>> hunkMap;
 	private HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
     	Main main = new Main();
-    	main.run(args);
+		main.run(args);
     }
 
-    private void run(String[] args) throws IOException {
+    private void run(String[] args) {
 		checkOS();
 		CLI option = new CLI();
 		ArrayList<String> inputs = option.CommonCLI(args);
@@ -40,23 +45,18 @@ public class Main {
 		DiffTool = option.getDiffTool();
 		input = option.getOptionValueP();
 
+		fileMap = new HashMap<String, ArrayList<String>>();
+		hunkMap = new HashMap<String, ArrayList<String>>();
+		coreMap = new HashMap<String, HashMap<String, ArrayList<String>>>();
+
 		if (inputs.size() == 0)
 			return;
 
 		CommitMiner commitMine;
 		ChangeMiner changeMine;
-		ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer();
 
-		fileMap = new HashMap<String, ArrayList<String>>();
-		hunkMap = new HashMap<String, ArrayList<String>>();
-		coreMap = new HashMap<String, HashMap<String, ArrayList<String>>>();
-		int total_count = 0;
-		int file_count = 0;
-		int hunk_count = 0;
-		int core_count = 0;
-
-		try {
-			for (String str : inputs) {
+		for (String str : inputs) {
+			try {
 				System.out.println(str);
 				System.out.print("ASTChangeAnalyzing...");
 				commitMine = new CommitMiner(str);
@@ -70,63 +70,14 @@ public class Main {
 						continue;
 					}
 					for (ChangeInfo changeInfo : changeInfoList) {
-						String fkey;
-						String hkey;
-						String projectName = changeInfo.getProjectName();
-						String commitID = changeInfo.getCommitID();
-						switch (language) {
-							case "LAS":
-								fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getEditOpWithName());
-								break;
-							default:
-								fkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithName());
-								hkey = changeAnalyzer.computeSHA256Hash(changeInfo.getActionsWithType());
-								if (hunkMap.containsKey(hkey)) {
-									hunkMap.get(hkey).add(projectName + "," + commitID);
-									hunk_count++;
-								}
-								else {
-									ArrayList<String> hunkList = new ArrayList<String>();
-									hunkList.add(projectName + "," + commitID);
-									hunkMap.put(hkey, hunkList);
-								}
-
-								if (coreMap.containsKey(fkey)) {
-									if (coreMap.get(fkey).containsKey(hkey)) {
-										coreMap.get(fkey).get(hkey).add(projectName + "," + commitID);
-										core_count++;
-									}
-									else {
-										ArrayList<String> combineList = new ArrayList<String>();
-										combineList.add(projectName + "," + commitID);
-										coreMap.get(fkey).put(hkey, combineList);
-									}
-								}
-								else {
-									ArrayList<String> combineList = new ArrayList<String>();
-									combineList.add(projectName + "," + commitID);
-									HashMap <String, ArrayList<String>> newCoreMap = new HashMap <String, ArrayList<String>>();
-									newCoreMap.put(hkey, combineList);
-									coreMap.put(fkey, newCoreMap);
-								}
-								break;
-						}
-						if (fileMap.containsKey(fkey)) {
-							fileMap.get(fkey).add(projectName + "," + commitID);
-							file_count++;
-						}
-						else {
-							ArrayList<String> fileList = new ArrayList<String>();
-							fileList.add(projectName + "," + commitID);
-							fileMap.put(fkey, fileList);
-						}
-						total_count++;
+						generateMap(changeInfo);
 					}
 					System.out.println("Finish\n");
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
 			}
-		} catch (IOException | GitAPIException e) {
-			e.printStackTrace();
 		}
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter("result.txt"));
@@ -141,7 +92,11 @@ public class Main {
 		}
     }
 
-    private void checkOS() {
+	private void setOS(String os) {
+		this.os = os;
+	}
+
+	private void checkOS() {
 		String cmd;
     	if (System.getProperty("os.name").toUpperCase().contains("MAC")) {
             setOS("MAC");
@@ -169,8 +124,81 @@ public class Main {
 		cli.executeSettings(cmd);
     }
 
-	public void setOS(String os) {
-		this.os = os;
+	private void generateMap (ChangeInfo changeInfo) {
+		String fkey;
+		String hkey;
+		String projectName = changeInfo.getProjectName();
+		String commitID = changeInfo.getCommitID();
+		switch (language) {
+			case "LAS":
+				fkey = computeSHA256Hash(changeInfo.getEditOpWithName());
+				hkey = computeSHA256Hash(changeInfo.getActionsWithType());
+				break;
+			default:
+				fkey = computeSHA256Hash(changeInfo.getActionsWithName());
+				hkey = computeSHA256Hash(changeInfo.getActionsWithType());
+				break;
+		}
+
+		if (fileMap.containsKey(fkey)) {
+			fileMap.get(fkey).add(projectName + "," + commitID);
+			file_count++;
+		}
+		else {
+			ArrayList<String> fileList = new ArrayList<String>();
+			fileList.add(projectName + "," + commitID);
+			fileMap.put(fkey, fileList);
+		}
+
+
+		if (hunkMap.containsKey(hkey)) {
+			hunkMap.get(hkey).add(projectName + "," + commitID);
+			hunk_count++;
+		}
+		else {
+			ArrayList<String> hunkList = new ArrayList<String>();
+			hunkList.add(projectName + "," + commitID);
+			hunkMap.put(hkey, hunkList);
+		}
+
+
+		if (coreMap.containsKey(fkey)) {
+			if (coreMap.get(fkey).containsKey(hkey)) {
+				coreMap.get(fkey).get(hkey).add(projectName + "," + commitID);
+				core_count++;
+			}
+			else {
+				ArrayList<String> combineList = new ArrayList<String>();
+				combineList.add(projectName + "," + commitID);
+				coreMap.get(fkey).put(hkey, combineList);
+			}
+		}
+		else {
+			ArrayList<String> combineList = new ArrayList<String>();
+			combineList.add(projectName + "," + commitID);
+			HashMap <String, ArrayList<String>> newCoreMap = new HashMap <String, ArrayList<String>>();
+			newCoreMap.put(hkey, combineList);
+			coreMap.put(fkey, newCoreMap);
+		}
+
+		total_count++;
+	}
+
+	public String computeSHA256Hash(String hashString) {
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("SHA-256");
+			md.update(hashString.getBytes());
+			byte bytes[] = md.digest();
+			StringBuffer sb = new StringBuffer();
+			for(byte b : bytes){
+				sb.append(Integer.toString((b&0xff) + 0x100, 16).substring(1));
+			}
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 }
