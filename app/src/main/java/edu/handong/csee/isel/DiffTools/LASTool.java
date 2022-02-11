@@ -57,16 +57,16 @@ public class LASTool {
 
             for(EditOp op : script.getEditOps()){
                 //System.out.println(op);
-               actionCount++;
-               System.out.println("\n#" +commitCount + "-" + actionCount
-                  + "\n L action name: " + op.getType()
-                       + "\n L action type: " + op.getNode().getLabel()
-                       + "\n L action Position info: " + op.getNode().getLineNumber()
-                       + "\n L location type: " + op.getLocation().getLabel()
-                       + "\n L location Position info: " + op.getLocation().getLineNumber());
-               System.out.println(srcFileSource);
-               System.out.println("########################################");
-               System.out.println(dstFileSource);
+//               actionCount++;
+//               System.out.println("\n#" +commitCount + "-" + actionCount
+//                  + "\n L action name: " + op.getType()
+//                       + "\n L action type: " + op.getNode().getLabel()
+//                       + "\n L action Position info: " + op.getNode().getLineNumber()
+//                       + "\n L location type: " + op.getLocation().getLabel()
+//                       + "\n L location Position info: " + op.getLocation().getLineNumber());
+//               System.out.println(srcFileSource);
+//               System.out.println("########################################");
+//               System.out.println(dstFileSource);
 
                changeInfo.addEditOp(op);
 
