@@ -1,8 +1,8 @@
 package edu.handong.csee.isel.RepoMiner;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import com.github.gumtreediff.tree.Tree;
 import edu.handong.csee.isel.DiffTools.GumTree;
@@ -30,9 +30,7 @@ public class ChangeMiner {
 		this.DiffTool = DiffTool;
 	}
 	
-	public ArrayList<ChangeInfo> collect(List<RevCommit> commitList) {
-
-		ArrayList<ChangeInfo> changeInfoList = new ArrayList<ChangeInfo>();
+	public void collect(List<RevCommit> commitList, ChangeAnalyzer changeAnalyzer) {
 	
 		switch(language.toUpperCase()) {
 			case "PYTHON":
@@ -80,11 +78,10 @@ public class ChangeMiner {
 							changeInfo = gumtree.constructChange(changeInfo);
 							break;
 					}
-					changeInfoList.add(changeInfo);
+					changeAnalyzer.generateMap(changeInfo, language);
 				}
 			}
 		}
-        return changeInfoList;
     }
 	
 }
