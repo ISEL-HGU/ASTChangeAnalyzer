@@ -47,12 +47,10 @@ public class CommitMiner {
 		} else {
 			git = Git.open(new File(path + "/.git"));
 		}
-
 		if (isGitClone) {
 			System.out.println("Cloning Finished\n");
 			return;
 		}
-
 		try {
 			System.out.print("Commit Mining...");
 			Iterable<RevCommit> walk = git.log().all().call();

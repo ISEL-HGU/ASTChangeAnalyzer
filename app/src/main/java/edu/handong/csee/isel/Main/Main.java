@@ -58,9 +58,11 @@ public class Main {
 				continue;
 			}
 		}
+		changeAnalyzer.setDone();
 		if (isChangeMine) System.out.println("Changed Mined: " + volume);
 		else if (isGitClone) return;
 		else { changeAnalyzer.printStatistic(); }
+		//
 		return;
     }
 

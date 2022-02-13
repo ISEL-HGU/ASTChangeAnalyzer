@@ -15,6 +15,7 @@ public class ChangeAnalyzer {
     private String input;
     private int volume;
     private boolean opened;
+    private boolean finished;
     private HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
 
     public ChangeAnalyzer(String input, int volume) {
@@ -28,6 +29,7 @@ public class ChangeAnalyzer {
     }
 
     public int getTotalCount() { return totalCount; }
+    public boolean setDone() { return finished; }
 
     public void generateMap (ChangeInfo changeInfo, String language) {
         String fkey;
@@ -83,28 +85,15 @@ public class ChangeAnalyzer {
         return "";
     }
 
-    public void printResult() {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("Result.txt"));
-            writer.write("Mined Repository Path : " + input
-                    + "\nAnalyzed Change size : " + totalCount
-                    + "\nHashMap(file level) size: " + fileCount
-                    + "\nHashMap(core level) size: " + coreCount);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return;
-    }
-
     public void printStatistic() {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("Statistic.txt", true));
             if (!opened) {
+                writer = new BufferedWriter(new FileWriter("Statistic.txt"));
                 writer.write("Mined Repository Path : " + input);
                 opened = true;
             }
-            else if (totalCount == volume) {
+            else if (finished) {
                 writer.write("\n\n\nSummarized Statistical Analysis: " + totalCount + "/" + volume
                         + "\nL Analyzed Change size: " + totalCount
                         + "\nL HashMap(file level) size: " + fileCount
