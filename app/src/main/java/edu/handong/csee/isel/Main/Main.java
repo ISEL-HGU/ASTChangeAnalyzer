@@ -1,6 +1,7 @@
 package edu.handong.csee.isel.Main;
 
 import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
+import edu.handong.csee.isel.ChangeAnalysis.GraphGenerator;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
@@ -22,7 +23,7 @@ public class Main {
     	Main main = new Main();
 		main.run(args);
     }
-
+Main
     private void run(String[] args) {
 		checkOS();
 		CLI cli = new CLI();
@@ -61,8 +62,11 @@ public class Main {
 		changeAnalyzer.setDone();
 		if (isChangeMine) System.out.println("Changed Mined: " + volume);
 		else if (isGitClone) return;
-		else { changeAnalyzer.printStatistic(); }
-		//
+		else {
+			changeAnalyzer.printStatistic();
+			GraphGenerator graph = new GraphGenerator();
+		}
+
 		return;
     }
 

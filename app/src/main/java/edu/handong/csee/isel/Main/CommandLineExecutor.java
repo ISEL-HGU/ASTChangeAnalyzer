@@ -29,7 +29,12 @@ public class CommandLineExecutor {
             cmdList.add("-c");
         }
     }
-	
+
+	public void addCmdList(String cmd) {
+		this.cmdList.add(cmd);
+	}
+
+
 	public void executeSettings(String cmd) {
     	
         // Setting commands
@@ -79,51 +84,51 @@ public class CommandLineExecutor {
 		}
 	
 	public void executeDeletion(File file) {
-        
-        // Setting commands
-        cmdList.add("rm -rf " + file.getPath());
-        String[] array = cmdList.toArray(new String[cmdList.size()]);
-        
-        try {
-            process = runtime.exec(array);
-            
-            successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
- 
-            while ((msg = successBufferReader.readLine()) != null) {
-            	if (successOutput!=null)
-            		successOutput.append(msg + System.getProperty("line.separator"));
-            }
-            
-            errorBufferReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "EUC-KR"));
-            while ((msg = errorBufferReader.readLine()) != null) {
-            	if (errorOutput!=null)
-            		errorOutput.append(msg + System.getProperty("line.separator"));
-            }
-            
-            process.waitFor();
- 
-            if (process.exitValue() == 0) {
-                System.out.println("\nFile Deletion Completed\n");
-                if (successOutput!=null)
-                	System.out.println(successOutput.toString());
-                
-            } else {
-                // when shell execution fails with exceptions
-                System.out.println("\nFile Deletion Failed\n");
-                if (errorOutput!=null)
-                	System.out.println(errorOutput.toString());
-            }
- 
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }  finally {
-            try {
-                process.destroy();
-                if (successBufferReader != null) successBufferReader.close();
-                if (errorBufferReader != null) errorBufferReader.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
+
+		// Setting commands
+		cmdList.add("rm -rf " + file.getPath());
+		String[] array = cmdList.toArray(new String[cmdList.size()]);
+
+		try {
+			process = runtime.exec(array);
+
+			successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
+
+			while ((msg = successBufferReader.readLine()) != null) {
+				if (successOutput != null)
+					successOutput.append(msg + System.getProperty("line.separator"));
+			}
+
+			errorBufferReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "EUC-KR"));
+			while ((msg = errorBufferReader.readLine()) != null) {
+				if (errorOutput != null)
+					errorOutput.append(msg + System.getProperty("line.separator"));
+			}
+
+			process.waitFor();
+
+			if (process.exitValue() == 0) {
+				System.out.println("\nFile Deletion Completed\n");
+				if (successOutput != null)
+					System.out.println(successOutput.toString());
+
+			} else {
+				// when shell execution fails with exceptions
+				System.out.println("\nFile Deletion Failed\n");
+				if (errorOutput != null)
+					System.out.println(errorOutput.toString());
+			}
+
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				process.destroy();
+				if (successBufferReader != null) successBufferReader.close();
+				if (errorBufferReader != null) errorBufferReader.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 }
