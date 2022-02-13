@@ -12,11 +12,13 @@ import java.util.ArrayList;
 
 
 public class Main {
-
-	private String os;
 	private String language;
 	private String DiffTool;
 	private String input;
+	private boolean isChangeMine;
+	private boolean isAnalysis;
+	private int volume = 0;
+
 
     public static void main(String[] args) {
     	Main main = new Main();
@@ -25,18 +27,22 @@ public class Main {
 
     private void run(String[] args) {
 		checkOS();
-		CLI option = new CLI();
-		ArrayList<String> inputs = option.CommonCLI(args);
-		language = option.getLanguage();
-		DiffTool = option.getDiffTool();
-		input = option.getOptionValueP();
+		CLI cli = new CLI();
+		ArrayList<String> inputs = cli.CommonCLI(args);
+		language = cli.getLanguage();
+		DiffTool = cli.getDiffTool();
+		input = cli.getInputPath();
+		isChangeMine = cli.isChangeMine();
+		isAnalysis = cli.isAnalysis();
+		volume = cli.getTotalCommit();
 
 		if (inputs.size() == 0)
 			return;
 
 		CommitMiner commitMine;
 		ChangeMiner changeMine;
-		ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer();
+		ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer(input, volume);
+		if (!isChangeMine) changeAnalyzer.printStatistic();
 
 		for (String str : inputs) {
 			try {
@@ -46,8 +52,9 @@ public class Main {
 				if (commitMine.isCompleted()) {
 					System.out.print("Change Mining...");
 					changeMine = new ChangeMiner();
-					changeMine.setProperties(commitMine.getRepo(), language, DiffTool);
-					changeMine.collect(commitMine.getCommitList(), changeAnalyzer);
+					changeMine.setProperties(commitMine.getRepo(), language, DiffTool, isAnalysis, volume);
+					if (isChangeMine) volume += changeMine.collect(commitMine.getCommitList());
+					else { changeMine.collect(commitMine.getCommitList(), changeAnalyzer); }
 					System.out.println("Finished\n");
 				}
 			} catch (Exception e) {
@@ -55,17 +62,13 @@ public class Main {
 				continue;
 			}
 		}
-		changeAnalyzer.printResult(input);
+		if (isChangeMine) System.out.println("Changed Mined: " + volume);
+		else { changeAnalyzer.printResult(); }
     }
-
-	private void setOS(String os) {
-		this.os = os;
-	}
 
 	private void checkOS() {
 		String cmd;
     	if (System.getProperty("os.name").toUpperCase().contains("MAC")) {
-            setOS("MAC");
 			System.setProperty("gt.pp.path", new File("").getAbsolutePath()
 					+ File.separator + "app"
 					+ File.separator + "pythonparser"
@@ -81,7 +84,6 @@ public class Main {
                     + File.separator + "pythonparser"
                     + File.separator + "requirements.txt";
         } else {
-			setOS("LINUX");
 			System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
 			System.setProperty("gt.cgum.path", "/data/CGYW/ASTChangeAnalyzer/app/cgum/cgum");
 			cmd = "pip3 install -r ../../../../pythonparser/requirements.txt";
@@ -89,6 +91,19 @@ public class Main {
 		CommandLineExecutor cli = new CommandLineExecutor();
 		cli.executeSettings(cmd);
     }
+
+	private int commitMine(ArrayList<String> inputs) {
+		int count = 0;
+		try{
+			for (String str : inputs) {
+				CommitMiner commitMine = new CommitMiner(str);
+				count += commitMine.getCommitList().size();
+			}
+		} catch (Exception e) {
+			return 0;
+		}
+		return count;
+	}
 
 }
 

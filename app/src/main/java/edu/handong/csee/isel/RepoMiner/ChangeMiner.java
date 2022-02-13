@@ -17,21 +17,21 @@ public class ChangeMiner {
 	private Repository repo;
 	private String language;
 	private String DiffTool;
+	private boolean isAnalysis;
 	private String fileExtension;
+	private int volumePortion;
+	private int volumeCount;
 	private String Java = ".java";
 	private String Python = ".py";
 	private String C = ".c";
 	private Tree src;
 	private Tree dst;
 
-	public void setProperties(Repository repo, String language, String DiffTool) {
+	public void setProperties(Repository repo, String language, String DiffTool, boolean isAnalysis, int volume) {
 		this.repo = repo;
 		this.language = language;
 		this.DiffTool = DiffTool;
-	}
-	
-	public void collect(List<RevCommit> commitList, ChangeAnalyzer changeAnalyzer) {
-	
+		this.isAnalysis = isAnalysis;
 		switch(language.toUpperCase()) {
 			case "PYTHON":
 				fileExtension = Python;
@@ -42,32 +42,27 @@ public class ChangeMiner {
 			default:
 				fileExtension = Java;
 		}
-
+		volumePortion = volume/20;
+		volumeCount = volumePortion;
+	}
+	
+	public void collect(List<RevCommit> commitList, ChangeAnalyzer changeAnalyzer) {
 		try (ProgressBar pb = new ProgressBar("Change Mining", commitList.size())) {
-
 			for (RevCommit commit : commitList) {
 				pb.step();
-
 				if (commit.getParentCount() < 1) {
 					continue;
 				}
 				RevCommit parent = commit.getParent(0);
-
 				List<DiffEntry> diffs = RepoUtils.diff(parent, commit, repo);
-
 				for (DiffEntry diff : diffs) {
-
 					String oldPath = diff.getOldPath();
 					String newPath = diff.getNewPath();
-
 					if (newPath.indexOf("Test") >= 0 || !newPath.endsWith(fileExtension))
 						continue;
-
 					String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
 					String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
-
 					ChangeInfo changeInfo = new ChangeInfo(oldPath, newPath, repo.getDirectory().getParent(), commit.name());
-
 					switch (DiffTool) {
 						case "LAS":
 							LASTool las = new LASTool(fileExtension, srcFileSource, dstFileSource);
@@ -79,11 +74,35 @@ public class ChangeMiner {
 							break;
 					}
 					changeAnalyzer.generateMap(changeInfo, language);
+					if (isAnalysis && changeAnalyzer.getTotalCount()==volumeCount) {
+						changeAnalyzer.printStatistic();
+						volumeCount += volumePortion;
+					}
 				}
 			}
 		}
     }
-	
+
+	public int collect(List<RevCommit> commitList) {
+		int count = 0;
+		try (ProgressBar pb = new ProgressBar("Change Mining", commitList.size())) {
+			for (RevCommit commit : commitList) {
+				pb.step();
+				if (commit.getParentCount() < 1) {
+					continue;
+				}
+				RevCommit parent = commit.getParent(0);
+				List<DiffEntry> diffs = RepoUtils.diff(parent, commit, repo);
+				for (DiffEntry diff : diffs) {
+					String newPath = diff.getNewPath();
+					if (newPath.indexOf("Test") >= 0 || !newPath.endsWith(fileExtension))
+						continue;
+					count++;
+				}
+			}
+		}
+		return count;
+	}
 }
 
 

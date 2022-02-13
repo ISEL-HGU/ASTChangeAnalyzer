@@ -9,18 +9,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ChangeAnalyzer {
-    private int total_count;
-    private int file_count;
-    private int hunk_count;
-    private int core_count;
+    private int totalCount;
+    private int fileCount;
+    private int coreCount;
+    private String input;
+    private int volume;
+    private boolean opened;
     private HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
 
-    public ChangeAnalyzer() {
+    public ChangeAnalyzer(String input, int volume) {
         coreMap = new HashMap<String, HashMap<String, ArrayList<String>>>();
-        total_count = 0;
-        file_count = 0;
-        core_count = 0;
+        totalCount = 0;
+        fileCount = 0;
+        coreCount = 0;
+        this.input = input;
+        this.volume = volume;
+        opened = false;
     }
+
+    public int getTotalCount() { return totalCount; }
 
     public void generateMap (ChangeInfo changeInfo, String language) {
         String fkey;
@@ -38,10 +45,10 @@ public class ChangeAnalyzer {
                 break;
         }
         if (coreMap.containsKey(fkey)) {
-            file_count++;
+            fileCount++;
             if (coreMap.get(fkey).containsKey(hkey)) {
                 coreMap.get(fkey).get(hkey).add(projectName + "," + commitID);
-                core_count++;
+                coreCount++;
             }
             else {
                 ArrayList<String> combineList = new ArrayList<String>();
@@ -56,7 +63,7 @@ public class ChangeAnalyzer {
             newCoreMap.put(hkey, combineList);
             coreMap.put(fkey, newCoreMap);
         }
-        total_count++;
+        totalCount++;
     }
 
     public String computeSHA256Hash(String hashString) {
@@ -76,14 +83,33 @@ public class ChangeAnalyzer {
         return "";
     }
 
-    public void printResult(String input) {
+    public void printResult() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("result.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("Result.txt"));
             writer.write("Mined Repository Path : " + input
-                    + "\nAnalyzed Change size : " + total_count
-                    + "\nHashMap(file level) size: " + file_count
-                    + "\nHashMap(hunk level) size: " + hunk_count
-                    + "\nHashMap(core level) size: " + core_count);
+                    + "\nAnalyzed Change size : " + totalCount
+                    + "\nHashMap(file level) size: " + fileCount
+                    + "\nHashMap(core level) size: " + coreCount);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return;
+    }
+
+    public void printStatistic() {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("Statistic.txt", true));
+            if (!opened) {
+                writer.write("Mined Repository Path : " + input);
+                opened = true;
+            }
+            else {
+                writer.write("\nCurrent Statistical Analysis : " + totalCount + "/" + volume
+                        + "\nAnalyzed Change size : " + totalCount
+                        + "\nHashMap(file level) size: " + fileCount
+                        + "\nHashMap(core level) size: " + coreCount);
+            }
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
