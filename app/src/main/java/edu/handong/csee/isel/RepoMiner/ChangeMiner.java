@@ -62,7 +62,7 @@ public class ChangeMiner {
 						continue;
 					String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
 					String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
-					ChangeInfo changeInfo = new ChangeInfo(oldPath, newPath, repo.getDirectory().getParent(), commit.name());
+					ChangeInfo changeInfo = new ChangeInfo(repo.getDirectory().getParent(), commit.name());
 					switch (DiffTool) {
 						case "LAS":
 							LASTool las = new LASTool(fileExtension, srcFileSource, dstFileSource);

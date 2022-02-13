@@ -104,11 +104,17 @@ public class ChangeAnalyzer {
                 writer.write("Mined Repository Path : " + input);
                 opened = true;
             }
+            else if (totalCount == volume) {
+                writer.write("\n\n\nSummarized Statistical Analysis: " + totalCount + "/" + volume
+                        + "\nL Analyzed Change size: " + totalCount
+                        + "\nL HashMap(file level) size: " + fileCount
+                        + "\nL HashMap(core level) size: " + coreCount);
+            }
             else {
-                writer.write("\nCurrent Statistical Analysis : " + totalCount + "/" + volume
-                        + "\nAnalyzed Change size : " + totalCount
-                        + "\nHashMap(file level) size: " + fileCount
-                        + "\nHashMap(core level) size: " + coreCount);
+                writer.write("\n\nCurrent Statistical Analysis: " + totalCount + "/" + volume
+                        + "\nL Analyzed Change size: " + totalCount
+                        + "\nL HashMap(file level) size: " + fileCount
+                        + "\nL HashMap(core level) size: " + coreCount);
             }
             writer.close();
         } catch (IOException e) {

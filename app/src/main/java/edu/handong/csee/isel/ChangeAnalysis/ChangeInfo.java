@@ -6,8 +6,6 @@ import com.github.gumtreediff.actions.model.Action;
 import script.model.EditOp;
 
 public class ChangeInfo {
-    private String srcFilePath;
-    private String dstFilePath;
     private ArrayList<Action> actionInfo;
     private ArrayList<EditOp> editInfo;
     private String projectName;
@@ -24,9 +22,7 @@ public class ChangeInfo {
     public String getProjectName() { return projectName; }
     public String getCommitID() { return commitID; }
 
-    public ChangeInfo(String srcFilePath, String dstFilePath, String projectName, String commitId) {
-        this.srcFilePath = srcFilePath;
-        this.dstFilePath = dstFilePath;
+    public ChangeInfo(String projectName, String commitId) {
         this.projectName = projectName;
         this.commitID = commitId;
         actionInfo = new ArrayList<Action>();

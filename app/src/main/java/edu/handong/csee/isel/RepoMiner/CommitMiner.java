@@ -20,17 +20,17 @@ public class CommitMiner {
 	private List<RevCommit> commitList;
 	private File file = null;
 	private Git git;
-	private boolean completed;
+	private boolean completed = false;
 	
-	public CommitMiner(String path) throws IOException, GitAPIException{
+	public CommitMiner(String path, boolean isGitClone) throws IOException, GitAPIException{
 		
 		Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com()(.*?)$");
 		Matcher matcher = pattern.matcher(path);
 		
 		if (matcher.find()) {
-			file = new File("/Users/nayeawon/Desktop/" + matcher.group(3) + "/.git");
+//			file = new File("/Users/nayeawon/Desktop/" + matcher.group(3) + "/.git");
 //			file = new File("/home/zackcglee/Documents/projects/ISEL/ASTChangeAnalyzer/clones/" + matcher.group(3));
-//			file = new File("/data/CGYW/clones/" + matcher.group(3) + "/.git");
+			file = new File("/data/CGYW/clones/" + matcher.group(3) + "/.git");
 			if (file.exists()) {
 				git = Git.open(file);
 			} else {
@@ -47,6 +47,12 @@ public class CommitMiner {
 		} else {
 			git = Git.open(new File(path + "/.git"));
 		}
+
+		if (isGitClone) {
+			System.out.println("Cloning Finished\n");
+			return;
+		}
+
 		try {
 			System.out.print("Commit Mining...");
 			Iterable<RevCommit> walk = git.log().all().call();
@@ -54,7 +60,6 @@ public class CommitMiner {
 			completed = true;
 		} catch (NoHeadException e) {
 			System.out.println("Empty repo\n");
-			completed = false;
 		}
 		return;
 	}

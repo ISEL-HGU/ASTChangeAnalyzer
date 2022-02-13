@@ -17,6 +17,7 @@ public class CLI {
 	private boolean help=false;
 	private boolean changeMine;
 	private boolean analysis;
+	private boolean gitClone;
 	private ArrayList<String> address;
 	private String language;
 	private String DiffTool;
@@ -40,6 +41,7 @@ public class CLI {
 	public String getInputPath() { return inputPath; }
 	public boolean isChangeMine() { return changeMine; }
 	public boolean isAnalysis() { return analysis; }
+	public boolean isGitClone() { return gitClone; }
 	public int getTotalCommit() { return totalCommit; }
 	
 	private boolean parseOptions(Options options, String[] args) {
@@ -75,6 +77,8 @@ public class CLI {
 			analysis = cmd.hasOption("analysis");
 			if (analysis)
 				totalCommit = Integer.parseInt(cmd.getOptionValue("analysis"));
+
+			gitClone = cmd.hasOption("gitClone");
 
 			help = cmd.hasOption("h");
 
@@ -113,6 +117,11 @@ public class CLI {
 				.argName("Expected programming language")
 				.build());
 
+		options.addOption(Option.builder("gitClone")
+				.desc("Set a language of a directory or a file")
+				.argName("Expected programming language")
+				.build());
+
 		options.addOption(Option.builder("changeMine")
 				.desc("Cloning")
 				.argName("Expected programming language")
@@ -134,7 +143,7 @@ public class CLI {
 	private void printHelp(Options options) {
 		// automatically generate the help statement
 		HelpFormatter formatter = new HelpFormatter();
-		String header = "AST change analyzer";
+		String header = "AST Change Analyzer";
 		String footer ="\nPlease report issues at https://github.com/ISEL-HGU/ASTChangeAnalyzer";
 		formatter.printHelp("ASTChangeAnalyzer", header, options, footer, true);
 	}
