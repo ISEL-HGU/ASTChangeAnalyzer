@@ -131,21 +131,26 @@ public class CommandLineExecutor {
 			}
 		}
 	}
-	public void executeGraph(String cmd) {
+	public void executeGraph(String cmd1) {
 
 
 		// Setting commands
-		cmdList.add(cmd);
+		cmdList.add(cmd1);
 		String[] array = cmdList.toArray(new String[cmdList.size()]);
-
+		//String[] array2 = cmdList.toArray(new String[1]);
 		try {
 			process = runtime.exec(array);
-
+			//System.out.println(array[0]+'|'+array[1]+'|'+array[2]+'|'+array[3]);
 			BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			while ((msg = input.readLine()) != null) {
 				System.out.println(msg);
+				System.out.println("1");
 			}
 			input.close();
+			ProcessBuilder pb = new ProcessBuilder(array[3]);
+			pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+			pb.redirectError(ProcessBuilder.Redirect.INHERIT);
+			Process p = pb.start();
 //			successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
 //
 //			while ((msg = successBufferReader.readLine()) != null) {

@@ -4,7 +4,7 @@ import numpy as np
 x = []
 y1 = []
 y2 = []
-with open(../../../../Statistic.txt) as f:
+with open("Statistic.txt") as f:
 #with open("../../../../../../../../../Statistic.txt") as f:
   lines = f.readlines()
 

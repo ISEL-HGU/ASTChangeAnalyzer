@@ -64,7 +64,8 @@ public class Main {
 		else if (isGitClone) return;
 		else {
 			changeAnalyzer.printStatistic();
-			GraphGenerator graph = new GraphGenerator();
+			System.out.println("For the graphical representation run graph.py file with following command" +
+					"\n python3 graph.py");
 		}
 
 		return;
