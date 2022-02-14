@@ -16,7 +16,7 @@ public class ChangeMiner {
 	
 	private Repository repo;
 	private String language;
-	private String DiffTool = "GUMTREE";
+	private String DiffTool;
 	private boolean isAnalysis;
 	private String fileExtension;
 	private int volumePortion;

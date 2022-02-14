@@ -6,6 +6,8 @@ import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 
@@ -29,9 +31,9 @@ public class Main {
 		CLI cli = new CLI();
 		ArrayList<String> inputs = cli.CommonCLI(args);
 		language = cli.getLanguage(); DiffTool = cli.getDiffTool();
-		input = cli.getInputPath(); isChangeMine = cli.isChangeMine();
+		isChangeMine = cli.isChangeMine(); volume = cli.getTotalCommit();
 		isAnalysis = cli.isAnalysis(); isGitClone = cli.isGitClone();
-		volume = cli.getTotalCommit();
+		input = cli.getInputPath();
 
 		if (inputs.size() == 0)
 			return;
@@ -64,11 +66,23 @@ public class Main {
 		else if (isGitClone) return;
 		else {
 			changeAnalyzer.printStatistic();
+			writeObjectToFile(changeAnalyzer);
 			GraphGenerator graph = new GraphGenerator();
 		}
-
 		return;
     }
+
+	private void writeObjectToFile (Object changeAnalyzer) {
+		try {
+			FileOutputStream fileOut = new FileOutputStream("/data/CGYW/ASTChangeAnalyzer/");
+			ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+			objectOut.writeObject(changeAnalyzer);
+			objectOut.close();
+			System.out.println("The Object was succesfully written to a file");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void checkOS() {
 		String cmd;
