@@ -29,8 +29,8 @@ public class CommitMiner {
 		
 		if (matcher.find()) {
 //			file = new File("/Users/nayeawon/Desktop/" + matcher.group(3) + "/.git");
-			file = new File("/home/zackcglee/Documents/projects/ISEL/ASTChangeAnalyzer/clones/" + matcher.group(3));
-//			file = new File("/data/CGYW/clones/" + matcher.group(3) + "/.git");
+//			file = new File("/home/zackcglee/Documents/projects/ISEL/ASTChangeAnalyzer/clones/" + matcher.group(3));
+			file = new File("/data/CGYW/clones/" + matcher.group(3) + "/.git");
 			if (file.exists()) {
 				git = Git.open(file);
 			} else {

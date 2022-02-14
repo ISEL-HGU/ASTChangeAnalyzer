@@ -3,33 +3,32 @@ package edu.handong.csee.isel.ChangeAnalysis;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ChangeAnalyzer {
+public class ChangeAnalyzer implements Serializable {
     private int totalCount;
     private int fileCount;
     private int coreCount;
-    private String input;
     private int volume;
     private boolean opened;
-    private boolean finished;
+    private boolean finished = false;
     private HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
 
-    public ChangeAnalyzer(String input, int volume) {
+    public ChangeAnalyzer(int volume) {
         coreMap = new HashMap<String, HashMap<String, ArrayList<String>>>();
         totalCount = 0;
         fileCount = 0;
         coreCount = 0;
-        this.input = input;
         this.volume = volume;
         opened = false;
     }
 
     public int getTotalCount() { return totalCount; }
-    public boolean setDone() { return finished; }
+    public void setDone() { finished = true; }
 
     public void generateMap (ChangeInfo changeInfo, String language) {
         String fkey;
@@ -90,7 +89,6 @@ public class ChangeAnalyzer {
             BufferedWriter writer = new BufferedWriter(new FileWriter("Statistic.txt", true));
             if (!opened) {
                 writer = new BufferedWriter(new FileWriter("Statistic.txt"));
-                writer.write("Mined Repository Path : " + input);
                 opened = true;
             }
             else if (finished) {
@@ -100,10 +98,10 @@ public class ChangeAnalyzer {
                         + "\nL HashMap(core level) size: " + coreCount);
             }
             else {
-                writer.write("\n\nCurrent Statistical Analysis: " + totalCount + "/" + volume
+                writer.write("Current Statistical Analysis: " + totalCount + "/" + volume
                         + "\nL Analyzed Change size: " + totalCount
                         + "\nL HashMap(file level) size: " + fileCount
-                        + "\nL HashMap(core level) size: " + coreCount);
+                        + "\nL HashMap(core level) size: " + coreCount + "\n\n");
             }
             writer.close();
         } catch (IOException e) {
