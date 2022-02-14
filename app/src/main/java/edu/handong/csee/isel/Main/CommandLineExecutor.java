@@ -63,13 +63,13 @@ public class CommandLineExecutor {
 	                System.out.println("\nSettings Completed\n");
 	                if (successOutput!=null)
 	                	System.out.println(successOutput);
-	                
+
 	            } else {
 	                System.err.println("\nSettings Failed\n");
 	                if (errorOutput!=null)
 	                	System.out.println(errorOutput);
 	            }
-	            
+
 	        } catch (IOException | InterruptedException e) {
 	            e.printStackTrace();
 	        }  finally {
@@ -130,5 +130,59 @@ public class CommandLineExecutor {
 				e1.printStackTrace();
 			}
 		}
+	}
+	public void executeGraph(String cmd) {
+
+
+		// Setting commands
+		cmdList.add(cmd);
+		String[] array = cmdList.toArray(new String[cmdList.size()]);
+
+		try {
+			process = runtime.exec(array);
+
+			BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			while ((msg = input.readLine()) != null) {
+				System.out.println(msg);
+			}
+			input.close();
+//			successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
+//
+//			while ((msg = successBufferReader.readLine()) != null) {
+//				if (successOutput!=null)
+//					successOutput.append(msg + System.getProperty("line.separator"));
+//			}
+//
+//			errorBufferReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "EUC-KR"));
+//			while ((msg = errorBufferReader.readLine()) != null) {
+//				if (errorOutput!=null)
+//					errorOutput.append(msg + System.getProperty("line.separator"));
+//			}
+
+			process.waitFor();
+
+			if (process.exitValue() == 0) {
+				System.out.println("\nSettings Completed\n");
+				if (successOutput!=null)
+					System.out.println(successOutput);
+
+			} else {
+				System.err.println("\nSettings Failed\n");
+				if (errorOutput!=null)
+					System.out.println(errorOutput);
+			}
+		System.out.println((successOutput));
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}  finally {
+			try {
+				process.destroy();
+				if (successBufferReader != null) successBufferReader.close();
+				if (errorBufferReader != null) errorBufferReader.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+
 	}
 }

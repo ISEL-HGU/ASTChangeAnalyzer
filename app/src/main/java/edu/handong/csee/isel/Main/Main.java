@@ -23,7 +23,7 @@ public class Main {
     	Main main = new Main();
 		main.run(args);
     }
-Main
+
     private void run(String[] args) {
 		checkOS();
 		CLI cli = new CLI();

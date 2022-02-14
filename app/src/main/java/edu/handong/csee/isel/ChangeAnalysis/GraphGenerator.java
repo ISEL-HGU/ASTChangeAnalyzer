@@ -8,8 +8,8 @@ public class GraphGenerator {
     public GraphGenerator() {
         CommandLineExecutor cli = new CommandLineExecutor();
         cli.addCmdList("pip install plotext");
-        //cli.executeSettings("python3 /data/CGYW/ASTChangeAnalyzer/app/src/main/java/edu/handong/csee/isel/ChangeAnalysis/graph.py");
-        cli.executeSettings("python3 graph.py");
+        cli.executeSettings("python3 /data/CGYW/ASTChangeAnalyzer/app/src/main/java/edu/handong/csee/isel/ChangeAnalysis/graph.py");
+        //cli.executeGraph("python3 graph.py");
     }
 
 }
