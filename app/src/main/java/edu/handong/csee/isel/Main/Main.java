@@ -66,19 +66,19 @@ public class Main {
 		else if (isGitClone) return;
 		else {
 			changeAnalyzer.printStatistic();
-			writeObjectToFile(changeAnalyzer);
 			GraphGenerator graph = new GraphGenerator();
+			writeObjectToFile(changeAnalyzer);
 		}
 		return;
     }
 
 	private void writeObjectToFile (Object changeAnalyzer) {
 		try {
-			FileOutputStream fileOut = new FileOutputStream("/data/CGYW/ASTChangeAnalyzer/");
+			FileOutputStream fileOut = new FileOutputStream("/data/CGYW/ASTChangeAnalyzer/ASTChanges.chg", true);
 			ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 			objectOut.writeObject(changeAnalyzer);
 			objectOut.close();
-			System.out.println("The Object was succesfully written to a file");
+			System.out.println("\nBinary File Generated\n");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -1,7 +1,6 @@
 package edu.handong.csee.isel.Main;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -11,8 +10,8 @@ public class CommandLineExecutor {
 
 	private static Process process = null;
 	private static Runtime runtime = Runtime.getRuntime();
-	private static StringBuffer successOutput;
-	private static StringBuffer errorOutput;
+	private static StringBuffer successOutput = new StringBuffer();
+	private static StringBuffer errorOutput = new StringBuffer();
 	private static BufferedReader successBufferReader = null; // 성공 버퍼
 	private static BufferedReader errorBufferReader = null; // 오류 버퍼
 	private static String msg = null; // 메시지
