@@ -10,8 +10,8 @@ public class CommandLineExecutor {
 
 	private static Process process = null;
 	private static Runtime runtime = Runtime.getRuntime();
-	private static StringBuffer successOutput = new StringBuffer();
-	private static StringBuffer errorOutput = new StringBuffer();
+	private static StringBuffer successOutput;
+	private static StringBuffer errorOutput;
 	private static BufferedReader successBufferReader = null; // 성공 버퍼
 	private static BufferedReader errorBufferReader = null; // 오류 버퍼
 	private static String msg = null; // 메시지
@@ -26,6 +26,8 @@ public class CommandLineExecutor {
 			cmdList.add("/bin/sh");
 			cmdList.add("-c");
 		}
+		successOutput = new StringBuffer();
+		errorOutput = new StringBuffer();
 	}
 
 	public void addCmdList(String cmd) {
@@ -120,7 +122,6 @@ public class CommandLineExecutor {
 				if (errorOutput!=null)
 					System.out.println(errorOutput);
 			}
-		System.out.println((successOutput));
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}  finally {
