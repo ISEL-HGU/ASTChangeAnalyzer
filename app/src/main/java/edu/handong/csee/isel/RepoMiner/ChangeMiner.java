@@ -24,8 +24,6 @@ public class ChangeMiner {
 	private String Java = ".java";
 	private String Python = ".py";
 	private String C = ".c";
-	private Tree src;
-	private Tree dst;
 
 	public void setProperties(Repository repo, String language, String DiffTool, boolean isAnalysis, int volume) {
 		this.repo = repo;
