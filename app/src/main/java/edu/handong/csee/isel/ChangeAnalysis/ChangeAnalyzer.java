@@ -13,13 +13,15 @@ public class ChangeAnalyzer implements Serializable {
     private int totalCount;
     private int fileCount;
     private int coreCount;
+    private String input;
     private int volume;
     private boolean opened;
     private boolean finished = false;
     private HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
 
-    public ChangeAnalyzer(int volume) {
+    public ChangeAnalyzer(String input, int volume) {
         coreMap = new HashMap<String, HashMap<String, ArrayList<String>>>();
+        this.input = input;
         totalCount = 0;
         fileCount = 0;
         coreCount = 0;
@@ -70,14 +72,14 @@ public class ChangeAnalyzer implements Serializable {
     public String computeSHA256Hash(String hashString) {
         MessageDigest md;
         try {
-            md = MessageDigest.getInstance("SHA-256");
-            md.update(hashString.getBytes());
-            byte bytes[] = md.digest();
-            StringBuffer sb = new StringBuffer();
-            for(byte b : bytes){
-                sb.append(Integer.toString((b&0xff) + 0x100, 16).substring(1));
-            }
-            return sb.toString();
+                md = MessageDigest.getInstance("SHA-256");
+                md.update(hashString.getBytes());
+                byte bytes[] = md.digest();
+                StringBuffer sb = new StringBuffer();
+                for(byte b : bytes){
+                    sb.append(Integer.toString((b&0xff) + 0x100, 16).substring(1));
+                }
+                return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -86,9 +88,10 @@ public class ChangeAnalyzer implements Serializable {
 
     public void printStatistic() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("Statistic.txt", true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt", true));
             if (!opened) {
-                writer = new BufferedWriter(new FileWriter("Statistic.txt"));
+                writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt"));
+                writer.write("Mined Repository Path : " + input);
                 opened = true;
             }
             else if (finished) {
@@ -98,10 +101,10 @@ public class ChangeAnalyzer implements Serializable {
                         + "\nL HashMap(core level) size: " + coreCount);
             }
             else {
-                writer.write("Current Statistical Analysis: " + totalCount + "/" + volume
+                writer.write("\n\nCurrent Statistical Analysis: " + totalCount + "/" + volume
                         + "\nL Analyzed Change size: " + totalCount
                         + "\nL HashMap(file level) size: " + fileCount
-                        + "\nL HashMap(core level) size: " + coreCount + "\n\n");
+                        + "\nL HashMap(core level) size: " + coreCount);
             }
             writer.close();
         } catch (IOException e) {

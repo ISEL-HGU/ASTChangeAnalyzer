@@ -33,13 +33,14 @@ public class Main {
 		language = cli.getLanguage(); DiffTool = cli.getDiffTool();
 		isChangeMine = cli.isChangeMine(); volume = cli.getTotalCommit();
 		isAnalysis = cli.isAnalysis(); isGitClone = cli.isGitClone();
+		input = cli.getInputPath();
 
 		if (inputs.size() == 0)
 			return;
 
 		CommitMiner commitMine;
 		ChangeMiner changeMine;
-		ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer(volume);
+		ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer(input, volume);
 		if (!isChangeMine) changeAnalyzer.printStatistic();
 
 		for (String str : inputs) {
@@ -73,7 +74,7 @@ public class Main {
 
 	private void writeObjectToFile (Object changeAnalyzer) {
 		try {
-			FileOutputStream fileOut = new FileOutputStream("");
+			FileOutputStream fileOut = new FileOutputStream("/data/CGYW/ASTChangeAnalyzer/");
 			ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 			objectOut.writeObject(changeAnalyzer);
 			objectOut.close();
