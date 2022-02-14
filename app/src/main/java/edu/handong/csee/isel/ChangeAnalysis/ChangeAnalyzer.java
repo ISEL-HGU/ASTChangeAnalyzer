@@ -71,14 +71,14 @@ public class ChangeAnalyzer {
     public String computeSHA256Hash(String hashString) {
         MessageDigest md;
         try {
-            md = MessageDigest.getInstance("SHA-256");
-            md.update(hashString.getBytes());
-            byte bytes[] = md.digest();
-            StringBuffer sb = new StringBuffer();
-            for(byte b : bytes){
-                sb.append(Integer.toString((b&0xff) + 0x100, 16).substring(1));
-            }
-            return sb.toString();
+                md = MessageDigest.getInstance("SHA-256");
+                md.update(hashString.getBytes());
+                byte bytes[] = md.digest();
+                StringBuffer sb = new StringBuffer();
+                for(byte b : bytes){
+                    sb.append(Integer.toString((b&0xff) + 0x100, 16).substring(1));
+                }
+                return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -87,25 +87,25 @@ public class ChangeAnalyzer {
 
     public void printStatistic() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("Statistic.txt", true));
-            if (!opened) {
-                writer = new BufferedWriter(new FileWriter("Statistic.txt"));
-                writer.write("Mined Repository Path : " + input);
-                opened = true;
-            }
-            else if (finished) {
-                writer.write("\n\n\nSummarized Statistical Analysis: " + totalCount + "/" + volume
-                        + "\nL Analyzed Change size: " + totalCount
-                        + "\nL HashMap(file level) size: " + fileCount
-                        + "\nL HashMap(core level) size: " + coreCount);
-            }
-            else {
-                writer.write("\n\nCurrent Statistical Analysis: " + totalCount + "/" + volume
-                        + "\nL Analyzed Change size: " + totalCount
-                        + "\nL HashMap(file level) size: " + fileCount
-                        + "\nL HashMap(core level) size: " + coreCount);
-            }
-            writer.close();
+                BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt", true));
+                if (!opened) {
+                    writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt"));
+                    writer.write("Mined Repository Path : " + input);
+                    opened = true;
+                }
+                else if (finished) {
+                    writer.write("\n\n\nSummarized Statistical Analysis: " + totalCount + "/" + volume
+                            + "\nL Analyzed Change size: " + totalCount
+                            + "\nL HashMap(file level) size: " + fileCount
+                            + "\nL HashMap(core level) size: " + coreCount);
+                }
+                else {
+                    writer.write("\n\nCurrent Statistical Analysis: " + totalCount + "/" + volume
+                            + "\nL Analyzed Change size: " + totalCount
+                            + "\nL HashMap(file level) size: " + fileCount
+                            + "\nL HashMap(core level) size: " + coreCount);
+                }
+                writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
