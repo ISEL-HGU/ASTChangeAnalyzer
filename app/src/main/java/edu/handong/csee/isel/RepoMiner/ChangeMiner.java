@@ -16,7 +16,7 @@ public class ChangeMiner {
 	
 	private Repository repo;
 	private String language;
-	private String DiffTool = "GUMTREE";
+	private String DiffTool;
 	private boolean isAnalysis;
 	private String fileExtension;
 	private int volumePortion;
@@ -24,8 +24,6 @@ public class ChangeMiner {
 	private String Java = ".java";
 	private String Python = ".py";
 	private String C = ".c";
-	private Tree src;
-	private Tree dst;
 
 	public void setProperties(Repository repo, String language, String DiffTool, boolean isAnalysis, int volume) {
 		this.repo = repo;

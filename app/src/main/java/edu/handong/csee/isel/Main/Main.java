@@ -1,11 +1,12 @@
 package edu.handong.csee.isel.Main;
 
 import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
-import edu.handong.csee.isel.ChangeAnalysis.GraphGenerator;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 
@@ -29,9 +30,9 @@ public class Main {
 		CLI cli = new CLI();
 		ArrayList<String> inputs = cli.CommonCLI(args);
 		language = cli.getLanguage(); DiffTool = cli.getDiffTool();
-		input = cli.getInputPath(); isChangeMine = cli.isChangeMine();
+		isChangeMine = cli.isChangeMine(); volume = cli.getTotalCommit();
 		isAnalysis = cli.isAnalysis(); isGitClone = cli.isGitClone();
-		volume = cli.getTotalCommit();
+		input = cli.getInputPath();
 
 		if (inputs.size() == 0)
 			return;
@@ -64,12 +65,26 @@ public class Main {
 		else if (isGitClone) return;
 		else {
 			changeAnalyzer.printStatistic();
+
 			System.out.println("For the graphical representation run graph.py file with following command" +
 					"\n python3 graph.py");
-		}
 
+			writeObjectToFile(changeAnalyzer);
+		}
 		return;
     }
+
+	private void writeObjectToFile (Object changeAnalyzer) {
+		try {
+			FileOutputStream fileOut = new FileOutputStream("/data/CGYW/ASTChangeAnalyzer/ASTChanges.chg", true);
+			ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+			objectOut.writeObject(changeAnalyzer);
+			objectOut.close();
+			System.out.println("\nBinary File Generated\n");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void checkOS() {
 		String cmd;
