@@ -76,7 +76,8 @@ public class Main {
 
 	private void writeObjectToFile (Object changeAnalyzer) {
 		try {
-			FileOutputStream fileOut = new FileOutputStream("/data/CGYW/ASTChangeAnalyzer/ASTChanges.chg", true);
+			//FileOutputStream fileOut = new FileOutputStream("/data/CGYW/ASTChangeAnalyzer/ASTChanges.chg", true);
+			FileOutputStream fileOut = new FileOutputStream("../../../../../ASTChanges.chg", true);
 			ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 			objectOut.writeObject(changeAnalyzer);
 			objectOut.close();

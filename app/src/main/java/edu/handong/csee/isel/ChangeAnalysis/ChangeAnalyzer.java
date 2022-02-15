@@ -88,9 +88,10 @@ public class ChangeAnalyzer implements Serializable {
 
     public void printStatistic() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt", true));
+            //BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt", true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("../../../../../Statistic.txt", true));
             if (!opened) {
-                writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt"));
+                writer = new BufferedWriter(new FileWriter("../../../../../Statistic.txt"));
                 writer.write("Mined Repository Path : " + input);
                 opened = true;
             }
