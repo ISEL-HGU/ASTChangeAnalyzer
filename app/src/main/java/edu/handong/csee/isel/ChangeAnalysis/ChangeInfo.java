@@ -30,6 +30,7 @@ public class ChangeInfo {
         actionsWithName = "";
         EditOpWithName = "";
         actionsWithType = "";
+        EditOpWithType = "";
     }
 
     public void addAction(Action action) {
@@ -42,6 +43,6 @@ public class ChangeInfo {
     public void addEditOp(EditOp op) {
         editInfo.add(op);
         EditOpWithName = EditOpWithName + op.getType() + "|" ;
-        EditOpWithType = EditOpWithType + op.getNode().getLabel() + "@" + op.getLocation().getLabel() + "|";
+        EditOpWithType = EditOpWithType + op.getType() + "@" + op.getNode().getLabel() + "&" + op.getLocation().getLabel() + "|";
     }
 }
