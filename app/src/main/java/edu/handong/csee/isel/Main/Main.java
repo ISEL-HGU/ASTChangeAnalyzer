@@ -18,6 +18,8 @@ public class Main {
 	private boolean isAnalysis;
 	private boolean isGitClone;
 	private int volume = 0;
+	private int increment = 0;
+
 
 
     public static void main(String[] args) {
@@ -30,7 +32,7 @@ public class Main {
 		CLI cli = new CLI();
 		ArrayList<String> inputs = cli.CommonCLI(args);
 		language = cli.getLanguage(); DiffTool = cli.getDiffTool();
-		isChangeMine = cli.isChangeMine(); volume = cli.getTotalCommit();
+		isChangeMine = cli.isChangeMine(); increment = cli.getIncrement();
 		isAnalysis = cli.isAnalysis(); isGitClone = cli.isGitClone();
 		input = cli.getInputPath();
 
@@ -39,7 +41,7 @@ public class Main {
 
 		CommitMiner commitMine;
 		ChangeMiner changeMine;
-		ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer(input, volume);
+		ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer(input);
 		if (!isChangeMine) changeAnalyzer.printStatistic();
 
 		for (String str : inputs) {
@@ -48,9 +50,8 @@ public class Main {
 				System.out.print("ASTChangeAnalyzing...");
 				commitMine = new CommitMiner(str, isGitClone);
 				if (commitMine.isCompleted()) {
-					System.out.print("Change Mining...");
 					changeMine = new ChangeMiner();
-					changeMine.setProperties(commitMine.getRepo(), language, DiffTool, isAnalysis, volume);
+					changeMine.setProperties(commitMine.getRepo(), language, DiffTool, isAnalysis, increment);
 					if (isChangeMine) volume += changeMine.collect(commitMine.getCommitList());
 					else { changeMine.collect(commitMine.getCommitList(), changeAnalyzer); }
 					System.out.println("Finished\n");
@@ -65,10 +66,8 @@ public class Main {
 		else if (isGitClone) return;
 		else {
 			changeAnalyzer.printStatistic();
-
 			System.out.println("For the graphical representation run graph.py file with following command" +
-					"\n python3 graph.py");
-
+					"\nL $ python3 graph.py");
 			writeObjectToFile(changeAnalyzer);
 		}
 		return;
@@ -76,7 +75,7 @@ public class Main {
 
 	private void writeObjectToFile (Object changeAnalyzer) {
 		try {
-			//FileOutputStream fileOut = new FileOutputStream("/data/CGYW/ASTChangeAnalyzer/ASTChanges.chg", true);
+//			FileOutputStream fileOut = new FileOutputStream("/data/CGYW/ASTChangeAnalyzer/ASTChanges.chg", true);
 			FileOutputStream fileOut = new FileOutputStream("../../../../../ASTChanges.chg", true);
 			ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 			objectOut.writeObject(changeAnalyzer);

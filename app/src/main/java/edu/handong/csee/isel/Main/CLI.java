@@ -22,7 +22,7 @@ public class CLI {
 	private String language;
 	private String DiffTool;
 	private String inputPath;
-	private int totalCommit;
+	private int increment;
 
 	
 	public ArrayList<String> CommonCLI (String[] args) {
@@ -42,7 +42,7 @@ public class CLI {
 	public boolean isChangeMine() { return changeMine; }
 	public boolean isAnalysis() { return analysis; }
 	public boolean isGitClone() { return gitClone; }
-	public int getTotalCommit() { return totalCommit; }
+	public int getIncrement() { return increment; }
 	
 	private boolean parseOptions(Options options, String[] args) {
 		CommandLineParser parser = new DefaultParser();
@@ -76,7 +76,7 @@ public class CLI {
 
 			analysis = cmd.hasOption("analysis");
 			if (analysis)
-				totalCommit = Integer.parseInt(cmd.getOptionValue("analysis"));
+				increment = Integer.parseInt(cmd.getOptionValue("analysis"));
 
 			gitClone = cmd.hasOption("gitClone");
 
@@ -128,7 +128,7 @@ public class CLI {
 				.build());
 
 		options.addOption(Option.builder("analysis")
-				.desc("Cloning")
+				.desc("increment")
 				.hasArg()
 				.argName("Expected programming language")
 				.build());

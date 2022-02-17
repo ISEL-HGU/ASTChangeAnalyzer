@@ -14,18 +14,16 @@ public class ChangeAnalyzer implements Serializable {
     private int fileCount;
     private int coreCount;
     private String input;
-    private int volume;
     private boolean opened;
     private boolean finished = false;
     private HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
 
-    public ChangeAnalyzer(String input, int volume) {
+    public ChangeAnalyzer(String input) {
         coreMap = new HashMap<String, HashMap<String, ArrayList<String>>>();
         this.input = input;
         totalCount = 0;
         fileCount = 0;
         coreCount = 0;
-        this.volume = volume;
         opened = false;
     }
 
@@ -96,13 +94,13 @@ public class ChangeAnalyzer implements Serializable {
                 opened = true;
             }
             else if (finished) {
-                writer.write("\n\n\nSummarized Statistical Analysis: " + totalCount + "/" + volume
+                writer.write("\n\n\nSummarized Statistical Analysis: "
                         + "\nL Analyzed Change size: " + totalCount
                         + "\nL HashMap(file level) size: " + fileCount
                         + "\nL HashMap(core level) size: " + coreCount);
             }
             else {
-                writer.write("\n\nCurrent Statistical Analysis: " + totalCount + "/" + volume
+                writer.write("\n\nCurrent Statistical Analysis: "
                         + "\nL Analyzed Change size: " + totalCount
                         + "\nL HashMap(file level) size: " + fileCount
                         + "\nL HashMap(core level) size: " + coreCount);
