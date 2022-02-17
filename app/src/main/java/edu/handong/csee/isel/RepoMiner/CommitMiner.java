@@ -56,9 +56,7 @@ public class CommitMiner {
 			Iterable<RevCommit> walk = git.log().all().call();
 			commitList = IterableUtils.toList(walk);
 			completed = true;
-		} catch (NoHeadException e) {
-			System.out.println("Empty repo\n");
-		}
+		} catch (NoHeadException e) { System.out.println("Empty repo\n"); }
 		return;
 	}
 	

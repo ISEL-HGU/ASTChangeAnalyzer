@@ -4,7 +4,6 @@ import java.util.List;
 
 import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
-import com.github.gumtreediff.tree.Tree;
 import edu.handong.csee.isel.DiffTools.GumTree;
 import edu.handong.csee.isel.DiffTools.LASTool;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -19,13 +18,13 @@ public class ChangeMiner {
 	private String DiffTool;
 	private boolean isAnalysis;
 	private String fileExtension;
-	private int volumePortion;
-	private int volumeCount;
+	private int increment;
+	private int totalCount;
 	private String Java = ".java";
 	private String Python = ".py";
 	private String C = ".c";
 
-	public void setProperties(Repository repo, String language, String DiffTool, boolean isAnalysis, int volume) {
+	public void setProperties(Repository repo, String language, String DiffTool, boolean isAnalysis, int increment) {
 		this.repo = repo;
 		this.language = language;
 		this.DiffTool = DiffTool;
@@ -40,8 +39,8 @@ public class ChangeMiner {
 			default:
 				fileExtension = Java;
 		}
-		volumePortion = volume/20;
-		volumeCount = volumePortion;
+		this.increment = increment;
+		totalCount = increment;
 	}
 	
 	public void collect(List<RevCommit> commitList, ChangeAnalyzer changeAnalyzer) {
@@ -73,9 +72,9 @@ public class ChangeMiner {
 								break;
 						}
 						changeAnalyzer.generateMap(changeInfo, language);
-						if (isAnalysis && changeAnalyzer.getTotalCount()==volumeCount) {
+						if (isAnalysis && changeAnalyzer.getTotalCount()==totalCount) {
 							changeAnalyzer.printStatistic();
-							volumeCount += volumePortion;
+							totalCount += increment;
 						}
 					} catch (Exception e) {
 						e.printStackTrace();

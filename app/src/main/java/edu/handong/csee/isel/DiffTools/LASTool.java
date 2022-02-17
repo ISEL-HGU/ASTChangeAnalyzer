@@ -67,7 +67,6 @@ public class LASTool {
 //               System.out.println(srcFileSource);
 //               System.out.println("########################################");
 //               System.out.println(dstFileSource);
-
                changeInfo.addEditOp(op);
 
             }
