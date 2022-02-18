@@ -71,7 +71,7 @@ public class ChangeMiner {
 								changeInfo = gumtree.constructChange(changeInfo);
 								break;
 						}
-						changeAnalyzer.generateMap(changeInfo, language);
+						changeAnalyzer.generateMap(changeInfo, DiffTool);
 						if (isAnalysis && changeAnalyzer.getTotalCount()==totalCount) {
 							changeAnalyzer.printStatistic();
 							totalCount += increment;
