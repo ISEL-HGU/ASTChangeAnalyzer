@@ -153,8 +153,6 @@ public class ChangeAnalyzer implements Serializable {
                     }
                 }
             }
-
-            return;
         }
     }
 }

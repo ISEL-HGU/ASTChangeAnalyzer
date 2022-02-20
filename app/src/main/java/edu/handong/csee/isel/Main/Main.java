@@ -1,6 +1,7 @@
 package edu.handong.csee.isel.Main;
 
 import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
+import edu.handong.csee.isel.ChangeAnalysis.IndexParser;
 import edu.handong.csee.isel.ChangeAnalysis.StatisticsGenerator;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
@@ -101,6 +102,7 @@ public class Main {
 					ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 					objectOut.writeObject(changeAnalyzer);
 					objectOut.close();
+					new IndexParser(savePath,changeAnalyzer.getCoreMap());
 				}
 			}
 		} catch (Exception e) {

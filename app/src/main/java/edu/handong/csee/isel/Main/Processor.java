@@ -1,6 +1,7 @@
 package edu.handong.csee.isel.Main;
 
 import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
+import edu.handong.csee.isel.ChangeAnalysis.IndexParser;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
@@ -52,6 +53,7 @@ public class Processor implements Runnable {
             else {
                 changeAnalyzer.printStatistic();
                 writeObjectToFile(changeAnalyzer);
+                new IndexParser(savePath,changeAnalyzer.getCoreMap());
             }
         } catch (Exception e) {
             e.printStackTrace();
