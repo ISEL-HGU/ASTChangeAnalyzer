@@ -35,7 +35,7 @@ public class Main {
 		checkOS();
 		CLI cli = new CLI();
 		ArrayList<String> projects = cli.CommonCLI(args);
-		Utils utils = cli.getUtils();
+		HashMap<String,String> url_projectName = cli.getUtils().getHashMap();
 		language = cli.getLanguage();
 		DiffTool = cli.getDiffTool();
 		input = cli.getInputPath();
@@ -54,7 +54,7 @@ public class Main {
 
 			for (String project : projects) {
 				Processor processor = new Processor();
-				processor.setProjectProperties(project, utils.getProjectName(project));
+				processor.setProjectProperties(project, url_projectName.get(project));
 				processor.setProperties(language, DiffTool, input, isChangeMine, isGitClone, savePath);
 				Runnable worker = processor;
 				executor.execute(worker);
