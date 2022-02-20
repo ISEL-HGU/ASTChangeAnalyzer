@@ -4,10 +4,20 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class ChangeAnalyzer implements Serializable {
     private int totalCount;
@@ -17,6 +27,7 @@ public class ChangeAnalyzer implements Serializable {
     private boolean opened;
     private boolean finished = false;
     private HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
+    private String projectName;
 
     public ChangeAnalyzer(String input) {
         coreMap = new HashMap<String, HashMap<String, ArrayList<String>>>();
@@ -27,8 +38,12 @@ public class ChangeAnalyzer implements Serializable {
         opened = false;
     }
 
+    public void setProjectName(String projectName) { this.projectName = projectName; }
+    public String getProjectName() { return projectName; }
     public int getTotalCount() { return totalCount; }
     public void setDone() { finished = true; }
+
+    public HashMap<String, HashMap<String, ArrayList<String>>> getCoreMap() { return coreMap; }
 
     public void generateMap (ChangeInfo changeInfo, String language) {
         String fkey;
@@ -111,5 +126,35 @@ public class ChangeAnalyzer implements Serializable {
         }
         return;
     }
+    public void indexWriter(String path) throws IOException {
+        String savingLocation = path + "/index.csv";
+        File file = new File(path);
+        if (file.exists()) {
+            BufferedWriter writer = Files.newBufferedWriter(
+                    Paths.get(savingLocation),
+                    StandardOpenOption.APPEND,
+                    StandardOpenOption.CREATE);
+            Reader in = new FileReader(savingLocation);
+            CSVParser parser = CSVFormat.EXCEL.parse(in);
 
+
+            for (String key : getCoreMap().keySet()) {
+                for (CSVRecord record : parser) {
+                    if (record.getRecordNumber() == 1) {
+                        for (int i = 0; i < record.size(); i++) {
+                            if (record.get(i).contains(key)) {
+                                CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
+                                csvPrinter.printRecord("1", key);
+                                csvPrinter.flush();
+                            } else {
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            return;
+        }
+    }
 }
