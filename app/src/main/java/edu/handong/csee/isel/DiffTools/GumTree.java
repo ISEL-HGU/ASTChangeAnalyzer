@@ -73,8 +73,8 @@ public class GumTree {
 
     public EditScript JavaASTDiffMine(String srcFileSource, String dstFileSource) throws IOException {
         Run.initGenerators();
-        File srcFile = new File("src.java");
-        File dstFile = new File("dst.java");
+        File srcFile = new File(filePath + "/src.java");
+        File dstFile = new File(filePath + "/dst.java");
         try {
             BufferedWriter srcWriter = new BufferedWriter(new FileWriter(srcFile));
             srcWriter.write(srcFileSource);

@@ -1,6 +1,5 @@
 package edu.handong.csee.isel.Main;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -45,5 +44,9 @@ public class Utils {
 			e.printStackTrace();
 		}
 		return name_URL;
+	}
+
+	public String getProjectName (String url) {
+		return url_projectName.get(url).replaceAll("/", "-");
 	}
 }

@@ -15,14 +15,17 @@ import java.util.*;
 
 public class CLI {
 	private boolean help=false;
+	private boolean thread = true;
 	private boolean changeMine;
-	private boolean analysis;
+	private boolean save;
 	private boolean gitClone;
 	private ArrayList<String> address;
 	private String language;
 	private String DiffTool;
 	private String inputPath;
-	private int increment;
+	private String savePath;
+	private String combinePath = "";
+	private Utils utils;
 
 	
 	public ArrayList<String> CommonCLI (String[] args) {
@@ -39,10 +42,12 @@ public class CLI {
 	public String getLanguage() { return language; }
 	public String getDiffTool() { return DiffTool; }
 	public String getInputPath() { return inputPath; }
+	public String getSavepath() { return savePath; }
+	public String getCombinePath() {return combinePath; }
+	public boolean activateThread() {return thread; }
 	public boolean isChangeMine() { return changeMine; }
-	public boolean isAnalysis() { return analysis; }
 	public boolean isGitClone() { return gitClone; }
-	public int getIncrement() { return increment; }
+	public Utils getUtils() {return utils; }
 	
 	private boolean parseOptions(Options options, String[] args) {
 		CommandLineParser parser = new DefaultParser();
@@ -50,16 +55,20 @@ public class CLI {
 			CommandLine cmd = parser.parse(options, args);
 			if (cmd.hasOption("p")) {
 				inputPath = cmd.getOptionValue("p");
-				if (inputPath.endsWith(".csv")) {
-					Utils utils = new Utils();
-					address = utils.csvReader(inputPath);
-				} else if (inputPath.startsWith("https")) {
+				if (inputPath.startsWith("https")) {
 					address.add(inputPath);
+					thread = false;
 				} else {
-					try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(inputPath))) {
-						for (Path path : stream) {
-							if (Files.isDirectory(path)) {
-								address.add(path.getFileName().toString());
+					if (inputPath.endsWith(".csv")) {
+						utils = new Utils();
+						address = utils.csvReader(inputPath);
+					}
+					else {
+						try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(inputPath))) {
+							for (Path path : stream) {
+								if (Files.isDirectory(path)) {
+									address.add(path.getFileName().toString());
+								}
 							}
 						}
 					}
@@ -74,11 +83,15 @@ public class CLI {
 
 			changeMine = cmd.hasOption("changeMine");
 
-			analysis = cmd.hasOption("analysis");
-			if (analysis)
-				increment = Integer.parseInt(cmd.getOptionValue("analysis"));
-
 			gitClone = cmd.hasOption("gitClone");
+
+			save = cmd.hasOption("save");
+			if (save)
+				savePath = cmd.getOptionValue("save");
+			else savePath = "/data/CGYW/chg";
+
+			if (cmd.hasOption("combine"))
+				combinePath = cmd.getOptionValue("combine");
 
 			help = cmd.hasOption("h");
 
@@ -128,15 +141,15 @@ public class CLI {
 				.build());
 
 		options.addOption(Option.builder("save")
-				.desc("increment")
+				.desc("Set a path to .chg, default: /data/CGYW/chg")
 				.hasArg()
-				.argName("Expected programming language")
+				.argName("Expected absolute path")
 				.build());
 
-		options.addOption(Option.builder("save")
-				.desc("increment")
+		options.addOption(Option.builder("combine")
+				.desc("combine .chg files to a data")
 				.hasArg()
-				.argName("Expected programming language")
+				.argName("Expected absolute path")
 				.build());
 		
 		options.addOption(Option.builder("h").longOpt("help")

@@ -36,7 +36,6 @@ public class CommitMiner {
 			if (file.exists()) {
 				git = Git.open(file);
 			} else {
-				System.out.print("Repository Cloning...");
 				try {
 					git = Git.cloneRepository()
 							.setURI(path)
@@ -50,11 +49,9 @@ public class CommitMiner {
 			git = Git.open(new File(path + "/.git"));
 		}
 		if (isGitClone) {
-			System.out.println("Cloning Finished\n");
 			return;
 		}
 		try {
-			System.out.print("Commit Mining...");
 			Iterable<RevCommit> walk = git.log().all().call();
 			commitList = IterableUtils.toList(walk);
 			completed = true;

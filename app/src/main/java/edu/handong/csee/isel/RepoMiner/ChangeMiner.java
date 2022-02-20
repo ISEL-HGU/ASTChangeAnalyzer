@@ -12,22 +12,19 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import me.tongfei.progressbar.*;
 
 public class ChangeMiner {
-
-	private String projectName;
 	private Repository repo;
 	private String language;
 	private String DiffTool;
-	private boolean isAnalysis;
 	private String fileExtension;
 	private String filePath;
 	private int totalCount;
 	private String Java = ".java";
 	private String Python = ".py";
 	private String C = ".c";
+	private String projectName;
 
-	public String getProjectName() { return projectName; }
 
-	public void setProperties(String filePath, Repository repo, String language, String DiffTool) {
+	public void setProperties(String filePath, Repository repo, String language, String DiffTool, String projectName) {
 		this.filePath = filePath;
 		this.repo = repo;
 		this.language = language;
@@ -42,10 +39,11 @@ public class ChangeMiner {
 			default:
 				fileExtension = Java;
 		}
+		this.projectName = projectName;
 	}
 	
 	public void collect(List<RevCommit> commitList, ChangeAnalyzer changeAnalyzer) {
-		try (ProgressBar pb = new ProgressBar("Change Mining", commitList.size())) {
+		try (ProgressBar pb = new ProgressBar(projectName, commitList.size())) {
 			for (RevCommit commit : commitList) {
 				pb.step();
 				if (commit.getParentCount() < 1) {
@@ -61,8 +59,7 @@ public class ChangeMiner {
 							continue;
 						String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
 						String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
-						projectName = repo.getDirectory().getParent();
-						ChangeInfo changeInfo = new ChangeInfo(getProjectName(), commit.name());
+						ChangeInfo changeInfo = new ChangeInfo(repo.getDirectory().getParent(), commit.name());
 						switch (DiffTool) {
 							case "LAS":
 								LASTool las = new LASTool(filePath, srcFileSource, dstFileSource);
@@ -73,8 +70,9 @@ public class ChangeMiner {
 								changeInfo = gumtree.constructChange(changeInfo);
 								break;
 						}
+						changeAnalyzer.setProjectName(changeInfo.getProjectName());
 						changeAnalyzer.generateMap(changeInfo, DiffTool);
-						if (isAnalysis && changeAnalyzer.getTotalCount()==totalCount) {
+						if (changeAnalyzer.getTotalCount()==totalCount) {
 							changeAnalyzer.printStatistic();
 						}
 					} catch (Exception e) {
