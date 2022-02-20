@@ -104,9 +104,11 @@ public class Main {
                     + File.separator + "pythonparser"
                     + File.separator + "requirements.txt";
         } else {
-			System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
+			System.setProperty("gt.pp.path", "app/pythonparser/pythonparser");
+			//System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
 			System.setProperty("gt.cgum.path", "/data/CGYW/ASTChangeAnalyzer/app/cgum/cgum");
-			cmd = "pip3 install -r ../../../../pythonparser/requirements.txt";
+			cmd = "pip3 install -r app/pythonparser/requirements.txt";
+			//cmd = "pip3 install -r ../../../../pythonparser/requirements.txt";
         }
 		CommandLineExecutor cli = new CommandLineExecutor();
 		cli.executeSettings(cmd);
