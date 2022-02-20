@@ -46,7 +46,7 @@ public class Utils {
 		return name_URL;
 	}
 
-	public String getProjectName (String url) {
-		return url_projectName.get(url).replaceAll("/", "-");
+	public HashMap<String,String> getHashMap () {
+		return url_projectName;
 	}
 }

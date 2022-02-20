@@ -17,7 +17,6 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 public class ChangeAnalyzer implements Serializable {
     private int totalCount;
@@ -125,36 +124,5 @@ public class ChangeAnalyzer implements Serializable {
             e.printStackTrace();
         }
         return;
-    }
-    public void indexWriter(String path) throws IOException {
-        String savingLocation = path + "/index.csv";
-        File file = new File(path);
-        if (file.exists()) {
-            BufferedWriter writer = Files.newBufferedWriter(
-                    Paths.get(savingLocation),
-                    StandardOpenOption.APPEND,
-                    StandardOpenOption.CREATE);
-            Reader in = new FileReader(savingLocation);
-            CSVParser parser = CSVFormat.EXCEL.parse(in);
-
-
-            for (String key : getCoreMap().keySet()) {
-                for (CSVRecord record : parser) {
-                    if (record.getRecordNumber() == 1) {
-                        for (int i = 0; i < record.size(); i++) {
-                            if (record.get(i).contains(key)) {
-                                CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
-                                csvPrinter.printRecord("1", key);
-                                csvPrinter.flush();
-                            } else {
-
-                            }
-                        }
-                    }
-                }
-            }
-
-            return;
-        }
     }
 }
