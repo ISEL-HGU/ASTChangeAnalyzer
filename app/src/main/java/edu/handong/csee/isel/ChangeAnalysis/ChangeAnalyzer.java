@@ -62,18 +62,18 @@ public class ChangeAnalyzer implements Serializable {
         if (coreMap.containsKey(fkey)) {
             fileCount++;
             if (coreMap.get(fkey).containsKey(hkey)) {
-                coreMap.get(fkey).get(hkey).add(projectName + "," + commitID);
+                coreMap.get(fkey).get(hkey).add(projectName + "-" + commitID);
                 coreCount++;
             }
             else {
                 ArrayList<String> combineList = new ArrayList<String>();
-                combineList.add(projectName + "," + commitID);
+                combineList.add(projectName + "-" + commitID);
                 coreMap.get(fkey).put(hkey, combineList);
             }
         }
         else {
             ArrayList<String> combineList = new ArrayList<String>();
-            combineList.add(projectName + "," + commitID);
+            combineList.add(projectName + "-" + commitID);
             HashMap <String, ArrayList<String>> newCoreMap = new HashMap <String, ArrayList<String>>();
             newCoreMap.put(hkey, combineList);
             coreMap.put(fkey, newCoreMap);
