@@ -18,17 +18,17 @@ public class ChangeMiner {
 	private String DiffTool;
 	private boolean isAnalysis;
 	private String fileExtension;
-	private int increment;
+	private String filePath;
 	private int totalCount;
 	private String Java = ".java";
 	private String Python = ".py";
 	private String C = ".c";
 
-	public void setProperties(Repository repo, String language, String DiffTool, boolean isAnalysis, int increment) {
+	public void setProperties(String filePath, Repository repo, String language, String DiffTool) {
+		this.filePath = filePath;
 		this.repo = repo;
 		this.language = language;
 		this.DiffTool = DiffTool;
-		this.isAnalysis = isAnalysis;
 		switch(language.toUpperCase()) {
 			case "PYTHON":
 				fileExtension = Python;
@@ -39,8 +39,6 @@ public class ChangeMiner {
 			default:
 				fileExtension = Java;
 		}
-		this.increment = increment;
-		totalCount = increment;
 	}
 	
 	public void collect(List<RevCommit> commitList, ChangeAnalyzer changeAnalyzer) {
@@ -63,18 +61,17 @@ public class ChangeMiner {
 						ChangeInfo changeInfo = new ChangeInfo(repo.getDirectory().getParent(), commit.name());
 						switch (DiffTool) {
 							case "LAS":
-								LASTool las = new LASTool(fileExtension, srcFileSource, dstFileSource);
+								LASTool las = new LASTool(filePath, srcFileSource, dstFileSource);
 								changeInfo = las.constructChange(changeInfo);
 								break;
 							default:
-								GumTree gumtree = new GumTree(fileExtension, srcFileSource, dstFileSource);
+								GumTree gumtree = new GumTree(filePath, fileExtension, srcFileSource, dstFileSource);
 								changeInfo = gumtree.constructChange(changeInfo);
 								break;
 						}
 						changeAnalyzer.generateMap(changeInfo, DiffTool);
 						if (isAnalysis && changeAnalyzer.getTotalCount()==totalCount) {
 							changeAnalyzer.printStatistic();
-							totalCount += increment;
 						}
 					} catch (Exception e) {
 						e.printStackTrace();

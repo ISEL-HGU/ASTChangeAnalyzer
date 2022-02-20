@@ -51,7 +51,7 @@ public class Main {
 				commitMine = new CommitMiner(str, isGitClone);
 				if (commitMine.isCompleted()) {
 					changeMine = new ChangeMiner();
-					changeMine.setProperties(commitMine.getRepo(), language, DiffTool, isAnalysis, increment);
+					changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool);
 					if (isChangeMine) volume += changeMine.collect(commitMine.getCommitList());
 					else { changeMine.collect(commitMine.getCommitList(), changeAnalyzer); }
 					System.out.println("Finished\n");

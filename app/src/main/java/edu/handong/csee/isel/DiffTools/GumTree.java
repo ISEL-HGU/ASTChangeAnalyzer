@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class GumTree {
+    private String filePath;
     private String fileExtension;
     private String srcFileSource;
     private String dstFileSource;
@@ -29,7 +30,8 @@ public class GumTree {
     private Tree dst;
 
 
-    public GumTree (String fileExtension, String srcFileSource, String dstFileSource) {
+    public GumTree (String filePath, String fileExtension, String srcFileSource, String dstFileSource) {
+        this.filePath = filePath;
         this.fileExtension = fileExtension;
         this.srcFileSource = srcFileSource;
         this.dstFileSource = dstFileSource;
@@ -55,8 +57,8 @@ public class GumTree {
                 actionList = editscript.asList();
 
         } catch (SyntaxException e) {
-            File srcFile = new File("src" + fileExtension);
-            File dstFile = new File("dst" + fileExtension);
+            File srcFile = new File(filePath + "/src" + fileExtension);
+            File dstFile = new File(filePath + "/dst" + fileExtension);
             srcFile.delete();
             dstFile.delete();
             return changeInfo;

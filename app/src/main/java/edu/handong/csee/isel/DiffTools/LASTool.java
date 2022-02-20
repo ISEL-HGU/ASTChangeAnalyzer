@@ -14,24 +14,22 @@ import script.model.EditOp;
 import tree.TreeBuilder;
 
 public class LASTool {
-    private String fileExtension;
+    private String filePath;
     private String srcFileSource;
     private String dstFileSource;
     private int commitCount = 0;
 
 
-    public LASTool(String fileExtension, String srcFileSource, String dstFileSource) {
-        this.fileExtension = fileExtension;
+    public LASTool(String filepath, String srcFileSource, String dstFileSource) {
+        this.filePath = filepath;
         this.srcFileSource = srcFileSource;
         this.dstFileSource = dstFileSource;
     }
 
     public ChangeInfo constructChange(ChangeInfo changeInfo) {
-
         commitCount++;
-
-        File srcFile = new File("srcFile.java");
-        File dstFile = new File("dstFile.java");
+        File srcFile = new File(filePath + "/srcFile.java");
+        File dstFile = new File(filePath + "/dstFile.java");
         try {
             BufferedWriter srcWriter = new BufferedWriter(new FileWriter(srcFile));
             srcWriter.write(srcFileSource);

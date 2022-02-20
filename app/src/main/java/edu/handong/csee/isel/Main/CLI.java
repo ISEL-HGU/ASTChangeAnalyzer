@@ -127,7 +127,13 @@ public class CLI {
 				.argName("Expected programming language")
 				.build());
 
-		options.addOption(Option.builder("analysis")
+		options.addOption(Option.builder("save")
+				.desc("increment")
+				.hasArg()
+				.argName("Expected programming language")
+				.build());
+
+		options.addOption(Option.builder("save")
 				.desc("increment")
 				.hasArg()
 				.argName("Expected programming language")
