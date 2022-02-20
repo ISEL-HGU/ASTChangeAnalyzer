@@ -70,7 +70,7 @@ public class ChangeMiner {
 								changeInfo = gumtree.constructChange(changeInfo);
 								break;
 						}
-						changeAnalyzer.setProjectName(changeInfo.getProjectName());
+						changeAnalyzer.setProjectName(projectName);
 						changeAnalyzer.generateMap(changeInfo, DiffTool);
 						if (changeAnalyzer.getTotalCount()==totalCount) {
 							changeAnalyzer.printStatistic();

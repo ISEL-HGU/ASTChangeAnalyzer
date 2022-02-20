@@ -22,15 +22,17 @@ public class CommitMiner {
 	private Git git;
 	private boolean completed = false;
 	private String filePath;
+	private String matcherGroup;
 	
 	public CommitMiner(String path, boolean isGitClone) throws IOException, GitAPIException{
-		Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com()(.*?)$");
+		Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com/()(.*?)$");
 		Matcher matcher = pattern.matcher(path);
 
 		if (matcher.find()) {
-			filePath = "/Users/nayeawon/Desktop/" +  matcher.group(3);
+//			filePath = "/Users/nayeawon/Desktop/" +  matcher.group(3);
 //			filePath = "/home/zackcglee/Documents/projects/ISEL/ASTChangeAnalyzer/clones/" +  matcher.group(3);
-//			filePath = "/data/CGYW/clones/" +  matcher.group(3);
+			filePath = "/data/CGYW/clones/" +  matcher.group(3);
+			matcherGroup = matcher.group(3);
 
 			file = new File(filePath + "/.git");
 			if (file.exists()) {
@@ -70,6 +72,8 @@ public class CommitMiner {
 	public boolean isCompleted() { return completed; }
 
 	public String getFilePath() { return filePath; }
+
+	public String getMatcherGroup() {return matcherGroup; }
     
 }
 

@@ -89,19 +89,19 @@ public class Main {
 			CommitMiner commitMine = new CommitMiner(project, isGitClone);
 			if (commitMine.isCompleted()) {
 				ChangeMiner changeMine = new ChangeMiner();
-				changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool, commitMine.getFilePath());
+				changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool, commitMine.getMatcherGroup().replaceAll("/", "-"));
 				if (isChangeMine) volume += changeMine.collect(commitMine.getCommitList());
 				else { changeMine.collect(commitMine.getCommitList(), changeAnalyzer); }
-			}
-			changeAnalyzer.setDone();
-			if (isChangeMine) System.out.println("Changed Mined: " + volume);
-			else if (isGitClone) return;
-			else {
-				changeAnalyzer.printStatistic();
-				FileOutputStream fileOut = new FileOutputStream(savePath + "/" +  changeAnalyzer.getProjectName() + ".chg");
-				ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-				objectOut.writeObject(changeAnalyzer);
-				objectOut.close();
+				changeAnalyzer.setDone();
+				if (isChangeMine) System.out.println("Changed Mined: " + volume);
+				else if (isGitClone) return;
+				else {
+					changeAnalyzer.printStatistic();
+					FileOutputStream fileOut = new FileOutputStream(savePath + "/" +  changeAnalyzer.getProjectName() + ".chg");
+					ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+					objectOut.writeObject(changeAnalyzer);
+					objectOut.close();
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

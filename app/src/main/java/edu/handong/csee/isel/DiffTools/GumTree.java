@@ -57,8 +57,15 @@ public class GumTree {
                 actionList = editscript.asList();
 
         } catch (SyntaxException e) {
-            File srcFile = new File(filePath + "/src" + fileExtension);
-            File dstFile = new File(filePath + "/dst" + fileExtension);
+            File srcFile;
+            File dstFile;
+            if (fileExtension.equals(".c") || fileExtension.equals(".py")) {
+                srcFile = new File("src" + fileExtension);
+                dstFile = new File("dst" + fileExtension);
+            } else {
+                srcFile = new File(filePath + "/src" + fileExtension);
+                dstFile = new File(filePath + "/dst" + fileExtension);
+            }
             srcFile.delete();
             dstFile.delete();
             return changeInfo;
