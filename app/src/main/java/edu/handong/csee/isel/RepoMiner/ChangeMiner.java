@@ -12,7 +12,8 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import me.tongfei.progressbar.*;
 
 public class ChangeMiner {
-	
+
+	private String projectName;
 	private Repository repo;
 	private String language;
 	private String DiffTool;
@@ -23,6 +24,8 @@ public class ChangeMiner {
 	private String Java = ".java";
 	private String Python = ".py";
 	private String C = ".c";
+
+	public String getProjectName() { return projectName; }
 
 	public void setProperties(String filePath, Repository repo, String language, String DiffTool) {
 		this.filePath = filePath;
@@ -58,7 +61,8 @@ public class ChangeMiner {
 							continue;
 						String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
 						String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
-						ChangeInfo changeInfo = new ChangeInfo(repo.getDirectory().getParent(), commit.name());
+						projectName = repo.getDirectory().getParent();
+						ChangeInfo changeInfo = new ChangeInfo(getProjectName(), commit.name());
 						switch (DiffTool) {
 							case "LAS":
 								LASTool las = new LASTool(filePath, srcFileSource, dstFileSource);
