@@ -2,6 +2,7 @@ package edu.handong.csee.isel.ChangeAnalysis;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class IndexParser {
@@ -57,7 +58,7 @@ public class IndexParser {
             FileInputStream fis;
 
             int fileCounter = 0;
-            boolean found = false;
+            boolean found = false, found2 = false;
 
             for(String fKey : this.coreMap.keySet()) {
                 for(String hKey : this.coreMap.get(fKey).keySet()) {
@@ -99,13 +100,35 @@ public class IndexParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        sortIndex(file);
     }
-    public String parseHashcode(String hashCode) {
 
-        String [] temp = hashCode.split("-");
 
-        String fkey = temp[0];
+    public void sortIndex(File file) {
+        String thisLine = "";
+        try {
+            File outFile = new File(path + "/temp.tmp");
+            FileInputStream fis;
+            fis = new FileInputStream(file);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            FileOutputStream fos = new FileOutputStream(outFile);
+            PrintWriter out = new PrintWriter(fos);
+            ArrayList<String> lines = new ArrayList<String>();
+            while ((thisLine = in.readLine()) != null) {
+                lines.add(thisLine);
+            }
+            Collections.sort(lines);
+            for(String line : lines) {
+                out.println(line);
+            }
+            out.flush();
+            out.close();
+            in.close();
+            file.delete();
+            outFile.renameTo(file);
 
-        return fkey;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
