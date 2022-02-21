@@ -35,7 +35,6 @@ public class Main {
 		checkOS();
 		CLI cli = new CLI();
 		ArrayList<String> projects = cli.CommonCLI(args);
-		HashMap<String,String> url_projectName = cli.getUtils().getHashMap();
 		language = cli.getLanguage();
 		DiffTool = cli.getDiffTool();
 		input = cli.getInputPath();
@@ -48,6 +47,7 @@ public class Main {
 			return;
 
 		if (cli.activateThread()) {
+			HashMap<String,String> url_projectName = cli.getUtils().getHashMap();
 			int numOfCoresInMyCPU = Runtime.getRuntime().availableProcessors()/2;
 			ExecutorService executor = Executors.newFixedThreadPool(numOfCoresInMyCPU);
 			ArrayList<Callable<Object>> calls = new ArrayList<Callable<Object>>();

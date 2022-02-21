@@ -1,9 +1,6 @@
 package edu.handong.csee.isel.ChangeAnalysis;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,9 +12,9 @@ public class IndexParser {
     public HashMap<String, HashMap<String, ArrayList<String>>> getCoreMap() { return coreMap; }
 
     public IndexParser(String path, HashMap<String, HashMap<String, ArrayList<String>>> coreMap) {
-        this.path = path + "/index.csv";
+        this.path = path;
         this.coreMap = coreMap;
-        File file = new File(this.path);
+        File file = new File(this.path + "/index.csv");
         if (file.exists()) {
             appendIndex(file);
         } else {
@@ -29,7 +26,6 @@ public class IndexParser {
 
         try {
             FileOutputStream fos = new FileOutputStream(file);
-            System.out.println("2");
             PrintWriter out = new PrintWriter(fos);
 
             for(String fKey : this.coreMap.keySet()) {
@@ -57,59 +53,59 @@ public class IndexParser {
         String thisLine = "";
 
         try {
-
-            FileInputStream fis = new FileInputStream(file);
-
             File outFile = null;
+            FileInputStream fis;
 
-
-            int i = 1, fileCounter = 0;
+            int fileCounter = 0;
             boolean found = false;
 
             for(String fKey : this.coreMap.keySet()) {
                 for(String hKey : this.coreMap.get(fKey).keySet()) {
                     String hashCode = fKey + "-" + hKey;
                     for(String content : this.coreMap.get(fKey).get(hKey)) {
+                        if(fileCounter == 0)
+                            fis = new FileInputStream(file);
+                        else
+                            fis = new FileInputStream(outFile);
                         BufferedReader in = new BufferedReader(new InputStreamReader(fis));
                         outFile = new File(path+"/$" +Integer.toString(fileCounter)+ ".tmp");
                         FileOutputStream fos = new FileOutputStream(outFile);
                         PrintWriter out = new PrintWriter(fos);
+
                         while ((thisLine = in.readLine()) != null) {
                             String [] row = thisLine.split(",");
                             if (row[0].equals(hashCode)) {
-
-                                thisLine = thisLine +","+ content + ",";
+                                thisLine = thisLine + content + ",";
                                 found = true;
-                                break;
-
                             }
                             out.println(thisLine);
-                            if(!found && i == row.length) {
-                                i = 1;
-                                out.println(hashCode + "," + content + ",");
-                                break;
-                            }
-                            i++;
                         }
+                        if(!found)
+                            out.println(hashCode + "," + content + ",");
+                        found = false;
                         out.flush();
                         out.close();
                         in.close();
                         fis = new FileInputStream(outFile);
-                        System.out.println(Integer.toString(fileCounter)+"@"+Integer.toString(coreMap.size()));
-                        if(fileCounter!=609)
-                            outFile.delete();
                         fileCounter++;
                     }
-
                 }
-
+            }
+            for(int z = 0; z < fileCounter-1; z++) {
+                new File(path+"/$"+Integer.toString(z)+".tmp").delete();
             }
             file.delete();
             outFile.renameTo(file);
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public String parseHashcode(String hashCode) {
+
+        String [] temp = hashCode.split("-");
+
+        String fkey = temp[0];
+
+        return fkey;
     }
 }

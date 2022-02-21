@@ -47,7 +47,7 @@ public class CLI {
 	public boolean activateThread() {return thread; }
 	public boolean isChangeMine() { return changeMine; }
 	public boolean isGitClone() { return gitClone; }
-	public Utils getUtils() {return utils; }
+	public Utils getUtils() { return utils; }
 	
 	private boolean parseOptions(Options options, String[] args) {
 		CommandLineParser parser = new DefaultParser();
