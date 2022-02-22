@@ -10,9 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-
-
-
 public class ChangeAnalyzer implements Serializable {
     private int totalCount;
     private int fileCount;
@@ -94,6 +91,9 @@ public class ChangeAnalyzer implements Serializable {
     }
 
     public void printStatistic() {
+        int actionGroup = 0;
+        for (String fkey : coreMap.keySet())
+            actionGroup += coreMap.get(fkey).size();
         try {
             //BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt", true));
             BufferedWriter writer = new BufferedWriter(new FileWriter("../../../../../Statistic.txt", true));
@@ -105,14 +105,14 @@ public class ChangeAnalyzer implements Serializable {
             else if (finished) {
                 writer.write("\n\n\nSummarized Statistical Analysis: "
                         + "\nL Analyzed Change size: " + totalCount
-                        + "\nL HashMap(file level) size: " + fileCount
-                        + "\nL HashMap(core level) size: " + coreCount);
+                        + "\nL HashMap(file level) size: " + fileCount + " {" + coreMap.size() + "}"
+                        + "\nL HashMap(core level) size: " + coreCount + " {" + actionGroup + "}");
             }
             else {
                 writer.write("\n\nCurrent Statistical Analysis: "
                         + "\nL Analyzed Change size: " + totalCount
-                        + "\nL HashMap(file level) size: " + fileCount
-                        + "\nL HashMap(core level) size: " + coreCount);
+                        + "\nL HashMap(file level) size: " + fileCount  + " {" + coreMap.size() + "}"
+                        + "\nL HashMap(core level) size: " + coreCount + " {" + actionGroup + "}");
             }
             writer.close();
         } catch (IOException e) {

@@ -54,7 +54,7 @@ public class Main {
 
 			for (String project : projects) {
 				Processor processor = new Processor();
-				processor.setProjectProperties(project, url_projectName.get(project));
+				processor.setProjectProperties(project, url_projectName.get(project).replaceAll("/", "-"));
 				processor.setProperties(language, DiffTool, input, isChangeMine, isGitClone, savePath);
 				Runnable worker = processor;
 				executor.execute(worker);

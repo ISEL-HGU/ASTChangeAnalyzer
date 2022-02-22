@@ -72,7 +72,7 @@ public class ChangeMiner {
 						}
 						changeAnalyzer.setProjectName(projectName);
 						changeAnalyzer.generateMap(changeInfo, DiffTool);
-						if (changeAnalyzer.getTotalCount()==totalCount) {
+						if (changeAnalyzer.getTotalCount()%20000==0) {
 							changeAnalyzer.printStatistic();
 						}
 					} catch (Exception e) {
