@@ -15,7 +15,7 @@ It has the following features:
 * converting a source file into a language-agnostic tree format (Java, Python, c, and c++ supported)
 * compute the differences between the trees
 * visualize these differences in different abstract levels
-* storing unique change patterns for mass change data
+* storing unique change patterns for collecting mass change data
 
 ## Documentation
 
@@ -26,25 +26,39 @@ It has the following features:
 
 2. `-java`, `-python`, `c` options : choose 'java', 'python', 'c', or 'c++(cpp in command) and name the code differencing tool (default: GumTree).
 
-3. `-gitClone`, `-changeMine`, `-analysis` options : gitClone option just clones the repos, and changeMine option gives total number of changes based on the path given with -p option. 
+3. `-gitClone` : this just clones a github repo/ or a repos from .csv listing urls taken from `-p` option (path statically set).
 
-Finally, analysis options produce .txt file and .chg binary file that has statistics about change analysis and hash-encoded binary information. 
-The `analysis` option requires an argument as integer which becomes the statistical increments for the records in .txt file
+4. `-changeMine` : this gives you the total number of changes from the given path from `-p` option.
 
-Example : `-p https://github.com/centic9/jgit-cookbook -java las -analysis 10`
+5. `-save` option : this option provides 3 things
+     
+                     first, it clones (if not cloned yet), diffs, and produces `.chg` binary file per project at the path given as argument
+                     second, it provides `Statistics.txt` file for further analysis.
+                     third, it updates or creates `index.csv` file that has hascode lists and project names mapped to index from `.chg` files.
 
-![Screenshot from 2022-02-18 00-25-46](https://user-images.githubusercontent.com/83571012/154513828-4e0877be-0c36-4515-9543-4c1efc337332.png)
+6. `-combine` option : this combines multiple `.chg` files into one `.chg` file
+
+
+Example : `-p https://github.com/centic9/jgit-cookbook -java las -save`
+
+
 
 
 
 * graph.py :
 
 we have simple graph.py file using plotext library to generate graph as a terminal output
-following command at the root directory with the .txt file will produce a graph
-`pip3 install plotext`
-`python3 graph.py`
-![Screenshot from 2022-02-18 00-30-25](https://user-images.githubusercontent.com/83571012/154514625-5d32b1df-d2c5-4e3c-9d48-f9debf4a9b10.png)
+following commands at the root directory with the .txt file will produce a graph if there exists `Statistics.txt` file generated form `-save` option.
 
+`pip3 install plotext`
+
+`python3 graph.py`
+
+
+![Screenshot from 2022-02-18 00-30-25](https://user-images.githubusercontent.com/83571012/154514625-5d32b1df-d2c5-4e3c-9d48-f9debf4a9b10.png)
+![Screenshot from 2022-02-18 00-25-46](https://user-images.githubusercontent.com/83571012/154513828-4e0877be-0c36-4515-9543-4c1efc337332.png)
+
+Example of `Statistics.txt` and `graph.py`
 
 
 
