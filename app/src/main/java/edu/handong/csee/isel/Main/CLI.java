@@ -109,15 +109,15 @@ public class CLI {
 		Options options = new Options();
 
 		options.addOption(Option.builder("p").longOpt("path")
-				.desc("Set a path of a directory or a file to display")
+				.desc("Set a path of a directory of a cloned project, a URL, or a path with a csv file")
 				.hasArg()
 				.argName("Local path")
 				.build());
 		
 		options.addOption(Option.builder("java")
-				.desc("Set a language of a directory or a file")
+				.desc("LAS or GumTree")
 				.hasArg()
-				.argName("Expected programming language")
+				.argName("Code differencing tool")
 				.build());
 
 		options.addOption(Option.builder("python")
@@ -131,17 +131,17 @@ public class CLI {
 				.build());
 
 		options.addOption(Option.builder("gitClone")
-				.desc("Set a language of a directory or a file")
-				.argName("Expected programming language")
+				.desc("Clone a project from a path provided at -p option")
+				.argName("URL path")
 				.build());
 
 		options.addOption(Option.builder("changeMine")
-				.desc("Cloning")
-				.argName("Expected programming language")
+				.desc("Count the number of total changes of a project")
+				.argName("Number of Change")
 				.build());
 
 		options.addOption(Option.builder("save")
-				.desc("Set a path to .chg, default: /data/CGYW/chg")
+				.desc("Set a path to .chg, default: /data/CGYW/chg. This option provides a index.csv, Statistics.txt, and .chg binary file")
 				.hasArg()
 				.argName("Expected absolute path")
 				.build());
