@@ -12,12 +12,12 @@ public class IndexParser {
     public String getPath() { return path; }
     public HashMap<String, HashMap<String, ArrayList<String>>> getCoreMap() { return coreMap; }
 
-    public IndexParser(String path, HashMap<String, HashMap<String, ArrayList<String>>> coreMap) {
+    public IndexParser(String path, HashMap<String, HashMap<String, ArrayList<String>>> coreMap) throws FileNotFoundException {
         this.path = path;
         this.coreMap = coreMap;
         File file = new File(this.path + "/index.csv");
         if (file.exists()) {
-            appendIndex(file);
+                appendIndex(file);
         } else {
             makeIndex(file);
         }
@@ -50,7 +50,7 @@ public class IndexParser {
     }
 
 
-    public void appendIndex(File file) {
+    public synchronized void appendIndex(File file) {
         String thisLine = "";
 
         try {
