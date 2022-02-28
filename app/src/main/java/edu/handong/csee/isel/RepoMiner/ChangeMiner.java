@@ -68,11 +68,10 @@ public class ChangeMiner {
 							default:
 								GumTree gumtree = new GumTree(filePath, fileExtension, srcFileSource, dstFileSource);
 								changeInfo = gumtree.constructChange(changeInfo);
-								break;
 						}
 						changeAnalyzer.setProjectName(projectName);
 						changeAnalyzer.generateMap(changeInfo, DiffTool);
-						if (changeAnalyzer.getTotalCount()%20000==0) {
+						if (changeAnalyzer.getTotalCount() > 0 && changeAnalyzer.getTotalCount()%20000==0) {
 							changeAnalyzer.printStatistic();
 						}
 					} catch (Exception e) {

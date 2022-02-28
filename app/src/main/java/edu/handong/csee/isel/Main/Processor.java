@@ -7,7 +7,7 @@ import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
+
 
 public class Processor implements Runnable {
     private String language;
@@ -39,7 +39,6 @@ public class Processor implements Runnable {
         try {
             ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer(input);
             changeAnalyzer.setProjectName(projectName);
-            if (!isChangeMine) changeAnalyzer.printStatistic();
             CommitMiner commitMine = new CommitMiner(project, isGitClone);
             if (commitMine.isCompleted()) {
                 ChangeMiner changeMine = new ChangeMiner();
@@ -47,11 +46,9 @@ public class Processor implements Runnable {
                 if (isChangeMine) volume += changeMine.collect(commitMine.getCommitList());
                 else { changeMine.collect(commitMine.getCommitList(), changeAnalyzer); }
             }
-            changeAnalyzer.setDone();
             if (isChangeMine) System.out.println("Changed Mined: " + volume);
             else if (isGitClone) return;
             else {
-                changeAnalyzer.printStatistic();
                 writeObjectToFile(changeAnalyzer);
                 new IndexParser(savePath,changeAnalyzer.getCoreMap());
             }

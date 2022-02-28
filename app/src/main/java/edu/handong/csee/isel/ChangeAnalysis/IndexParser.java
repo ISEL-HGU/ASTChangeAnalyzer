@@ -17,13 +17,13 @@ public class IndexParser {
         this.coreMap = coreMap;
         File file = new File(this.path + "/index.csv");
         if (file.exists()) {
-                appendIndex(file);
+            appendIndex(file);
         } else {
             makeIndex(file);
         }
     }
 
-    public void makeIndex(File file) {
+    public synchronized void makeIndex(File file) {
 
         try {
             FileOutputStream fos = new FileOutputStream(file);

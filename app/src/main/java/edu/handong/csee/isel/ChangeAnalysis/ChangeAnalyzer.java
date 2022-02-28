@@ -11,28 +11,22 @@ import java.util.HashMap;
 
 
 public class ChangeAnalyzer implements Serializable {
-    private int totalCount;
-    private int fileCount;
-    private int coreCount;
+    private static int totalCount;
+    private static int groupCount;
+    private static int coreCount;
     private String input;
-    private boolean opened;
-    private boolean finished = false;
+    private static boolean opened = false;
     private HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
     private String projectName;
 
     public ChangeAnalyzer(String input) {
         coreMap = new HashMap<String, HashMap<String, ArrayList<String>>>();
         this.input = input;
-        totalCount = 0;
-        fileCount = 0;
-        coreCount = 0;
-        opened = false;
     }
 
     public void setProjectName(String projectName) { this.projectName = projectName; }
     public String getProjectName() { return projectName; }
     public int getTotalCount() { return totalCount; }
-    public void setDone() { finished = true; }
 
     public HashMap<String, HashMap<String, ArrayList<String>>> getCoreMap() { return coreMap; }
 
@@ -52,15 +46,14 @@ public class ChangeAnalyzer implements Serializable {
                 break;
         }
         if (coreMap.containsKey(fkey)) {
-            fileCount++;
             if (coreMap.get(fkey).containsKey(hkey)) {
                 coreMap.get(fkey).get(hkey).add(projectName + "-" + commitID);
-                coreCount++;
             }
             else {
                 ArrayList<String> combineList = new ArrayList<String>();
                 combineList.add(projectName + "-" + commitID);
                 coreMap.get(fkey).put(hkey, combineList);
+                coreCount++;
             }
         }
         else {
@@ -69,6 +62,8 @@ public class ChangeAnalyzer implements Serializable {
             HashMap <String, ArrayList<String>> newCoreMap = new HashMap <String, ArrayList<String>>();
             newCoreMap.put(hkey, combineList);
             coreMap.put(fkey, newCoreMap);
+            groupCount++;
+            coreCount++;
         }
         totalCount++;
     }
@@ -76,14 +71,14 @@ public class ChangeAnalyzer implements Serializable {
     public String computeSHA256Hash(String hashString) {
         MessageDigest md;
         try {
-                md = MessageDigest.getInstance("SHA-256");
-                md.update(hashString.getBytes());
-                byte bytes[] = md.digest();
-                StringBuffer sb = new StringBuffer();
-                for(byte b : bytes){
-                    sb.append(Integer.toString((b&0xff) + 0x100, 16).substring(1));
-                }
-                return sb.toString();
+            md = MessageDigest.getInstance("SHA-256");
+            md.update(hashString.getBytes());
+            byte bytes[] = md.digest();
+            StringBuffer sb = new StringBuffer();
+            for(byte b : bytes){
+                sb.append(Integer.toString((b&0xff) + 0x100, 16).substring(1));
+            }
+            return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -91,29 +86,17 @@ public class ChangeAnalyzer implements Serializable {
     }
 
     public void printStatistic() {
-        int actionGroup = 0;
-        for (String fkey : coreMap.keySet())
-            actionGroup += coreMap.get(fkey).size();
         try {
             //BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt", true));
             BufferedWriter writer = new BufferedWriter(new FileWriter("../../../../../Statistic.txt", true));
             if (!opened) {
                 writer = new BufferedWriter(new FileWriter("../../../../../Statistic.txt"));
-                writer.write("Mined Repository Path : " + input);
+                writer.write("Mined Repository Path: " + input
+                        + "\nformat: [# of groups] / # of change analyzed"
+                        + "\n-file , hunk");
                 opened = true;
             }
-            else if (finished) {
-                writer.write("\n\n\nSummarized Statistical Analysis: "
-                        + "\nL Analyzed Change size: " + totalCount
-                        + "\nL HashMap(file level) size: " + fileCount + " {" + coreMap.size() + "}"
-                        + "\nL HashMap(core level) size: " + coreCount + " {" + actionGroup + "}");
-            }
-            else {
-                writer.write("\n\nCurrent Statistical Analysis: "
-                        + "\nL Analyzed Change size: " + totalCount
-                        + "\nL HashMap(file level) size: " + fileCount  + " {" + coreMap.size() + "}"
-                        + "\nL HashMap(core level) size: " + coreCount + " {" + actionGroup + "}");
-            }
+            writer.write("\n [" + groupCount + " , " + coreCount + "] / " + totalCount);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
