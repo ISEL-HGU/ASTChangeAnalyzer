@@ -50,7 +50,8 @@ public class Processor implements Runnable {
             else if (isGitClone) return;
             else {
                 writeObjectToFile(changeAnalyzer);
-                new IndexParser(savePath,changeAnalyzer.getCoreMap());
+                IndexParser index = new IndexParser(savePath,changeAnalyzer.getCoreMap());
+                index.generateIndex();
             }
         } catch (Exception e) {
             e.printStackTrace();

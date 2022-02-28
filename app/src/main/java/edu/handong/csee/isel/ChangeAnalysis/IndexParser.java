@@ -12,18 +12,13 @@ public class IndexParser {
     public String getPath() { return path; }
     public HashMap<String, HashMap<String, ArrayList<String>>> getCoreMap() { return coreMap; }
 
-    public IndexParser(String path, HashMap<String, HashMap<String, ArrayList<String>>> coreMap) throws FileNotFoundException {
+    public IndexParser(String path, HashMap<String, HashMap<String, ArrayList<String>>> coreMap) {
         this.path = path;
         this.coreMap = coreMap;
-        File file = new File(this.path + "/index.csv");
-        if (file.exists()) {
-            appendIndex(file);
-        } else {
-            makeIndex(file);
-        }
+
     }
 
-    public synchronized void makeIndex(File file) {
+    public void makeIndex(File file) {
 
         try {
             FileOutputStream fos = new FileOutputStream(file);
@@ -49,8 +44,16 @@ public class IndexParser {
 
     }
 
+    public synchronized void generateIndex() {
+        File file = new File(this.path + "/index.csv");
+        if (file.exists()) {
+            appendIndex(file);
+        } else {
+            makeIndex(file);
+        }
+    }
 
-    public synchronized void appendIndex(File file) {
+    public void appendIndex(File file) {
         String thisLine = "";
 
         try {
@@ -92,11 +95,15 @@ public class IndexParser {
                     }
                 }
             }
+
+
+            if(outFile == null)
+                outFile = file;
+            file.delete();
+            outFile.renameTo(file);
             for(int z = 0; z < fileCounter-1; z++) {
                 new File(path+"/$"+Integer.toString(z)+".tmp").delete();
             }
-            file.delete();
-            outFile.renameTo(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
