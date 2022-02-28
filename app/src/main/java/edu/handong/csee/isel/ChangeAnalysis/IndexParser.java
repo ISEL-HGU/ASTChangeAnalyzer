@@ -96,18 +96,24 @@ public class IndexParser {
                 }
             }
 
-
-            if(outFile == null)
-                outFile = file;
-            file.delete();
-            outFile.renameTo(file);
-            for(int z = 0; z < fileCounter-1; z++) {
-                new File(path+"/$"+Integer.toString(z)+".tmp").delete();
+            try {
+                if(outFile == null)
+                    outFile = file;
+                file.delete();
+                outFile.renameTo(file);
+                for(int z = 0; z < fileCounter-1; z++) {
+                    new File(path + "/$" + Integer.toString(z) + ".tmp").delete();
+                }
+            } catch (NullPointerException e) {
+                System.out.println("There is a problem with a repo. Skipping indexing");
+                return;
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sortIndex(file);
+        if(file.exists())
+            sortIndex(file);
     }
 
 
