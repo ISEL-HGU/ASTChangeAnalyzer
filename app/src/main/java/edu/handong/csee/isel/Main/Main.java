@@ -65,9 +65,7 @@ public class Main {
 			System.out.println("Finished\n");
 		} else {
 			if (projects.size() > 0) {
-				for (String project : projects) {
-					runWithNoThread(language, DiffTool, input, isChangeCount, isGitClone, savePath, project);
-				}
+				for (String project : projects) runWithNoThread(language, DiffTool, input, isChangeCount, isGitClone, savePath, project);
 			}
 		}
 
