@@ -28,7 +28,7 @@ It has the following features:
 
 3. `-gitClone` : this just clones a github repo/ or a repos from .csv listing urls taken from `-p` option (path statically set).
 
-4. `-changeMine` : this gives you the total number of changes from the given path from `-p` option.
+4. `-changeCount` : this gives you the total number of changes from the given path from `-p` option.
 
 5. `-save` option : this option provides 3 things
      
