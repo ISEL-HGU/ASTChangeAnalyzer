@@ -1,8 +1,8 @@
 package edu.handong.csee.isel.Main;
 
+import edu.handong.csee.isel.ChangeAnalysis.BinaryReader;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
 import edu.handong.csee.isel.ChangeAnalysis.IndexParser;
-import edu.handong.csee.isel.ChangeAnalysis.StatisticsGenerator;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
@@ -43,14 +43,11 @@ public class Main {
 		savePath = cli.getSavepath();
 		combinePath = cli.getCombinePath();
 
-		if (projects.size() == 0)
-			return;
-
-		if (cli.activateThread()) {
+		if (projects.size() > 0 && cli.activateThread()) {
 			HashMap<String,String> url_projectName = cli.getUtils().getHashMap();
 			int numOfCoresInMyCPU = Runtime.getRuntime().availableProcessors()/2;
 			ExecutorService executor = Executors.newFixedThreadPool(numOfCoresInMyCPU);
-			ArrayList<Callable<Object>> calls = new ArrayList<Callable<Object>>();
+			ArrayList<Callable<Object>> calls = new ArrayList<>();
 
 			for (String project : projects) {
 				Processor processor = new Processor();
@@ -67,8 +64,10 @@ public class Main {
 			while (!executor.isTerminated()) {}
 			System.out.println("Finished\n");
 		} else {
-			for (String project : projects) {
-				runWithNoThread(language, DiffTool, input, isChangeMine, isGitClone, savePath, project);
+			if (projects.size() > 0) {
+				for (String project : projects) {
+					runWithNoThread(language, DiffTool, input, isChangeMine, isGitClone, savePath, project);
+				}
 			}
 		}
 
@@ -76,8 +75,8 @@ public class Main {
 				"\nL $ python3 graph.py");
 
 		if (combinePath.length()>1) {
-			StatisticsGenerator statisticsGenerator = new StatisticsGenerator(combinePath);
-			statisticsGenerator.combine();
+			BinaryReader binaryReader = new BinaryReader(combinePath);
+			binaryReader.getHashMap();
 		}
 
 		return;
@@ -98,7 +97,7 @@ public class Main {
 				else {
 					FileOutputStream fileOut = new FileOutputStream(savePath + "/" +  changeAnalyzer.getProjectName() + ".chg");
 					ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-					objectOut.writeObject(changeAnalyzer);
+					objectOut.writeObject((ChangeAnalyzer)changeAnalyzer);
 					objectOut.close();
 					new IndexParser(savePath,changeAnalyzer.getCoreMap());
 				}

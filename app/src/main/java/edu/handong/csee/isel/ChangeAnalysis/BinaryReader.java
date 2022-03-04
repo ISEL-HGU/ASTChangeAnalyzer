@@ -6,17 +6,19 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class StatisticsGenerator {
+public class BinaryReader {
     private String combinePath;
 
-    public StatisticsGenerator(String combinePath) {
+    public BinaryReader(String combinePath) {
         this.combinePath = combinePath;
     }
 
-    public void combine() {
+    public void getHashMap() {
         Set<String> fileList = new HashSet<>();
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(combinePath))) {
             for (Path path : stream) {
@@ -27,15 +29,17 @@ public class StatisticsGenerator {
             }
         } catch (Exception e) { e.printStackTrace(); }
         for (String files : fileList) {
+            if (!files.endsWith(".chg")) continue;
             try {
-                FileInputStream fileIn = new FileInputStream(files);
+                FileInputStream fileIn = new FileInputStream(combinePath + "/" + files);
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
 
-                Object obj = objectIn.readObject();
+                ChangeAnalyzer binaryChangeAnalyzer = (ChangeAnalyzer)objectIn.readObject();
 
-                System.out.println("The Object has been read from the file");
+                HashMap<String, HashMap<String, ArrayList<String>>> coreMap = binaryChangeAnalyzer.getCoreMap();
+
                 objectIn.close();
-
+                fileIn.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }

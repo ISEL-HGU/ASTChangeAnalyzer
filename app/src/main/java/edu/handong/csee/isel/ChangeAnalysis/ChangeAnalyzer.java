@@ -16,7 +16,8 @@ public class ChangeAnalyzer implements Serializable {
     private static int coreCount;
     private String input;
     private static boolean opened = false;
-    private HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
+    public static final long serialVersionUID = -2073457782355550636L; // to be fixed later
+    public HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
     private String projectName;
 
     public ChangeAnalyzer(String input) {
@@ -27,14 +28,11 @@ public class ChangeAnalyzer implements Serializable {
     public void setProjectName(String projectName) { this.projectName = projectName; }
     public String getProjectName() { return projectName; }
     public int getTotalCount() { return totalCount; }
-
     public HashMap<String, HashMap<String, ArrayList<String>>> getCoreMap() { return coreMap; }
 
-    public void generateMap (ChangeInfo changeInfo, String language) {
+    public void generateMap (ChangeInfo changeInfo, String language, String commitID) {
         String fkey;
         String hkey;
-        String projectName = changeInfo.getProjectName();
-        String commitID = changeInfo.getCommitID();
         switch (language) {
             case "LAS":
                 fkey = computeSHA256Hash(changeInfo.getEditOpWithName());
@@ -103,4 +101,11 @@ public class ChangeAnalyzer implements Serializable {
         }
         return;
     }
+
+    @Override
+    public String toString() {
+
+        return null;
+    }
+
 }

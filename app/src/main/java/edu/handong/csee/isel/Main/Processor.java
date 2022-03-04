@@ -53,6 +53,7 @@ public class Processor implements Runnable {
                 IndexParser index = new IndexParser(savePath,changeAnalyzer.getCoreMap());
                 index.generateIndex();
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             return;

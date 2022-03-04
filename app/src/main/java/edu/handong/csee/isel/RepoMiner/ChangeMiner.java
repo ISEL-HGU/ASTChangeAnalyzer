@@ -13,11 +13,9 @@ import me.tongfei.progressbar.*;
 
 public class ChangeMiner {
 	private Repository repo;
-	private String language;
 	private String DiffTool;
 	private String fileExtension;
 	private String filePath;
-	private int totalCount;
 	private String Java = ".java";
 	private String Python = ".py";
 	private String C = ".c";
@@ -27,7 +25,6 @@ public class ChangeMiner {
 	public void setProperties(String filePath, Repository repo, String language, String DiffTool, String projectName) {
 		this.filePath = filePath;
 		this.repo = repo;
-		this.language = language;
 		this.DiffTool = DiffTool;
 		switch(language.toUpperCase()) {
 			case "PYTHON":
@@ -59,7 +56,7 @@ public class ChangeMiner {
 							continue;
 						String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
 						String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
-						ChangeInfo changeInfo = new ChangeInfo(projectName, commit.name());
+						ChangeInfo changeInfo = new ChangeInfo();
 						switch (DiffTool) {
 							case "LAS":
 								LASTool las = new LASTool(filePath, srcFileSource, dstFileSource);
@@ -70,7 +67,7 @@ public class ChangeMiner {
 								changeInfo = gumtree.constructChange(changeInfo);
 						}
 						changeAnalyzer.setProjectName(projectName);
-						changeAnalyzer.generateMap(changeInfo, DiffTool);
+						changeAnalyzer.generateMap(changeInfo, DiffTool, commit.getId().getName());
 						if (changeAnalyzer.getTotalCount() > 0 && changeAnalyzer.getTotalCount()%20000==0) {
 							changeAnalyzer.printStatistic();
 						}
@@ -79,6 +76,7 @@ public class ChangeMiner {
 						continue;
 					}
 				}
+				System.out.println();
 			}
 		}
     }
