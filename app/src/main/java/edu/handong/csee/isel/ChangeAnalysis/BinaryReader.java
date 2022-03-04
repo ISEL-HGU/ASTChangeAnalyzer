@@ -34,9 +34,9 @@ public class BinaryReader {
                 FileInputStream fileIn = new FileInputStream(combinePath + "/" + files);
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
 
-                ChangeAnalyzer binaryChangeAnalyzer = (ChangeAnalyzer)objectIn.readObject();
+                ChangeInfo binaryChangeInfo = (ChangeInfo)objectIn.readObject();
 
-                HashMap<String, HashMap<String, ArrayList<String>>> coreMap = binaryChangeAnalyzer.getCoreMap();
+                HashMap<String, HashMap<String, ArrayList<String>>> coreMap = binaryChangeInfo.getCoreMap();
 
                 objectIn.close();
                 fileIn.close();

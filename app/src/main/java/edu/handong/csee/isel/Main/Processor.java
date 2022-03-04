@@ -1,6 +1,6 @@
 package edu.handong.csee.isel.Main;
 
-import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
+import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import edu.handong.csee.isel.ChangeAnalysis.IndexParser;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
@@ -37,20 +37,20 @@ public class Processor implements Runnable {
     @Override
     public void run() {
         try {
-            ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer(input);
-            changeAnalyzer.setProjectName(projectName);
+            ChangeInfo changeInfo = new ChangeInfo(input);
+            changeInfo.setProjectName(projectName);
             CommitMiner commitMine = new CommitMiner(project, isGitClone);
             if (commitMine.isCompleted()) {
                 ChangeMiner changeMine = new ChangeMiner();
                 changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool, projectName);
                 if (isChangeMine) volume += changeMine.collect(commitMine.getCommitList());
-                else { changeMine.collect(commitMine.getCommitList(), changeAnalyzer); }
+                else { changeMine.collect(commitMine.getCommitList(), changeInfo); }
             }
             if (isChangeMine) System.out.println("Changed Mined: " + volume);
             else if (isGitClone) return;
             else {
-                writeObjectToFile(changeAnalyzer);
-                IndexParser index = new IndexParser(savePath,changeAnalyzer.getCoreMap());
+                writeObjectToFile(changeInfo);
+                IndexParser index = new IndexParser(savePath, changeInfo.getCoreMap());
                 index.generateIndex();
             }
 

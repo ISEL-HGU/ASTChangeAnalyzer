@@ -2,8 +2,8 @@ package edu.handong.csee.isel.RepoMiner;
 
 import java.util.List;
 
-import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
+import edu.handong.csee.isel.ChangeAnalysis.ChangeData;
 import edu.handong.csee.isel.DiffTools.GumTree;
 import edu.handong.csee.isel.DiffTools.LASTool;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -39,7 +39,7 @@ public class ChangeMiner {
 		this.projectName = projectName;
 	}
 	
-	public void collect(List<RevCommit> commitList, ChangeAnalyzer changeAnalyzer) {
+	public void collect(List<RevCommit> commitList, ChangeInfo changeInfo) {
 		try (ProgressBar pb = new ProgressBar(projectName, commitList.size())) {
 			for (RevCommit commit : commitList) {
 				pb.step();
@@ -56,20 +56,20 @@ public class ChangeMiner {
 							continue;
 						String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
 						String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
-						ChangeInfo changeInfo = new ChangeInfo();
+						ChangeData changeData = new ChangeData();
 						switch (DiffTool) {
 							case "LAS":
 								LASTool las = new LASTool(filePath, srcFileSource, dstFileSource);
-								changeInfo = las.constructChange(changeInfo);
+								changeData = las.constructChange(changeData);
 								break;
 							default:
 								GumTree gumtree = new GumTree(filePath, fileExtension, srcFileSource, dstFileSource);
-								changeInfo = gumtree.constructChange(changeInfo);
+								changeData = gumtree.constructChange(changeData);
 						}
-						changeAnalyzer.setProjectName(projectName);
-						changeAnalyzer.generateMap(changeInfo, DiffTool, commit.getId().getName());
-						if (changeAnalyzer.getTotalCount() > 0 && changeAnalyzer.getTotalCount()%20000==0) {
-							changeAnalyzer.printStatistic();
+						changeInfo.setProjectName(projectName);
+						changeInfo.generateMap(changeData, DiffTool, commit.getId().getName());
+						if (changeInfo.getTotalCount() > 0 && changeInfo.getTotalCount()%20000==0) {
+							changeInfo.printStatistic();
 						}
 					} catch (Exception e) {
 						e.printStackTrace();

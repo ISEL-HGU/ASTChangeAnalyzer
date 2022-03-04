@@ -13,7 +13,7 @@ import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
-import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
+import edu.handong.csee.isel.ChangeAnalysis.ChangeData;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -37,7 +37,7 @@ public class GumTree {
         this.dstFileSource = dstFileSource;
     }
 
-    public ChangeInfo constructChange(ChangeInfo changeInfo) {
+    public ChangeData constructChange(ChangeData changeData) {
 
         EditScript editscript = null;
         List<Action> actionList = null;
@@ -68,14 +68,14 @@ public class GumTree {
             }
             srcFile.delete();
             dstFile.delete();
-            return changeInfo;
+            return changeData;
         } catch (IOException e) {
             e.printStackTrace();
         }
         for (Action action : actionList) {
-            changeInfo.addAction(action);
+            changeData.addAction(action);
         }
-        return changeInfo;
+        return changeData;
     }
 
     public EditScript JavaASTDiffMine(String srcFileSource, String dstFileSource) throws IOException {
