@@ -68,10 +68,14 @@ public class IndexParser {
                     PrintWriter out = new PrintWriter(fos);
 
                     while ((thisLine = in.readLine()) != null) {
-                        String [] row = thisLine.split(",");
-                        if (row[0].equals(key)) {
-                            thisLine = thisLine + contents + ",";
-                            found = true;
+                        try {
+                            String [] row = thisLine.split(",");
+                            if (row[0].equals(key)) {
+                                thisLine = thisLine + contents + ",";
+                                found = true;
+                            }
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            continue;
                         }
                         out.println(thisLine);
                     }
