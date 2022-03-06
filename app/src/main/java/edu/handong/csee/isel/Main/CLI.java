@@ -23,8 +23,8 @@ public class CLI {
 	private String language;
 	private String DiffTool;
 	private String inputPath;
-	private String savePath;
-	private String combinePath = "";
+	private String chgPath;
+	private String indexPath;
 	private Utils utils;
 
 	
@@ -42,8 +42,8 @@ public class CLI {
 	public String getLanguage() { return language; }
 	public String getDiffTool() { return DiffTool; }
 	public String getInputPath() { return inputPath; }
-	public String getSavepath() { return savePath; }
-	public String getCombinePath() {return combinePath; }
+	public String getChgPath() { return chgPath; }
+	public String getIndexPath() {return indexPath; }
 	public boolean activateThread() {return thread; }
 	public boolean isChangeCount() { return changeCount; }
 	public boolean isGitClone() { return gitClone; }
@@ -87,11 +87,11 @@ public class CLI {
 
 			save = cmd.hasOption("save");
 			if (save)
-				savePath = cmd.getOptionValue("save");
-			else savePath = "/data/CGYW/chg";
+				chgPath = cmd.getOptionValue("save");
+			else chgPath = "/data/CGYW/chg";
 
-			if (cmd.hasOption("combine"))
-				combinePath = cmd.getOptionValue("combine");
+			if (cmd.hasOption("sample"))
+				indexPath = cmd.getOptionValue("sample");
 
 			help = cmd.hasOption("h");
 
@@ -146,10 +146,10 @@ public class CLI {
 				.argName("Expected absolute path")
 				.build());
 
-		options.addOption(Option.builder("combine")
-				.desc("combine .chg files to a data")
+		options.addOption(Option.builder("sample")
+				.desc("get 20 samples group sized as median from index.csv")
 				.hasArg()
-				.argName("Expected absolute path")
+				.argName("path for index.csv")
 				.build());
 		
 		options.addOption(Option.builder("h").longOpt("help")

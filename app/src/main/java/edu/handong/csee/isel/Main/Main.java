@@ -3,6 +3,7 @@ package edu.handong.csee.isel.Main;
 import edu.handong.csee.isel.ChangeAnalysis.BinaryReader;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import edu.handong.csee.isel.ChangeAnalysis.IndexParser;
+import edu.handong.csee.isel.ChangeAnalysis.SampleCollector;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
@@ -23,8 +24,8 @@ public class Main {
 	private boolean isChangeCount;
 	private boolean isGitClone;
 	private int volume = 0;
-	private String savePath;
-	private String combinePath;
+	private String chgPath;
+	private String indexPath;
 
     public static void main(String[] args) {
     	Main main = new Main();
@@ -40,8 +41,8 @@ public class Main {
 		input = cli.getInputPath();
 		isChangeCount = cli.isChangeCount();
 		isGitClone = cli.isGitClone();
-		savePath = cli.getSavepath();
-		combinePath = cli.getCombinePath();
+		chgPath = cli.getChgPath();
+		indexPath = cli.getIndexPath();
 
 		if (projects.size() > 0 && cli.activateThread()) {
 			HashMap<String,String> url_projectName = cli.getUtils().getHashMap();
@@ -52,7 +53,7 @@ public class Main {
 			for (String project : projects) {
 				Processor processor = new Processor();
 				processor.setProjectProperties(project, url_projectName.get(project).replaceAll("/", "-"));
-				processor.setProperties(language, DiffTool, input, isChangeCount, isGitClone, savePath);
+				processor.setProperties(language, DiffTool, input, isChangeCount, isGitClone, chgPath);
 				Runnable worker = processor;
 				executor.execute(worker);
 				calls.add(Executors.callable(worker));
@@ -65,16 +66,17 @@ public class Main {
 			System.out.println("Finished\n");
 		} else {
 			if (projects.size() > 0) {
-				for (String project : projects) runWithNoThread(language, DiffTool, input, isChangeCount, isGitClone, savePath, project);
+				for (String project : projects) runWithNoThread(language, DiffTool, input, isChangeCount, isGitClone, chgPath, project);
 			}
 		}
 
 		System.out.println("For the graphical representation run graph.py file with following command" +
 				"\nL $ python3 graph.py");
 
-		if (combinePath.length()>1) {
-			BinaryReader binaryReader = new BinaryReader(combinePath);
-			binaryReader.getHashMap();
+		if (indexPath.length()>1) {
+			new SampleCollector(indexPath,20);
+			//BinaryReader binaryReader = new BinaryReader(indexPath);
+			//binaryReader.getHashMap();
 		}
 
 		return;
