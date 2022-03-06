@@ -92,7 +92,6 @@ public class CLI {
 
 			if (cmd.hasOption("combine"))
 				combinePath = cmd.getOptionValue("combine");
-
 			help = cmd.hasOption("h");
 
 		} catch (Exception e) {
