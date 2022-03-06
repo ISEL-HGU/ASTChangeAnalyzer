@@ -19,10 +19,9 @@ public class ChangeMiner {
 	private String Java = ".java";
 	private String Python = ".py";
 	private String C = ".c";
-	private String projectName;
 
 
-	public void setProperties(String filePath, Repository repo, String language, String DiffTool, String projectName) {
+	public void setProperties(String filePath, Repository repo, String language, String DiffTool) {
 		this.filePath = filePath;
 		this.repo = repo;
 		this.DiffTool = DiffTool;
@@ -36,10 +35,9 @@ public class ChangeMiner {
 			default:
 				fileExtension = Java;
 		}
-		this.projectName = projectName;
 	}
 	
-	public void collect(List<RevCommit> commitList, ChangeInfo changeInfo) {
+	public void collect(String projectName, List<RevCommit> commitList, ChangeInfo changeInfo) {
 		try (ProgressBar pb = new ProgressBar(projectName, commitList.size())) {
 			for (RevCommit commit : commitList) {
 				pb.step();

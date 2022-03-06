@@ -1,6 +1,5 @@
 package edu.handong.csee.isel.Main;
 
-import edu.handong.csee.isel.ChangeAnalysis.BinaryReader;
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import edu.handong.csee.isel.ChangeAnalysis.IndexParser;
 import edu.handong.csee.isel.ChangeAnalysis.SampleCollector;
@@ -89,10 +88,10 @@ public class Main {
 			CommitMiner commitMine = new CommitMiner(project, isGitClone);
 			if (commitMine.isCompleted()) {
 				ChangeMiner changeMine = new ChangeMiner();
-				changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool, commitMine.getMatcherGroup().replaceAll("/", "-"));
+				changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool);
 				changeInfo.setProjectName(commitMine.getMatcherGroup().replaceAll("/", "-"));
 				if (isChangeMine) volume += changeMine.collect(commitMine.getCommitList());
-				else { changeMine.collect(commitMine.getCommitList(), changeInfo); }
+				else { changeMine.collect(commitMine.getMatcherGroup().replaceAll("/", "-"), commitMine.getCommitList(), changeInfo); }
 				if (isChangeMine) System.out.println("Changed Mined: " + volume);
 				else if (isGitClone) return;
 				else {

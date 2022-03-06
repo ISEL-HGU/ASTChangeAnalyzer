@@ -92,6 +92,7 @@ public class CLI {
 
 			if (cmd.hasOption("sample"))
 				indexPath = cmd.getOptionValue("sample");
+			else indexPath = "/data/CGYW/chg/index.csv";
 
 			help = cmd.hasOption("h");
 
