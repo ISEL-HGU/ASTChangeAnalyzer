@@ -13,55 +13,40 @@ import java.util.HashMap;
 public class ChangeInfo implements Serializable {
     private static int totalCount;
     private static int groupCount;
-    private static int coreCount;
     private String input;
     private static boolean opened = false;
     public static final long serialVersionUID = -2073457782355550636L; // to be fixed later
-    public HashMap<String, HashMap<String, ArrayList<String>>> coreMap;
+    public HashMap<String, ArrayList<String>> hashMap;
     private String projectName;
 
     public ChangeInfo(String input) {
-        coreMap = new HashMap<String, HashMap<String, ArrayList<String>>>();
+        hashMap = new HashMap<String, ArrayList<String>>();
         this.input = input;
     }
 
     public void setProjectName(String projectName) { this.projectName = projectName; }
     public String getProjectName() { return projectName; }
     public int getTotalCount() { return totalCount; }
-    public HashMap<String, HashMap<String, ArrayList<String>>> getCoreMap() { return coreMap; }
+    public HashMap<String, ArrayList<String>> getHashMap() { return hashMap; }
 
-    public void generateMap (ChangeData changeData, String language, String commitID) {
-        String fkey;
-        String hkey;
+    public void generateMap (ChangeData changeData, String language, String commitID, String fileName) {
+        String key;
         switch (language) {
             case "LAS":
-                fkey = computeSHA256Hash(changeData.getEditOpWithName());
-                hkey = computeSHA256Hash(changeData.getEditOpWithType());
+                key = computeSHA256Hash(changeData.getEditOp());
                 break;
             default:
-                fkey = computeSHA256Hash(changeData.getActionsWithName());
-                hkey = computeSHA256Hash(changeData.getActionsWithType());
+                key = computeSHA256Hash(changeData.getActions());
                 break;
         }
-        if (coreMap.containsKey(fkey)) {
-            if (coreMap.get(fkey).containsKey(hkey)) {
-                coreMap.get(fkey).get(hkey).add(projectName + "-" + commitID);
-            }
-            else {
-                ArrayList<String> combineList = new ArrayList<String>();
-                combineList.add(projectName + "-" + commitID);
-                coreMap.get(fkey).put(hkey, combineList);
-                coreCount++;
-            }
+        if (hashMap.containsKey(key)) {
+            hashMap.get(key).add(projectName + "-" + commitID + "-" + fileName);
         }
         else {
-            ArrayList<String> combineList = new ArrayList<String>();
-            combineList.add(projectName + "-" + commitID);
-            HashMap <String, ArrayList<String>> newCoreMap = new HashMap <String, ArrayList<String>>();
-            newCoreMap.put(hkey, combineList);
-            coreMap.put(fkey, newCoreMap);
+            ArrayList<String> list = new ArrayList<String>();
+            list.add(projectName + "-" + commitID + "-" + fileName);
+            hashMap.put(key, list);
             groupCount++;
-            coreCount++;
         }
         totalCount++;
     }
@@ -90,11 +75,11 @@ public class ChangeInfo implements Serializable {
             if (!opened) {
                 writer = new BufferedWriter(new FileWriter("../../../../../Statistic.txt"));
                 writer.write("Mined Repository Path: " + input
-                        + "\nformat: [# of groups] / # of change analyzed"
-                        + "\n-file , hunk");
+                        + "\nformat: # of groups / # of change analyzed");
                 opened = true;
             }
-            writer.write("\n [" + groupCount + " , " + coreCount + "] / " + totalCount);
+            if (totalCount > 0)
+                writer.write("\n " + groupCount + " / " + totalCount);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();

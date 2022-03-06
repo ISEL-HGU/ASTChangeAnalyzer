@@ -4,31 +4,45 @@ import com.github.gumtreediff.actions.model.Action;
 import script.model.EditOp;
 
 public class ChangeData {
-    private String actionsWithName;
-    private String EditOpWithName;
-    private String actionsWithType;
-    private String EditOpWithType;
+    private String actions;
+    private String editOp;
 
-    public String getActionsWithName() { return actionsWithName; }
-    public String getEditOpWithName() { return EditOpWithName; }
-    public String getActionsWithType() { return actionsWithType; }
-    public String getEditOpWithType() { return EditOpWithType; }
+    public String getActions() { return actions; }
+    public String getEditOp() { return editOp; }
 
     public ChangeData() {
-        actionsWithName = "";
-        EditOpWithName = "";
-        actionsWithType = "";
-        EditOpWithType = "";
+        actions = "";
+        editOp = "";
     }
 
     public void addAction(Action action) {
-        actionsWithName = actionsWithName + action.getName() + "|";
-        actionsWithType = actionsWithType + action.getName() + "@" + action.getNode().getType().toString().replaceAll("\\:\\s\\S$", "")
-                .replaceAll("[0-9+,+0-9]", "").replaceAll("\\[", "").replaceAll("\\]","") + "|";
+        String location;
+        if (action.getName().contains("delete"))
+            location = "";
+        else location = getActionLocation(action);
+
+        actions = actions + action.getName() + "@"
+                + action.getNode().getType().toString().replaceAll("\\:\\s\\S$", "")
+                .replaceAll("[0-9+,+0-9]", "").replaceAll("\\[", "").replaceAll("\\]","")
+                + location.replace(" ", "") + "|";
     }
+
+    public String getActionLocation(Action action) {
+        String[] actionStringList = action.toString().split("\n");
+        boolean checked = false;
+        for (int i=0; i<actionStringList.length; i++) {
+            if (checked) {
+                return "2" + actionStringList[i].replaceAll("\\:\\s\\S$", "")
+                        .replaceAll("[0-9+,+0-9]", "").replaceAll("\\[", "").replaceAll("\\]","");
+            }
+            if (actionStringList[i].contains("\\[")) continue;
+            else if (actionStringList[i].contains("to")) checked = true;
+        }
+        return "";
+    }
+
   
     public void addEditOp(EditOp op) {
-        EditOpWithName = EditOpWithName + op.getType() + "|" ;
-        EditOpWithType = EditOpWithType + op.getType() + "@" + op.getNode().getLabel() + "&" + op.getLocation().getLabel() + "|";
+        editOp = editOp + op.getType() + "@" + op.getNode().getLabel() + "&" + op.getLocation().getLabel() + "|";
     }
 }

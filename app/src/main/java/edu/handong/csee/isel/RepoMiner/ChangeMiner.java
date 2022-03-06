@@ -66,9 +66,8 @@ public class ChangeMiner {
 								GumTree gumtree = new GumTree(filePath, fileExtension, srcFileSource, dstFileSource);
 								changeData = gumtree.constructChange(changeData);
 						}
-						changeInfo.setProjectName(projectName);
-						changeInfo.generateMap(changeData, DiffTool, commit.getId().getName());
-						if (changeInfo.getTotalCount() > 0 && changeInfo.getTotalCount()%20000==0) {
+						changeInfo.generateMap(changeData, DiffTool, commit.getId().getName(), newPath);
+						if (changeInfo.getTotalCount() > 0 && changeInfo.getTotalCount()%200==0) {
 							changeInfo.printStatistic();
 						}
 					} catch (Exception e) {
@@ -76,7 +75,6 @@ public class ChangeMiner {
 						continue;
 					}
 				}
-				System.out.println();
 			}
 		}
     }

@@ -88,6 +88,7 @@ public class Main {
 			if (commitMine.isCompleted()) {
 				ChangeMiner changeMine = new ChangeMiner();
 				changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool, commitMine.getMatcherGroup().replaceAll("/", "-"));
+				changeInfo.setProjectName(commitMine.getMatcherGroup().replaceAll("/", "-"));
 				if (isChangeMine) volume += changeMine.collect(commitMine.getCommitList());
 				else { changeMine.collect(commitMine.getCommitList(), changeInfo); }
 				if (isChangeMine) System.out.println("Changed Mined: " + volume);
@@ -97,7 +98,7 @@ public class Main {
 					ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 					objectOut.writeObject((ChangeInfo) changeInfo);
 					objectOut.close();
-					new IndexParser(savePath, changeInfo.getCoreMap());
+					new IndexParser(savePath, changeInfo.getHashMap());
 				}
 			}
 		} catch (Exception e) {

@@ -36,7 +36,7 @@ public class BinaryReader {
 
                 ChangeInfo binaryChangeInfo = (ChangeInfo)objectIn.readObject();
 
-                HashMap<String, HashMap<String, ArrayList<String>>> coreMap = binaryChangeInfo.getCoreMap();
+                HashMap<String, ArrayList<String>> hashMap = binaryChangeInfo.getHashMap();
 
                 objectIn.close();
                 fileIn.close();
