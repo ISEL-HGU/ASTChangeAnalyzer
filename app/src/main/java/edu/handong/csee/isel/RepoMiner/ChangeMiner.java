@@ -65,7 +65,7 @@ public class ChangeMiner {
 								changeData = gumtree.constructChange(changeData);
 						}
 						changeInfo.generateMap(changeData, DiffTool, commit.getId().getName(), newPath);
-						if (changeInfo.getTotalCount() > 0 && changeInfo.getTotalCount()%200==0) {
+						if (changeInfo.getTotalCount() > 0 && changeInfo.getTotalCount()%200000==0) {
 							changeInfo.printStatistic();
 						}
 					} catch (Exception e) {
