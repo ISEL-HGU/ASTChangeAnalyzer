@@ -16,7 +16,7 @@ import java.util.*;
 public class CLI {
 	private boolean help=false;
 	private boolean thread = true;
-	private boolean changeMine;
+	private boolean changeCount;
 	private boolean save;
 	private boolean gitClone;
 	private ArrayList<String> address;
@@ -45,7 +45,7 @@ public class CLI {
 	public String getSavepath() { return savePath; }
 	public String getCombinePath() {return combinePath; }
 	public boolean activateThread() {return thread; }
-	public boolean isChangeMine() { return changeMine; }
+	public boolean isChangeCount() { return changeCount; }
 	public boolean isGitClone() { return gitClone; }
 	public Utils getUtils() { return utils; }
 	
@@ -81,7 +81,7 @@ public class CLI {
 			if (cmd.hasOption("java"))
 				DiffTool = cmd.getOptionValue("java").toUpperCase();
 
-			changeMine = cmd.hasOption("changeMine");
+			changeCount = cmd.hasOption("changeCount");
 
 			gitClone = cmd.hasOption("gitClone");
 
@@ -134,7 +134,7 @@ public class CLI {
 				.argName("URL path")
 				.build());
 
-		options.addOption(Option.builder("changeMine")
+		options.addOption(Option.builder("changeCount")
 				.desc("Count the number of total changes of a project")
 				.argName("Number of Change")
 				.build());

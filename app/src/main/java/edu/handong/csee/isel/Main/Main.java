@@ -1,8 +1,8 @@
 package edu.handong.csee.isel.Main;
 
-import edu.handong.csee.isel.ChangeAnalysis.ChangeAnalyzer;
+import edu.handong.csee.isel.ChangeAnalysis.BinaryReader;
+import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import edu.handong.csee.isel.ChangeAnalysis.IndexParser;
-import edu.handong.csee.isel.ChangeAnalysis.StatisticsGenerator;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
 
@@ -20,7 +20,7 @@ public class Main {
 	private String language;
 	private String DiffTool;
 	private String input;
-	private boolean isChangeMine;
+	private boolean isChangeCount;
 	private boolean isGitClone;
 	private int volume = 0;
 	private String savePath;
@@ -38,24 +38,21 @@ public class Main {
 		language = cli.getLanguage();
 		DiffTool = cli.getDiffTool();
 		input = cli.getInputPath();
-		isChangeMine = cli.isChangeMine();
+		isChangeCount = cli.isChangeCount();
 		isGitClone = cli.isGitClone();
 		savePath = cli.getSavepath();
 		combinePath = cli.getCombinePath();
 
-		if (projects.size() == 0)
-			return;
-
-		if (cli.activateThread()) {
+		if (projects.size() > 0 && cli.activateThread()) {
 			HashMap<String,String> url_projectName = cli.getUtils().getHashMap();
 			int numOfCoresInMyCPU = Runtime.getRuntime().availableProcessors()/2;
 			ExecutorService executor = Executors.newFixedThreadPool(numOfCoresInMyCPU);
-			ArrayList<Callable<Object>> calls = new ArrayList<Callable<Object>>();
+			ArrayList<Callable<Object>> calls = new ArrayList<>();
 
 			for (String project : projects) {
 				Processor processor = new Processor();
 				processor.setProjectProperties(project, url_projectName.get(project).replaceAll("/", "-"));
-				processor.setProperties(language, DiffTool, input, isChangeMine, isGitClone, savePath);
+				processor.setProperties(language, DiffTool, input, isChangeCount, isGitClone, savePath);
 				Runnable worker = processor;
 				executor.execute(worker);
 				calls.add(Executors.callable(worker));
@@ -67,8 +64,8 @@ public class Main {
 			while (!executor.isTerminated()) {}
 			System.out.println("Finished\n");
 		} else {
-			for (String project : projects) {
-				runWithNoThread(language, DiffTool, input, isChangeMine, isGitClone, savePath, project);
+			if (projects.size() > 0) {
+				for (String project : projects) runWithNoThread(language, DiffTool, input, isChangeCount, isGitClone, savePath, project);
 			}
 		}
 
@@ -76,8 +73,8 @@ public class Main {
 				"\nL $ python3 graph.py");
 
 		if (combinePath.length()>1) {
-			StatisticsGenerator statisticsGenerator = new StatisticsGenerator(combinePath);
-			statisticsGenerator.combine();
+			BinaryReader binaryReader = new BinaryReader(combinePath);
+			binaryReader.getHashMap();
 		}
 
 		return;
@@ -85,22 +82,22 @@ public class Main {
 
 	private void runWithNoThread(String language, String DiffTool, String input, boolean isChangeMine, boolean isGitClone, String savePath, String project) {
 		try {
-			ChangeAnalyzer changeAnalyzer = new ChangeAnalyzer(input);
-			if (!isChangeMine) changeAnalyzer.printStatistic();
+			ChangeInfo changeInfo = new ChangeInfo(input);
+			if (!isChangeMine) changeInfo.printStatistic();
 			CommitMiner commitMine = new CommitMiner(project, isGitClone);
 			if (commitMine.isCompleted()) {
 				ChangeMiner changeMine = new ChangeMiner();
 				changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool, commitMine.getMatcherGroup().replaceAll("/", "-"));
 				if (isChangeMine) volume += changeMine.collect(commitMine.getCommitList());
-				else { changeMine.collect(commitMine.getCommitList(), changeAnalyzer); }
+				else { changeMine.collect(commitMine.getCommitList(), changeInfo); }
 				if (isChangeMine) System.out.println("Changed Mined: " + volume);
 				else if (isGitClone) return;
 				else {
-					FileOutputStream fileOut = new FileOutputStream(savePath + "/" +  changeAnalyzer.getProjectName() + ".chg");
+					FileOutputStream fileOut = new FileOutputStream(savePath + "/" +  changeInfo.getProjectName() + ".chg");
 					ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-					objectOut.writeObject(changeAnalyzer);
+					objectOut.writeObject((ChangeInfo) changeInfo);
 					objectOut.close();
-					new IndexParser(savePath,changeAnalyzer.getCoreMap());
+					new IndexParser(savePath, changeInfo.getCoreMap());
 				}
 			}
 		} catch (Exception e) {

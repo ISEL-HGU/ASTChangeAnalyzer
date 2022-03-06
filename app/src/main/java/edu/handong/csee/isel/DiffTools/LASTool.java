@@ -1,8 +1,6 @@
 package edu.handong.csee.isel.DiffTools;
 
-import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
-
-import main.LAS;
+import edu.handong.csee.isel.ChangeAnalysis.ChangeData;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -26,7 +24,7 @@ public class LASTool {
         this.dstFileSource = dstFileSource;
     }
 
-    public ChangeInfo constructChange(ChangeInfo changeInfo) {
+    public ChangeData constructChange(ChangeData changeData) {
         commitCount++;
         File srcFile = new File(filePath + "/srcFile.java");
         File dstFile = new File(filePath + "/dstFile.java");
@@ -65,7 +63,7 @@ public class LASTool {
 //               System.out.println(srcFileSource);
 //               System.out.println("########################################");
 //               System.out.println(dstFileSource);
-               changeInfo.addEditOp(op);
+               changeData.addEditOp(op);
 
             }
 //            System.out.println(script.exactMatch);
@@ -79,7 +77,7 @@ public class LASTool {
 
 
 
-        return changeInfo;
+        return changeData;
     }
 
 }
