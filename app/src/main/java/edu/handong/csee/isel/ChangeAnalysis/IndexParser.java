@@ -44,6 +44,8 @@ public class IndexParser {
         } else {
             makeIndex(file);
         }
+        if(file.exists())
+            sortIndex(file);
     }
 
     public void appendIndex(File file) {
@@ -54,7 +56,7 @@ public class IndexParser {
             FileInputStream fis;
 
             int fileCounter = 0;
-            boolean found = false, found2 = false;
+            boolean found = false;
 
             for(String key : this.hashMap.keySet()) {
                 for(String contents : this.hashMap.get(key)) {
@@ -82,11 +84,16 @@ public class IndexParser {
                     if(!found)
                         out.println(key + "," + contents + ",");
                     found = false;
-                    out.flush();
-                    out.close();
-                    in.close();
-                    fis = new FileInputStream(outFile);
-                    fileCounter++;
+                    try {
+                        out.flush();
+                        out.close();
+                        in.close();
+                        fis = new FileInputStream(outFile);
+                        fileCounter++;
+                    } catch (FileNotFoundException e ) {
+                        continue;
+                    }
+
                 }
             }
 
@@ -106,8 +113,7 @@ public class IndexParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(file.exists())
-            sortIndex(file);
+
     }
 
 
