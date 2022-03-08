@@ -1,41 +1,25 @@
 package edu.handong.csee.isel.ChangeAnalysis;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 public class IndexParser {
     private String path;
     private HashMap<String, ArrayList<String>> hashMap;
 
-    public String getPath() { return path; }
+    public String getPath() {
+        return path;
+    }
 
     public IndexParser(String path, HashMap<String, ArrayList<String>> hashMap) {
         this.path = path;
         this.hashMap = hashMap;
     }
 
-    public void makeIndex(File file) {
-
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            PrintWriter out = new PrintWriter(fos);
-
-            for(String key : hashMap.keySet()) {
-                out.print(key);
-                for(String contents : hashMap.get(key))
-                    out.print(","+hashMap.get(key));
-                out.print("\n");
-            }
-            out.flush();
-            out.close();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public synchronized void generateIndex() {
         File file = new File(this.path + "/index.csv");
@@ -44,80 +28,89 @@ public class IndexParser {
         } else {
             makeIndex(file);
         }
-        if(file.exists())
+        if (file.exists())
             sortIndex(file);
     }
 
-    public void appendIndex(File file) {
-        String thisLine = "";
-
+    public synchronized void makeIndex(File file) {
         try {
-            File outFile = null;
-            FileInputStream fis;
+            FileOutputStream fos = new FileOutputStream(file);
+            PrintWriter out = new PrintWriter(fos);
 
-            int fileCounter = 0;
-            boolean found = false;
+            for (String key : hashMap.keySet()) {
+                out.print(key);
+                for (String contents : hashMap.get(key))
+                    out.print("," + contents);
+                out.print("\n");
+            }
+            out.flush();
+            out.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            for(String key : this.hashMap.keySet()) {
-                for(String contents : this.hashMap.get(key)) {
-                    if(fileCounter == 0)
-                        fis = new FileInputStream(file);
-                    else
-                        fis = new FileInputStream(outFile);
-                    BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-                    outFile = new File(path+"/$" +Integer.toString(fileCounter)+ ".tmp");
-                    FileOutputStream fos = new FileOutputStream(outFile);
-                    PrintWriter out = new PrintWriter(fos);
+    public synchronized void makeIndex(File file, HashMap<String,ArrayList<String>> map) {
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            PrintWriter out = new PrintWriter(fos);
 
-                    while ((thisLine = in.readLine()) != null) {
-                        try {
-                            String [] row = thisLine.split(",");
-                            if (row[0].equals(key)) {
-                                thisLine = thisLine + contents + ",";
-                                found = true;
-                            }
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            continue;
-                        }
-                        out.println(thisLine);
-                    }
-                    if(!found)
-                        out.println(key + "," + contents + ",");
-                    found = false;
-                    try {
-                        out.flush();
-                        out.close();
-                        in.close();
-                        fis = new FileInputStream(outFile);
-                        fileCounter++;
-                    } catch (FileNotFoundException e ) {
-                        continue;
-                    }
+            for (String key : map.keySet()) {
+                out.print(key);
+                for (String contents : map.get(key))
+                    out.print("," + contents);
+                out.print("\n");
+            }
+            out.flush();
+            out.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public synchronized void appendIndex(File file) {
 
+        HashMap<String, ArrayList<String>> csvMap = new HashMap<String, ArrayList<String>>();
+//        String thisLine = "";
+//
+        try {
+//            File outFile = null;
+            Reader in = new FileReader(file);
+            CSVParser parser = CSVFormat.EXCEL.parse(in);
+            for (CSVRecord record : parser) {
+                ArrayList<String> temp = new ArrayList<String>();
+                if (csvMap.containsKey(record.get(0))) {
+                    csvMap.get(record.get(0)).add(record.get(1));
+                } else {
+                    temp.add(record.get(1));
+                    csvMap.put(record.get(0),temp);
+                }
+
+                for (int i = 2; i < record.size(); i++) {
+                    csvMap.get(record.get(0)).add(record.get(i));
                 }
             }
+            in.close();
 
-            try {
-                if(outFile == null)
-                    outFile = file;
-                file.delete();
-                outFile.renameTo(file);
-                for(int z = 0; z < fileCounter-1; z++) {
-                    new File(path + "/$" + Integer.toString(z) + ".tmp").delete();
-                }
-            } catch (NullPointerException e) {
-                System.out.println("There is a problem with a repo. Skipping indexing");
-                return;
-            }
 
-        } catch (IOException e) {
+        } catch(FileNotFoundException e){
+            e.printStackTrace();
+        } catch(IOException e){
             e.printStackTrace();
         }
 
+        File outFile =  new File(this.path + "/temp.csv");
+        makeIndex(outFile ,merge(csvMap,hashMap));
+        file.delete();
+        outFile.renameTo(file);
     }
 
 
-    public void sortIndex(File file) {
+
+
+
+    public synchronized void sortIndex(File file) {
         String thisLine = "";
         try {
             File outFile = new File(path + "/temp.tmp");
@@ -143,5 +136,21 @@ public class IndexParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public synchronized static HashMap<String, ArrayList<String>> merge(HashMap<String, ArrayList<String>> list_1, HashMap<String, ArrayList<String>> list_2) {
+        HashMap<String, ArrayList<String>> l1 = new HashMap<>();
+        l1.putAll(list_1);
+        for (String keys_1 : list_1.keySet()) {
+            for (String keys_2 : list_2.keySet()) {
+                if(keys_1.equals(keys_2))
+                    l1.get(keys_1).addAll(list_2.get(keys_2));
+                else
+                    l1.put(keys_2,list_2.get(keys_2));
+            }
+        }
+        if (list_1.size() ==0)
+            return list_2;
+        return l1;
     }
 }
