@@ -73,7 +73,7 @@ public class Main {
 				"\nL $ python3 graph.py");
 
 		if (indexPath.length()>1) {
-			new SampleCollector(indexPath,20);
+			//new SampleCollector(indexPath,20);
 			//BinaryReader binaryReader = new BinaryReader(indexPath);
 			//binaryReader.getHashMap();
 		}
@@ -95,11 +95,14 @@ public class Main {
 				if (isChangeMine) System.out.println("Changed Mined: " + volume);
 				else if (isGitClone) return;
 				else {
+
 					FileOutputStream fileOut = new FileOutputStream(savePath + "/" +  changeInfo.getProjectName() + ".chg");
 					ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 					objectOut.writeObject((ChangeInfo) changeInfo);
 					objectOut.close();
-					new IndexParser(savePath, changeInfo.getHashMap());
+
+					IndexParser index = new IndexParser(savePath, changeInfo.getHashMap());
+					index.generateIndex();
 				}
 			}
 		} catch (Exception e) {

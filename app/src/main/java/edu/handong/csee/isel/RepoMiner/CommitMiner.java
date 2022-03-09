@@ -30,8 +30,9 @@ public class CommitMiner {
 
 		if (matcher.find()) {
 //			filePath = "/Users/nayeawon/Desktop/" +  matcher.group(3);
-//			filePath = "/home/zackcglee/Documents/projects/ISEL/ASTChangeAnalyzer/clones/" +  matcher.group(3);
+//			filePath = "/Users/leechanggong/Projects/ASTChangeAnalyzer/clones/" +  matcher.group(3);
 			filePath = "/data/CGYW/clones/" +  matcher.group(3);
+
 			matcherGroup = matcher.group(3);
 
 			file = new File(filePath + "/.git");
