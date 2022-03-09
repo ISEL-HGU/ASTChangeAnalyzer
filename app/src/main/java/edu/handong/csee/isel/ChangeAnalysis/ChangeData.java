@@ -17,7 +17,7 @@ public class ChangeData {
 
     public void addAction(Action action) {
         String location;
-        if (action.getName().contains("delete"))
+        if (action.getName().contains("delete") || action.getName().contains("update"))
             location = "";
         else location = getActionLocation(action);
 
@@ -36,7 +36,7 @@ public class ChangeData {
                         .replaceAll("[0-9+,+0-9]", "").replaceAll("\\[", "").replaceAll("\\]","");
             }
             if (actionStringList[i].contains("\\[")) continue;
-            else if (actionStringList[i].contains("to")) checked = true;
+            else if (actionStringList[i].indexOf("to") == 0) checked = true;
         }
         return "";
     }
