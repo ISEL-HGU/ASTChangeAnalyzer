@@ -73,7 +73,7 @@ public class Main {
 				"\nL $ python3 graph.py");
 
 		if (indexPath.length()>1) {
-			//new SampleCollector(indexPath,20);
+			new SampleCollector(indexPath,20);
 			//BinaryReader binaryReader = new BinaryReader(indexPath);
 			//binaryReader.getHashMap();
 		}
