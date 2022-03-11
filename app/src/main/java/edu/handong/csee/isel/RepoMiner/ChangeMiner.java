@@ -13,7 +13,7 @@ import me.tongfei.progressbar.*;
 
 public class ChangeMiner {
 	private Repository repo;
-	private String DiffTool;
+	private String DiffTool = "GUMTREE";
 	private String fileExtension;
 	private String filePath;
 	private String Java = ".java";
@@ -96,6 +96,41 @@ public class ChangeMiner {
 			}
 		}
 		return count;
+	}
+
+	public String collect(String filePath, String fileName, RevCommit commit, Repository repo) {
+		if (commit.getParentCount() < 1) return "";
+		RevCommit parent = commit.getParent(0);
+		List<DiffEntry> diffs = RepoUtils.diff(parent, commit, repo);
+		for (DiffEntry diff : diffs) {
+			try {
+				String oldPath = diff.getOldPath();
+				String newPath = diff.getNewPath();
+				fileExtension = fileName.substring(fileName.length()-5);
+				if (!newPath.equals(fileName) || newPath.indexOf("Test") >= 0 || !newPath.endsWith(fileExtension)) continue;
+				String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
+				String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);
+				ChangeData changeData = new ChangeData();
+				switch (DiffTool) {
+					case "LAS":
+						LASTool las = new LASTool(filePath, srcFileSource, dstFileSource);
+						changeData = las.constructChange(changeData);
+						break;
+					default:
+						GumTree gumtree = new GumTree(filePath, fileExtension, srcFileSource, dstFileSource);
+						changeData = gumtree.constructChange(changeData);
+				}
+				return changeData.getActions();
+//				changeInfo.generateMap(changeData, DiffTool, commit.getId().getName(), newPath);
+//				if (changeInfo.getTotalCount() > 0 && changeInfo.getTotalCount()%200000==0) {
+//					changeInfo.printStatistic();
+//				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
+			}
+		}
+		return "";
 	}
 }
 

@@ -11,10 +11,6 @@ public class IndexParser {
     private String path;
     private HashMap<String, ArrayList<String>> hashMap;
 
-    public String getPath() {
-        return path;
-    }
-
     public IndexParser(String path, HashMap<String, ArrayList<String>> hashMap) {
         this.path = path;
         this.hashMap = hashMap;
@@ -36,11 +32,11 @@ public class IndexParser {
         try {
             FileOutputStream fos = new FileOutputStream(file);
             PrintWriter out = new PrintWriter(fos);
-
             for (String key : hashMap.keySet()) {
                 out.print(key);
-                for (String contents : hashMap.get(key))
+                for (String contents : hashMap.get(key)){
                     out.print("," + contents);
+                }
                 out.print("\n");
             }
             out.flush();
@@ -83,12 +79,18 @@ public class IndexParser {
                 if (csvMap.containsKey(record.get(0))) {
                     csvMap.get(record.get(0)).add(record.get(1));
                 } else {
-                    temp.add(record.get(1));
+                    try {
+                        temp.add(record.get(1));
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("ArrayIndexOutOfBoundsException occured, " + record.get(0));
+                        continue;
+                    }
                     csvMap.put(record.get(0),temp);
                 }
 
                 for (int i = 2; i < record.size(); i++) {
-                    csvMap.get(record.get(0)).add(record.get(i));
+                    if (!record.get(i).equals(record.get(i-1)))
+                        csvMap.get(record.get(0)).add(record.get(i));
                 }
             }
             in.close();
@@ -141,14 +143,20 @@ public class IndexParser {
     public synchronized static HashMap<String, ArrayList<String>> merge(HashMap<String, ArrayList<String>> list_1, HashMap<String, ArrayList<String>> list_2) {
         HashMap<String, ArrayList<String>> l1 = new HashMap<>();
         l1.putAll(list_1);
-        for (String keys_1 : list_1.keySet()) {
-            for (String keys_2 : list_2.keySet()) {
-                if(keys_1.equals(keys_2))
-                    l1.get(keys_1).addAll(list_2.get(keys_2));
-                else
-                    l1.put(keys_2,list_2.get(keys_2));
-            }
+        for (String keys_2 : list_2.keySet()) {
+            if (l1.containsKey(keys_2)) l1.get(keys_2).addAll(list_2.get(keys_2));
+            else l1.put(keys_2, list_2.get(keys_2));
         }
+//        for (String keys_1 : list_1.keySet()) {
+//            for (String keys_2 : list_2.keySet()) {
+//                if(keys_1.equals(keys_2)) {
+//                    l1.get(keys_1).addAll(list_2.get(keys_2));
+//                    System.out.println(keys_1);
+//                }
+//                else
+//                    l1.put(keys_2,list_2.get(keys_2));
+//            }
+//        }
         if (list_1.size() ==0)
             return list_2;
         return l1;

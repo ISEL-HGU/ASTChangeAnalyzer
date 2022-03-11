@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -44,14 +43,13 @@ public class Main {
 		indexPath = cli.getIndexPath();
 
 		if (projects.size() > 0 && cli.activateThread()) {
-			HashMap<String,String> url_projectName = cli.getUtils().getHashMap();
 			int numOfCoresInMyCPU = Runtime.getRuntime().availableProcessors()/2;
 			ExecutorService executor = Executors.newFixedThreadPool(numOfCoresInMyCPU);
 			ArrayList<Callable<Object>> calls = new ArrayList<>();
 
 			for (String project : projects) {
 				Processor processor = new Processor();
-				processor.setProjectProperties(project, url_projectName.get(project).replaceAll("/", "-"));
+				processor.setProjectProperties(project);
 				processor.setProperties(language, DiffTool, input, isChangeCount, isGitClone, chgPath);
 				Runnable worker = processor;
 				executor.execute(worker);
@@ -70,10 +68,10 @@ public class Main {
 		}
 
 		System.out.println("For the graphical representation run graph.py file with following command" +
-				"\nL $ python3 graph.py");
+				"\nL $ python3 graph.py\n");
 
 		if (indexPath.length()>1) {
-			//new SampleCollector(indexPath,20);
+			new SampleCollector(indexPath,20);
 			//BinaryReader binaryReader = new BinaryReader(indexPath);
 			//binaryReader.getHashMap();
 		}
@@ -89,20 +87,19 @@ public class Main {
 			if (commitMine.isCompleted()) {
 				ChangeMiner changeMine = new ChangeMiner();
 				changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool);
-				changeInfo.setProjectName(commitMine.getMatcherGroup().replaceAll("/", "-"));
+				changeInfo.setProjectName(commitMine.getMatcherGroup());
 				if (isChangeMine) volume += changeMine.collect(commitMine.getCommitList());
-				else { changeMine.collect(commitMine.getMatcherGroup().replaceAll("/", "-"), commitMine.getCommitList(), changeInfo); }
+				else { changeMine.collect(commitMine.getMatcherGroup(), commitMine.getCommitList(), changeInfo); }
 				if (isChangeMine) System.out.println("Changed Mined: " + volume);
 				else if (isGitClone) return;
 				else {
-
+					System.out.println(changeInfo.getHashMap().size());
+					IndexParser index = new IndexParser(savePath, changeInfo.getHashMap());
+					index.generateIndex();
 					FileOutputStream fileOut = new FileOutputStream(savePath + "/" +  changeInfo.getProjectName() + ".chg");
 					ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 					objectOut.writeObject((ChangeInfo) changeInfo);
 					objectOut.close();
-
-					IndexParser index = new IndexParser(savePath, changeInfo.getHashMap());
-					index.generateIndex();
 				}
 			}
 		} catch (Exception e) {

@@ -29,34 +29,33 @@ public class Processor implements Runnable {
         this.savePath = savePath;
     }
 
-    public void setProjectProperties(String project, String projectName) {
+    public void setProjectProperties(String project) {
         this.project = project;
-        this.projectName = projectName;
     }
 
     @Override
     public void run() {
         try {
             ChangeInfo changeInfo = new ChangeInfo(input);
-            changeInfo.setProjectName(projectName);
             CommitMiner commitMine = new CommitMiner(project, isGitClone);
+            projectName = commitMine.getMatcherGroup().replaceAll("/", "~");
+            changeInfo.setProjectName(projectName);
             if (commitMine.isCompleted()) {
                 ChangeMiner changeMine = new ChangeMiner();
                 changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool);
                 if (isChangeCount) volume += changeMine.collect(commitMine.getCommitList());
                 else { changeMine.collect(projectName, commitMine.getCommitList(), changeInfo); }
-            }
-            if (isChangeCount) System.out.println("Changed Mined: " + volume);
-            else if (isGitClone) return;
-            else {
-                writeObjectToFile(changeInfo);
-                synchronized (this) {
-                    IndexParser index = new IndexParser(savePath, changeInfo.getHashMap());
-                    index.generateIndex();
+                if (isChangeCount) System.out.println("Changed Mined: " + volume);
+                else if (isGitClone) return;
+                else {
+                    if (changeInfo.getHashMap().size() == 0) return;
+                    writeObjectToFile(changeInfo);
+                    synchronized (this) {
+                        IndexParser index = new IndexParser(savePath, changeInfo.getHashMap());
+                        index.generateIndex();
+                    }
                 }
-
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             return;

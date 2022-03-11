@@ -92,6 +92,7 @@ public class GumTree {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         src = TreeGenerators.getInstance().getTree(srcFile.getPath()).getRoot(); // retrieves and applies the default parser for the file
         dst = TreeGenerators.getInstance().getTree(dstFile.getPath()).getRoot(); // retrieves and applies the default parser for the file
 

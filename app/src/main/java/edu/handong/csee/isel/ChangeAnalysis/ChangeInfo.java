@@ -20,7 +20,7 @@ public class ChangeInfo implements Serializable {
     private String projectName;
 
     public ChangeInfo(String input) {
-        hashMap = new HashMap<String, ArrayList<String>>();
+        hashMap = new HashMap<>();
         this.input = input;
     }
 
@@ -40,11 +40,11 @@ public class ChangeInfo implements Serializable {
                 break;
         }
         if (hashMap.containsKey(key)) {
-            hashMap.get(key).add(projectName + "-" + commitID + "-" + fileName);
+            hashMap.get(key).add(projectName + "&" + commitID + "&" + fileName);
         }
         else {
             ArrayList<String> list = new ArrayList<String>();
-            list.add(projectName + "-" + commitID + "-" + fileName);
+            list.add(projectName + "&" + commitID + "&" + fileName);
             hashMap.put(key, list);
             groupCount++;
         }
