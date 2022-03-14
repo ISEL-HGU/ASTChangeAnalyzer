@@ -35,7 +35,9 @@ public class Main {
 		CLI cli = new CLI();
 		ArrayList<String> projects = cli.CommonCLI(args);
 		language = cli.getLanguage();
-		DiffTool = cli.getDiffTool();
+		if (!language.equals("JAVA"))
+			DiffTool = "GUMTREE";
+		else DiffTool = cli.getDiffTool();
 		input = cli.getInputPath();
 		isChangeCount = cli.isChangeCount();
 		isGitClone = cli.isGitClone();
@@ -87,9 +89,9 @@ public class Main {
 			if (commitMine.isCompleted()) {
 				ChangeMiner changeMine = new ChangeMiner();
 				changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool);
-				changeInfo.setProjectName(commitMine.getMatcherGroup());
+				changeInfo.setProjectName(commitMine.getMatcherGroup().replaceAll("/", "~"));
 				if (isChangeMine) volume += changeMine.collect(commitMine.getCommitList());
-				else { changeMine.collect(commitMine.getMatcherGroup(), commitMine.getCommitList(), changeInfo); }
+				else { changeMine.collect(commitMine.getMatcherGroup().replaceAll("/", "~"), commitMine.getCommitList(), changeInfo); }
 				if (isChangeMine) System.out.println("Changed Mined: " + volume);
 				else if (isGitClone) return;
 				else {
