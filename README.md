@@ -22,7 +22,7 @@ It has the following features:
 ### Execution
 
 * Required Options :
-1. `-p` option : provide a local path, an URL, or a file containing either list of local paths or URLs for the repository (absolute path if local path)
+1. `-p` option : provide an argument of a local path, an URL, or a file containing either list of local paths or URLs for the repository (absolute path if local path)
 
 2. `-java`, `-python`, `c` options : choose 'java', 'python', 'c', or 'c++(cpp in command) and name the code differencing tool (default: GumTree).
 
@@ -32,34 +32,16 @@ It has the following features:
 
 5. `-save` option : this option provides 3 things
      
-                     first, it clones (if not cloned yet), diffs, and produces `.chg` binary file per project at the path given as argument
+                     first, it clones (if not cloned yet), diffs, and produces `.chg` binary file per project at the path given as an argument
                      second, it provides `Statistics.txt` file for further analysis.
                      third, it updates or creates `index.csv` file that has hascode lists and project names mapped to index from `.chg` files.
 
-6. `-combine` option : this combines multiple `.chg` files into one `.chg` file
+6. `-combine` option : this combines multiple `.chg` files into one `.chg` file (not implemented yet)
+
+7. `-sample` option : takes an absolute path of `index.csv` to provide 20 samples based on the median value.
 
 
 Example : `-p https://github.com/centic9/jgit-cookbook -java las -save`
-
-
-
-
-
-* graph.py :
-
-we have simple graph.py file using plotext library to generate graph as a terminal output
-following commands at the root directory with the .txt file will produce a graph if there exists `Statistics.txt` file generated form `-save` option.
-
-`pip3 install plotext`
-
-`python3 graph.py`
-
-
-![Screenshot from 2022-02-18 00-30-25](https://user-images.githubusercontent.com/83571012/154514625-5d32b1df-d2c5-4e3c-9d48-f9debf4a9b10.png)
-![Screenshot from 2022-02-18 00-25-46](https://user-images.githubusercontent.com/83571012/154513828-4e0877be-0c36-4515-9543-4c1efc337332.png)
-
-Example of `Statistics.txt` and `graph.py`
-
 
 
 * Dependencies :
