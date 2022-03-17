@@ -106,7 +106,9 @@ public class ChangeMiner {
 			try {
 				String oldPath = diff.getOldPath();
 				String newPath = diff.getNewPath();
-				fileExtension = fileName.substring(fileName.length()-5);
+				if (fileName.endsWith(".py")) fileExtension = Python;
+				else if (fileName.endsWith(".c")) fileExtension = C;
+				else fileExtension = Java;
 				if (!newPath.equals(fileName) || newPath.indexOf("Test") >= 0 || !newPath.endsWith(fileExtension)) continue;
 				String srcFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName() + "~1", oldPath);
 				String dstFileSource = RepoUtils.fetchBlob(repo, commit.getId().getName(), newPath);

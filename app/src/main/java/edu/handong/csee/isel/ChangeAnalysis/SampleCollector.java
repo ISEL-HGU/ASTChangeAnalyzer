@@ -32,7 +32,7 @@ public class SampleCollector {
             in = new FileReader(indexPath);
             CSVParser parser = CSVFormat.EXCEL.parse(in);
             for (CSVRecord record : parser) {
-                sizeList.add(record.size());
+                sizeList.add(record.size()-1);
             }
             Collections.sort(sizeList);
             ArrayList<Integer> medianNeighbor = new ArrayList<>();
@@ -87,7 +87,7 @@ public class SampleCollector {
             String projectPath = commitMiner.getFilePath() + projectName;
             if (commit!=null) {
                 ChangeMiner changeMiner = new ChangeMiner();
-                actionRecord.add(projectName + "\n\t" + changeMiner.collect(projectPath, fileName, commit, commitMiner.getRepo()));
+                actionRecord.add("# " + projectName + fileName + "\n   " + changeMiner.collect(projectPath, fileName, commit, commitMiner.getRepo()));
             }
         }
         for (String action : actionRecord) printSampleAnalysis(action);
