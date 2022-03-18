@@ -1,0 +1,230 @@
+Project name,ISSUE KEY,Github
+Hadoop,HADOOP,https://github.com/apache/hadoop
+Tomcat,MTOMCAT,https://github.com/apache/tomcat
+Lucene,LUCENE,https://github.com/apache/lucene-solr
+Camel,CAMEL,https://github.com/apache/camel
+HBase,HBASE,https://github.com/apache/hbase
+Cloudstack,CLOUDSTACK,https://github.com/apache/cloudstack
+Spark,SPARK,https://github.com/apache/spark
+Qpid,QPID,https://github.com/apache/qpid
+Ambari,AMBARI,https://github.com/apache/ambari
+Felix,FELIX,https://github.com/apache/felix
+Wicket,WICKET,https://github.com/apache/wicket
+Ignite,IGNITE,https://github.com/apache/ignite
+CXF,CXF,https://github.com/apache/cxf
+OFBiz,OFBIZ,https://github.com/apache/ofbiz
+Groovy,GROOVY,https://github.com/apache/groovy
+Beam,BEAM,https://github.com/apache/beam
+Flink,FLINK,https://github.com/apache/flink
+Cassandra,CASSANDRA,https://github.com/apache/cassandra
+OpenEJB,OPENEJB,https://github.com/apache/openejb
+Jena,JENA,https://github.com/apache/jena
+Aries,ARIES,https://github.com/apache/aries
+Hive,HIVE,https://github.com/apache/hive
+Karaf,KARAF,https://github.com/apache/karaf
+Axis2,AXIS2,https://github.com/apache/axis-axis2-java-core
+Geronimo,GERONIMO,https://github.com/apache/geronimo
+TomEE,TOMEE,https://github.com/apache/tomee
+Brooklyn,BROOKLYN,https://github.com/apache/brooklyn-server
+PDFBox,PDFBox,https://github.com/apache/pdfbox
+Isis,ISIS,https://github.com/apache/isis
+Storm,STORM,https://github.com/apache/storm
+Jackrabbit,JCR,https://github.com/apache/jackrabbit
+Synapse,SYNAPSE,https://github.com/apache/synapse
+Directory Server,DIRISERVER,https://github.com/apache/directory-server
+Brooklyn,BROOKLYN,https://github.com/apache/incubator-brooklyn
+Axis,AXIS,https://github.com/apache/axis-axis1-java
+Maven,MNG,https://github.com/apache/maven
+Phoenix,PHOENIX,https://github.com/apache/phoenix
+ActiveMQ,AMQ,https://github.com/apache/activemq
+jclouds,JCLOUDS,https://github.com/apache/jclouds
+Tobago,TOBAGO,https://github.com/apache/myfaces-tobago
+Kafka,KAFKA,https://github.com/apache/kafka
+Usergrid,USERGRID,https://github.com/apache/usergrid
+Kylin,KYLIN,https://github.com/apache/kylin
+Click,CLKE,https://github.com/apache/click
+James,JAMES,https://github.com/apache/james-project
+Syncope,SYNCOPE,https://github.com/apache/syncope
+Accumulo,ACCUMULO,https://github.com/apache/accumulo
+Archiva,MRM,https://github.com/apache/archiva
+xml,FOP,https://github.com/apache/xmlgraphics-fop
+Geode,GEODE,https://github.com/apache/geode
+Airavata,AIRAVATA,https://github.com/apache/airavata
+JSPWiki,JSPWIKI,https://github.com/apache/jspwiki
+UIMA,UIMA,https://github.com/apache/uima-uimaj
+ActiveMQ,ARTEMIS,https://github.com/apache/activemq-artemis
+Derby,DERBY,https://github.com/apache/derby
+AsterixDB,ASTERIXDB,https://github.com/apache/asterixdb
+Apex,APEXMALHAR,https://github.com/apache/apex-malhar
+Xerces for Java XML Parser,XERCESJ,https://github.com/apache/xerces2-j
+Cayenne,CAY,https://github.com/apache/cayenne
+Commons Math,MATH,https://github.com/apache/commons-math
+OpenJPA,OPENJPA,https://github.com/apache/openjpa
+Continuum,CONTINUUM,https://github.com/apache/continuum
+SystemML,SYSTEMML,https://github.com/apache/systemml
+SIS,SIS,https://github.com/apache/sis
+Pulsar,PULSAR,https://github.com/apache/pulsar
+Struts Framework,WW,https://github.com/apache/struts
+MyFaces,MYFACES,https://github.com/apache/myfaces
+NiFi,NIFI,https://github.com/apache/nifi
+Commons Lang,LANG,https://github.com/apache/commons-lang
+Apex,APEXCORE,https://github.com/apache/apex-core
+Pig,PIG,https://github.com/apache/pig
+Tika,TIKA,https://github.com/apache/tika
+ManifoldCF,CONNECTORS,https://github.com/apache/manifoldcf
+Tapestry,TAP5,https://github.com/apache/tapestry-5
+Xalan,XALANJ,https://github.com/apache/xalan-j
+Directory Studio,DIRSTUDIO,https://github.com/apache/directory-studio
+Polygene,POLYGENE,https://github.com/apache/attic-polygene-java
+Zeppelin,ZEPPELIN,https://github.com/apache/zeppelin
+CarbonData,CARBONDATA,https://github.com/apache/carbondata
+ODE,ODE,https://github.com/apache/ode
+Guacamole,GUACAMOLE,https://github.com/apache/guacamole-client
+Shindig,SHINDIG,https://github.com/apache/shindig
+DRILL,DRILL,https://github.com/apache/drill
+Pivot,PIVOT,https://github.com/apache/pivot
+Openmeetings,OPENMEETINGS,https://github.com/apache/openmeetings
+Atlas,ATLAS,https://github.com/apache/atlas
+Roller,ROL,https://github.com/apache/roller
+Mahout,MAHOUT,https://github.com/apache/mahout
+Velocity,VELOCITY,https://github.com/apache/velocity-engine
+Axiom,AXIOM,https://github.com/apache/ws-axiom
+cTAKES,CTAKES,https://github.com/apache/ctakes
+NetBeans,NETBEANS,https://github.com/apache/netbeans
+Helix,HELIX,https://github.com/apache/helix
+Calcite,CALCITE,https://github.com/apache/calcite
+Ranger,RANGER,https://github.com/apache/ranger
+Joshua,JOSHUA,https://github.com/apache/joshua
+Cordova,CB,https://github.com/apache/cordova-android
+MINA,DIRMINA,https://github.com/apache/mina
+OpenWebBeans,OWB,https://github.com/apache/openwebbeans
+Aurora,AURORA,https://github.com/apache/aurora
+Ambari,AMBARI,https://github.com/apache/incubator-ambari
+HttpComponents,HTTPCORE,https://github.com/apache/httpcomponents-core
+ZooKeeper,ZOOKEEPER,https://github.com/apache/zookeeper
+Nutch,NUTCH,https://github.com/apache/nutch
+Tez,TEZ,https://github.com/apache/tez
+Airflow,AIRFLOW,https://github.com/apache/incubator-dolphinscheduler
+REEF,REEF,https://github.com/apache/reef
+Commons Configuration,CONFIGURATION,https://github.com/apache/commons-configuration
+HttpComponents,HTTPCLIENT,https://github.com/apache/httpcomponents-client
+Commons Collections,COLLECTIONS,https://github.com/apache/commons-collections
+Batik,BATIK,https://github.com/apache/xmlgraphics-batik
+Commons JEXL,JEXL,https://github.com/apache/commons-jexl
+Commons Validator,VALIDATOR,https://github.com/apache/commons-validator
+Santuario,SANTUARIO,https://github.com/apache/santuario-java
+BigTop,BIGTOP,https://github.com/apache/bigtop
+BookKeeper,BOOKKEEPER,https://github.com/apache/bookkeeper
+Ant,IVY,https://github.com/apache/ant-ivy
+Freemarker,FREEMARKER,https://github.com/apache/freemarker
+Pluto,PLUTO,https://github.com/apache/portals-pluto
+Commons Compress,COMPRESS,https://github.com/apache/commons-compress
+Oozie,OOZIE,https://github.com/apache/oozie
+jUDDI,JUDDI,https://github.com/apache/juddi
+Avro,AVRO,https://github.com/apache/avro
+OODT,OODT,https://github.com/apache/oodt
+OpenNLP,OPENNLP,https://github.com/apache/opennlp
+Commons IO,IO,https://github.com/apache/commons-io
+Chemistry,CMIS,https://github.com/apache/chemistry-opencmis
+Knox,KNOX,https://github.com/apache/knox
+Calcite,CALCITE,https://github.com/apache/calcite-avatica
+Commons VFS,VFS,https://github.com/apache/commons-vfs
+Flume,FLUME,https://github.com/apache/flume
+Samza,SAMZA,https://github.com/apache/samza
+Parquet,PARQUET,https://github.com/apache/parquet-mr
+Commons Digester,DIGESTER,https://github.com/apache/commons-digester
+Commons Jelly,JELLY,https://github.com/apache/commons-jelly
+CXF,FEDIZ,https://github.com/apache/cxf-fediz
+Lens,LENS,https://github.com/apache/lens
+Shiro,SHIRO,https://github.com/apache/shiro
+Deltaspike,DELTASPIKE,https://github.com/apache/deltaspike
+Marmotta,MARMOTTA,https://github.com/apache/marmotta
+Commons Net,NET,https://github.com/apache/commons-net
+Commons DBCP,DBCP,https://github.com/apache/commons-dbcp
+Commons Pool,POOL,https://github.com/apache/commons-pool
+Sqoop,SQOOP,https://github.com/apache/sqoop
+SSHD,SSHD,https://github.com/apache/mina-sshd
+Commons Codec,CODEC,https://github.com/apache/commons-codec
+Hivemall,HIVEMALL,https://github.com/apache/incubator-hivemall
+Kerby,DIRKRB,https://github.com/apache/directory-kerby
+Maven Doxia,DOXIA,https://github.com/apache/maven-doxia
+Olingo,OLINGO,https://github.com/apache/olingo-odata4
+Velocity,VELTOOLS,https://github.com/apache/velocity-tools
+Ace,ACE,https://github.com/apache/ace
+Fortress,FC,https://github.com/apache/directory-fortress-core
+XMLBeans,XMLBEANS,https://github.com/apache/xmlbeans
+Creadur,RAT,https://github.com/apache/creadur-rat
+Sandesha2,SANDESHA2,https://github.com/apache/sandesha
+Sentry,SENTRY,https://github.com/apache/sentry
+Hama,HAMA,https://github.com/apache/hama
+Commons JCS,JCS,https://github.com/apache/commons-jcs
+Commons BCEL,BCEL,https://github.com/apache/commons-bcel
+Tiles Framework,TILES,https://github.com/apache/tiles
+Commons Exec,EXEC,https://github.com/apache/commons-exec
+Metron,METRON,https://github.com/apache/metron
+Abdera,ABDERA,https://github.com/apache/abdera
+Sling,SLING,https://github.com/apache/sling-site
+Commons Csv,CSV,https://github.com/apache/commons-csv
+Gora,GORA,https://github.com/apache/gora
+Onami,ONAMI,https://github.com/apache/attic-onami
+Commons BeanUtils,BEANUTILS,https://github.com/apache/commons-beanutils
+Commons Daemon,DAEMON,https://github.com/apache/commons-daemon
+RAMPART,RAMPART,https://github.com/apache/axis-axis2-java-rampart
+Yetus,YETUS,https://github.com/apache/yetus
+Empire-db,EMPIREDB,https://github.com/apache/empire-db
+BVal,BVAL,https://github.com/apache/bval
+Crunch,CRUNCH,https://github.com/apache/crunch
+Commons SCXML,SCXML,https://github.com/apache/commons-scxml
+River,RIVER,https://github.com/apache/river
+Commons FileUpload,FILEUPLOAD,https://github.com/apache/commons-fileupload
+Commons RNG,RNG,https://github.com/apache/commons-rng
+Giraph,GIRAPH,https://github.com/apache/giraph
+FtpServer,FTPSERVER,https://github.com/apache/ftpserver
+Logging,LOGGING,https://github.com/apache/commons-logging
+Eagle,EAGLE,https://github.com/apache/eagle
+Chukwa,CHUKWA,https://github.com/apache/chukwa
+Commons CLI,CLI,https://github.com/apache/commons-cli
+Archiva,MRM,https://github.com/apache/archiva-redback-core
+Commons Weaver,WEAVER,https://github.com/apache/commons-weaver
+Chainsaw,CHAINSAW,https://github.com/apache/chainsaw
+ServiceMix,SM,https://github.com/apache/servicemix
+Commons Email,EMAIL,https://github.com/apache/commons-email
+Aries,ARIES,https://github.com/apache/aries-rsa
+Commons DbUtils,DBUTILS,https://github.com/apache/commons-dbutils
+Ant,IVYDE,https://github.com/apache/ant-ivyde
+MetaModel,METAMODEL,https://github.com/apache/metamodel
+Vysper,VYSPER,https://github.com/apache/mina-vysper
+Commons Functor,FUNCTOR,https://github.com/apache/commons-functor
+CXF,DOSGI,https://github.com/apache/cxf-dosgi
+Commons BSF,BSF,https://github.com/apache/commons-bsf
+Commons Chain,CHAIN,https://github.com/apache/commons-chain
+XML Graphics Commons,XGC,https://github.com/apache/xmlgraphics-commons
+Etch,ETCH,https://github.com/apache/etch
+Commons JXPath,JXPATH,https://github.com/apache/commons-jxpath
+Ambari,AMBARI,https://github.com/apache/ambari-logsearch
+Commons Proxy,PROXY,https://github.com/apache/commons-proxy
+Ambari,AMBARI,https://github.com/apache/ambari-metrics
+Juddi Scout,SCOUT,https://github.com/apache/juddi-scout
+Commons OGNL,OGNL,https://github.com/apache/commons-ognl
+Accumulo,ACCUMULO,https://github.com/apache/accumulo-proxy
+Aries,ARIES,https://github.com/apache/aries-jax-rs-whiteboard
+Mnemonic,MNEMONIC,https://github.com/apache/mnemonic
+HttpComponents,HTTPASYNC,https://github.com/apache/httpasyncclient
+Rya,RYA,https://github.com/apache/rya
+Creadur,WHISKER,https://github.com/apache/creadur-whisker
+Axis,AXIS2,https://github.com/apache/axis-axis2-java-transports
+Commons JCI,JCI,https://github.com/apache/commons-jci
+Myriad,MYRIAD,https://github.com/apache/incubator-myriad
+Ant,EASYANT,https://github.com/apache/ant-easyant-core
+Twill,TWILL,https://github.com/apache/twill
+Aries,ARIES,https://github.com/apache/aries-jpa
+DistributedLog,DL,https://github.com/apache/distributedlog
+MRUnit,MRUNIT,https://github.com/apache/attic-mrunit
+Kandula,KAND,https://github.com/apache/axis-axis2-java-kandula
+Infrastructure,INFRA,https://github.com/apache/ambari-infra
+CXF,CXFXJC,https://github.com/apache/cxf-xjc-utils
+Flex,FLEX,https://github.com/apache/flex-blazeds
+Bahir,BAHIR,https://github.com/apache/bahir-flink
+Creadur,TENTACLES,https://github.com/apache/creadur-tentacles
+Savan,SAVAN,https://github.com/apache/axis-axis2-java-savan
+Cordova,CB,https://github.com/apache/cordova
