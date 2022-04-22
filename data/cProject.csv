@@ -1,31 +1,31 @@
-Project Name	Github URL
-git	https://github.com/git/git
-qmk_firmware	https://github.com/qmk/qmk_firmware
-FreeRDP	https://github.com/FreeRDP/FreeRDP
-Ffmpeg	https://github.com/FFmpeg/FFmpeg
-scrcpy	https://github.com/Genymobile/scrcpy
-obs-studio	https://github.com/obsproject/obs-studio
-shadowsocks-libev	https://github.com/shadowsocks/shadowsocks-libev
-curl	https://github.com/curl/curl
-glfw	https://github.com/glfw/glfw
-vlc	https://github.com/videolan/vlc
-libevent	https://github.com/libevent/libevent
-systemd	https://github.com/systemd/systemd
-radare2	https://github.com/radareorg/radare2
-librdkafka	https://github.com/edenhill/librdkafka
-cpuminer	https://github.com/jgarzik/cpuminer
-mpv	https://github.com/mpv-player/mpv
-libgit2	https://github.com/libgit2/libgit2
-kcp	https://github.com/skywind3000/kcp
-phpredis	https://github.com/phpredis/phpredis
-hashcat	https://github.com/hashcat/hashcat
-xrdp	https://github.com/neutrinolabs/xrdp
-rufus	https://github.com/pbatard/rufus
-lvgl	https://github.com/lvgl/lvgl
-RIOT	https://github.com/RIOT-OS/RIOT
-edk2	https://github.com/tianocore/edk2
-HP-Socket	https://github.com/ldcsaa/HP-Socket
-libusb	https://github.com/libusb/libusb
-libsodium	https://github.com/jedisct1/libsodium
-yaf	https://github.com/laruence/yaf
-sumatrapdf	https://github.com/sumatrapdfreader/sumatrapdf
+Project Name,Github URL
+git,https://github.com/git/git
+qmk_firmware,https://github.com/qmk/qmk_firmware
+FreeRDP,https://github.com/FreeRDP/FreeRDP
+Ffmpeg,https://github.com/FFmpeg/FFmpeg
+"scrcpy	",https://github.com/Genymobile/scrcpy
+obs-studio,https://github.com/obsproject/obs-studio
+shadowsocks-libev,https://github.com/shadowsocks/shadowsocks-libev
+curl,https://github.com/curl/curl
+glfw,https://github.com/glfw/glfw
+vlc,https://github.com/videolan/vlc
+libevent,https://github.com/libevent/libevent
+systemd,https://github.com/systemd/systemd
+radare2,https://github.com/radareorg/radare2
+librdkafka,https://github.com/edenhill/librdkafka
+cpuminer,https://github.com/jgarzik/cpuminer
+mpv,https://github.com/mpv-player/mpv
+"libgit2	",https://github.com/libgit2/libgit2
+kcp,https://github.com/skywind3000/kcp
+phpredis,https://github.com/phpredis/phpredis
+hashcat,https://github.com/hashcat/hashcat
+xrdp,https://github.com/neutrinolabs/xrdp
+rufus,https://github.com/pbatard/rufus
+lvgl,https://github.com/lvgl/lvgl
+RIOT,https://github.com/RIOT-OS/RIOT
+edk2,https://github.com/tianocore/edk2
+HP-Socket,https://github.com/ldcsaa/HP-Socket
+libusb,https://github.com/libusb/libusb
+libsodium,https://github.com/jedisct1/libsodium
+yaf,https://github.com/laruence/yaf
+sumatrapdf,https://github.com/sumatrapdfreader/sumatrapdf
