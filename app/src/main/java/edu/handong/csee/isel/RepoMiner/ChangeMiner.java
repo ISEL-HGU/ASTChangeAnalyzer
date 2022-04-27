@@ -19,6 +19,7 @@ public class ChangeMiner {
 	private String Java = ".java";
 	private String Python = ".py";
 	private String C = ".c";
+	public static int count;
 
 
 	public void setProperties(String filePath, Repository repo, String language, String DiffTool) {
@@ -65,7 +66,7 @@ public class ChangeMiner {
 								changeData = gumtree.constructChange(changeData);
 						}
 						changeInfo.generateMap(changeData, DiffTool, commit.getId().getName(), newPath);
-						if (changeInfo.getTotalCount() > 0 && changeInfo.getTotalCount()%200000==0) {
+						if (changeInfo.getTotalCount() > 0 && changeInfo.getTotalCount()%20000==0) {
 							changeInfo.printStatistic();
 						}
 					} catch (Exception e) {
@@ -77,8 +78,7 @@ public class ChangeMiner {
 		}
     }
 
-	public int collect(List<RevCommit> commitList) {
-		int count = 0;
+	public void collect(List<RevCommit> commitList) {
 		try (ProgressBar pb = new ProgressBar("Change Mining", commitList.size())) {
 			for (RevCommit commit : commitList) {
 				pb.step();
@@ -95,7 +95,6 @@ public class ChangeMiner {
 				}
 			}
 		}
-		return count;
 	}
 
 	public String collect(String filePath, String fileName, RevCommit commit, Repository repo) {
