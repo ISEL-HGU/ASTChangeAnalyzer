@@ -73,10 +73,12 @@ public class Main {
 				"\nL $ python3 graph.py\n");
 
 		if (indexPath.length()>1) {
-			new SampleCollector(indexPath,20);
+			//new SampleCollector(indexPath,20);
 			//BinaryReader binaryReader = new BinaryReader(indexPath);
 			//binaryReader.getHashMap();
 		}
+
+		if (isChangeCount) System.out.println("Total Change Mined: " + ChangeMiner.count);
 
 		return;
     }
@@ -90,7 +92,7 @@ public class Main {
 				ChangeMiner changeMine = new ChangeMiner();
 				changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool);
 				changeInfo.setProjectName(commitMine.getMatcherGroup().replaceAll("/", "~"));
-				if (isChangeMine) volume += changeMine.collect(commitMine.getCommitList());
+				if (isChangeMine) changeMine.collect(commitMine.getCommitList());
 				else { changeMine.collect(commitMine.getMatcherGroup().replaceAll("/", "~"), commitMine.getCommitList(), changeInfo); }
 				if (isChangeMine) System.out.println("Changed Mined: " + volume);
 				else if (isGitClone) return;
@@ -131,10 +133,10 @@ public class Main {
 //			System.setProperty("gt.pp.path", "app/pythonparser/pythonparser");
 //			cmd = "pip3 install -r app/pythonparser/requirements.txt";
 
-			System.setProperty("gt.pp.path", "../../../../pythonparser/pythonparser");
+			System.setProperty("gt.pp.path", "/home/nayeawon/.local/bin/pythonparser");
 			cmd = "pip3 install -r ../../../../pythonparser/requirements.txt";
 
-			System.setProperty("gt.cgum.path", "/data/CGYW/ASTChangeAnalyzer/app/cgum/cgum");
+			System.setProperty("gt.cgum.path", "/home/nayeawon/.local/bin/cgum");
         }
 
 		CommandLineExecutor cli = new CommandLineExecutor();

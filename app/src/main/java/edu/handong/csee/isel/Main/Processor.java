@@ -18,7 +18,6 @@ public class Processor implements Runnable {
     private String savePath;
     private String project;
     private String projectName;
-    private int volume = 0;
 
     public void setProperties(String language, String DiffTool, String input, boolean isChangeCount, boolean isGitClone, String savePath) {
         this.language = language;
@@ -43,10 +42,12 @@ public class Processor implements Runnable {
             if (commitMine.isCompleted()) {
                 ChangeMiner changeMine = new ChangeMiner();
                 changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool);
-                if (isChangeCount) volume += changeMine.collect(commitMine.getCommitList());
+                if (isChangeCount) {
+			changeMine.collect(commitMine.getCommitList());
+		}
                 else { changeMine.collect(projectName, commitMine.getCommitList(), changeInfo); }
-                if (isChangeCount) System.out.println("Changed Mined: " + volume);
-                else if (isGitClone) return;
+                
+		if (isGitClone) return;
                 else {
                     if (changeInfo.getHashMap().size() == 0) return;
                     writeObjectToFile(changeInfo);
@@ -56,6 +57,7 @@ public class Processor implements Runnable {
                     }
                 }
             }
+	    return;
         } catch (Exception e) {
             e.printStackTrace();
             return;
