@@ -17,8 +17,9 @@ public class IndexParser {
     }
 
 
-    public synchronized void generateIndex() {
-        File file = new File(this.path + "/index.csv");
+    public void generateIndex() {
+        //File file = new File(this.path + "/index.csv");
+        File file = new File(this.path + "/merge.csv");
         if (file.exists()) {
             appendIndex(file);
         } else {
@@ -28,7 +29,7 @@ public class IndexParser {
             sortIndex(file);
     }
 
-    public synchronized void makeIndex(File file) {
+    public void makeIndex(File file) {
         try {
             FileOutputStream fos = new FileOutputStream(file);
             PrintWriter out = new PrintWriter(fos);
@@ -47,7 +48,7 @@ public class IndexParser {
         }
     }
 
-    public synchronized void makeIndex(File file, HashMap<String,ArrayList<String>> map) {
+    public void makeIndex(File file, HashMap<String,ArrayList<String>> map) {
         try {
             FileOutputStream fos = new FileOutputStream(file);
             PrintWriter out = new PrintWriter(fos);
@@ -65,7 +66,7 @@ public class IndexParser {
             e.printStackTrace();
         }
     }
-    public synchronized void appendIndex(File file) {
+    public void appendIndex(File file) {
 
         HashMap<String, ArrayList<String>> csvMap = new HashMap<String, ArrayList<String>>();
 //        String thisLine = "";
@@ -82,6 +83,7 @@ public class IndexParser {
                     try {
                         temp.add(record.get(1));
                     } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println(record);
                         System.out.println("ArrayIndexOutOfBoundsException occured, " + record.get(0));
                         continue;
                     }
@@ -112,7 +114,7 @@ public class IndexParser {
 
 
 
-    public synchronized void sortIndex(File file) {
+    public void sortIndex(File file) {
         String thisLine = "";
         try {
             File outFile = new File(path + "/temp.tmp");
@@ -140,7 +142,7 @@ public class IndexParser {
         }
     }
 
-    public synchronized static HashMap<String, ArrayList<String>> merge(HashMap<String, ArrayList<String>> list_1, HashMap<String, ArrayList<String>> list_2) {
+    public static HashMap<String, ArrayList<String>> merge(HashMap<String, ArrayList<String>> list_1, HashMap<String, ArrayList<String>> list_2) {
         HashMap<String, ArrayList<String>> l1 = new HashMap<>();
         l1.putAll(list_1);
         for (String keys_2 : list_2.keySet()) {

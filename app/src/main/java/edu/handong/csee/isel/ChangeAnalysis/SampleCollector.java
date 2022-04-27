@@ -8,19 +8,19 @@ import org.apache.commons.csv.CSVRecord;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class SampleCollector {
     private String indexPath;
     private int recordNum;
+    private HashMap<String, ArrayList<String>> hashMap;
 
     public SampleCollector (String inputPath, int recordNum) {
         this.indexPath = inputPath;
         this.recordNum = recordNum;
-        getSample();
+//        getSample();
+        countCSV();
+//        addPyToMLDL();
     }
 
     public void getSample() {
@@ -36,12 +36,19 @@ public class SampleCollector {
             }
             Collections.sort(sizeList);
             ArrayList<Integer> medianNeighbor = new ArrayList<>();
-            int half = sizeList.size()/2;
-            int median = sizeList.get(half);
-            for(int i = half - 20; i < half+20; i+=2) {
+//            int half = sizeList.size()/2;
+//            int median = sizeList.get(half);
+//            for(int i = half - 20; i < half+20; i+=2) {
+//                medianNeighbor.add(sizeList.get(i));
+//            }
+//            System.out.println("The median of group size for collected data : " + median
+//                    + "\n\n" + "Getting the " + recordNum +  " random samples from data....");
+
+            int max = sizeList.size()-1;
+            for(int i = max; i >= max-40; i= i-2) {
                 medianNeighbor.add(sizeList.get(i));
             }
-            System.out.println("The median of group size for collected data : " + median
+            System.out.println("The maximum of group size for collected data : " + max
                                 + "\n\n" + "Getting the " + recordNum +  " random samples from data....");
 
             in = new FileReader(indexPath);
@@ -87,7 +94,7 @@ public class SampleCollector {
             String projectPath = commitMiner.getFilePath() + projectName;
             if (commit!=null) {
                 ChangeMiner changeMiner = new ChangeMiner();
-                actionRecord.add("# " + projectName + fileName + "\n   " + changeMiner.collect(projectPath, fileName, commit, commitMiner.getRepo()));
+                actionRecord.add("# " + projectName + "/" + fileName + "\n   " + changeMiner.collect(projectPath, fileName, commit, commitMiner.getRepo()));
             }
         }
         for (String action : actionRecord) printSampleAnalysis(action);
@@ -97,9 +104,10 @@ public class SampleCollector {
 
     private ArrayList<String[]> parseRecord (String record) {
         String[] contents = record.split(",");
-        printSampleAnalysis(contents[0]);
+        printSampleAnalysis(contents[2].replace("values=[", ""));
+        System.out.println(contents[2].replace("values=[", ""));
         ArrayList<String[]> recordInfo = new ArrayList<>();
-        for (int i=1; i<contents.length; i++) {
+        for (int i=3; i<contents.length; i++) {
             String[] data = contents[i].split("&");
             recordInfo.add(data);
         }
@@ -110,11 +118,95 @@ public class SampleCollector {
         try {
             //BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt", true));
             BufferedWriter writer = new BufferedWriter(new FileWriter("../../../../../Sample.txt", true));
-            writer.write(content + "\n");
+            writer.write(content.replace("]", "") + "\n");
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return;
+    }
+
+    private void countCSV () {
+        int largest=0;
+        int numGroup = 0;
+        int count;
+        ArrayList<Integer> sizeList = new ArrayList<Integer>();
+        try {
+            Reader in = new FileReader(indexPath);
+            CSVParser parser = CSVFormat.EXCEL.parse(in);
+            for (CSVRecord record : parser) {
+                count = 0;
+                numGroup++;
+                for (String str : record)
+                    if(str.contains("~") && str.length() >= 5) count++;
+                sizeList.add(count);
+                if (count > largest) largest = count;
+            }
+            System.out.println("Number of Groups: " + numGroup);
+            System.out.println("The biggest size of Group: " + largest);
+
+            int sum=0;
+            for (int i=0; i< sizeList.size(); i++) sum += sizeList.get(i);
+            System.out.println("Total sum of group sizes: " + sum);
+            System.out.println("Average size of Groups: " + sum/numGroup);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addPyToMLDL() {
+        hashMap = new HashMap<String, ArrayList<String>>();
+        try {
+            // make HashMap with rMD and add it to rPY
+            Reader rMD = new FileReader(indexPath);
+            CSVParser parseMD = CSVFormat.EXCEL.parse(rMD);
+            for (CSVRecord recordMD : parseMD) {
+                String[] contents = recordMD.toString().split(",");
+                contents[2] = contents[2].replace("values=[", "");
+                if (hashMap.containsKey(contents[2])) {
+                    ArrayList<String> tmp = hashMap.get(contents[2]);
+                    for (int i=3; i<contents.length; i++) {
+                        if (contents[i].length() < 5) break;
+                        tmp.add(contents[i].replace("]]", ""));
+                    }
+                    hashMap.put(contents[2], tmp);
+                }
+                else {
+                    ArrayList<String> files = new ArrayList<>();
+                    for (int i=3; i<contents.length; i++) {
+                        if (contents[i].length() < 5) break;
+                        files.add(contents[i].replace("]]", ""));
+                    }
+                    hashMap.put(contents[2], files);
+                }
+            }
+
+            Reader rPy = new FileReader("/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer/python_0422.csv");
+            CSVParser parsePy = CSVFormat.EXCEL.parse(rPy);
+            for (CSVRecord recordPy : parsePy) {
+                String[] contents = recordPy.toString().split(",");
+                contents[2] = contents[2].replace("values=[", "");
+                if (hashMap.containsKey(contents[2])) {
+                    ArrayList<String> tmp = hashMap.get(contents[2]);
+                    for (int i=3; i<contents.length; i++) {
+                        if (contents[i].length() < 5) break;
+                        tmp.add(contents[i].replace("]]", ""));
+                    }
+                    hashMap.put(contents[2], tmp);
+                }
+                else {
+                    ArrayList<String> files = new ArrayList<>();
+                    for (int i=3; i<contents.length; i++) {
+                        if (contents[i].length() < 5) break;
+                        files.add(contents[i].replace("]]", ""));
+                    }
+                    hashMap.put(contents[2], files);
+                }
+            }
+
+            IndexParser indexParser = new IndexParser("/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer", hashMap);
+            indexParser.generateIndex();
+
+        } catch (IOException e) { e.printStackTrace();}
     }
 }

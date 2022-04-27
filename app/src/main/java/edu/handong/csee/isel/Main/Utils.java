@@ -45,8 +45,4 @@ public class Utils {
 		}
 		return name_URL;
 	}
-
-	public HashMap<String,String> getHashMap () {
-		return url_projectName;
-	}
 }
