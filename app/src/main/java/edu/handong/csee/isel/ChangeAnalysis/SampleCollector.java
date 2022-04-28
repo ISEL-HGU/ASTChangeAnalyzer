@@ -18,8 +18,8 @@ public class SampleCollector {
     public SampleCollector (String inputPath, int recordNum) {
         this.indexPath = inputPath;
         this.recordNum = recordNum;
-//        getSample();
-        countCSV();
+        getSample();
+//        countCSV();
 //        addPyToMLDL();
     }
 
@@ -36,20 +36,20 @@ public class SampleCollector {
             }
             Collections.sort(sizeList);
             ArrayList<Integer> medianNeighbor = new ArrayList<>();
-//            int half = sizeList.size()/2;
-//            int median = sizeList.get(half);
-//            for(int i = half - 20; i < half+20; i+=2) {
-//                medianNeighbor.add(sizeList.get(i));
-//            }
-//            System.out.println("The median of group size for collected data : " + median
-//                    + "\n\n" + "Getting the " + recordNum +  " random samples from data....");
-
-            int max = sizeList.size()-1;
-            for(int i = max; i >= max-40; i= i-2) {
+            int half = sizeList.size()/2;
+            int median = sizeList.get(half);
+            for(int i = half - 20; i < half+20; i+=2) {
                 medianNeighbor.add(sizeList.get(i));
             }
-            System.out.println("The maximum of group size for collected data : " + max
-                                + "\n\n" + "Getting the " + recordNum +  " random samples from data....");
+            System.out.println("The median of group size for collected data : " + median
+                    + "\n\n" + "Getting the " + recordNum +  " random samples from data....");
+
+//            int max = sizeList.size()-1;
+//            for(int i = max; i >= max-40; i= i-2) {
+//                medianNeighbor.add(sizeList.get(i));
+//            }
+//            System.out.println("The maximum of group size for collected data : " + max
+//                                + "\n\n" + "Getting the " + recordNum +  " random samples from data....");
 
             in = new FileReader(indexPath);
             CSVParser parser2 = CSVFormat.EXCEL.parse(in);
@@ -104,10 +104,9 @@ public class SampleCollector {
 
     private ArrayList<String[]> parseRecord (String record) {
         String[] contents = record.split(",");
-        printSampleAnalysis(contents[2].replace("values=[", ""));
-        System.out.println(contents[2].replace("values=[", ""));
+        printSampleAnalysis(contents[0]);
         ArrayList<String[]> recordInfo = new ArrayList<>();
-        for (int i=3; i<contents.length; i++) {
+        for (int i=1; i<contents.length; i++) {
             String[] data = contents[i].split("&");
             recordInfo.add(data);
         }
@@ -117,7 +116,7 @@ public class SampleCollector {
     private void printSampleAnalysis(String content) {
         try {
             //BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt", true));
-            BufferedWriter writer = new BufferedWriter(new FileWriter("../../../../../Sample.txt", true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/leechanggong/Projects/ASTChangeAnalyzer/ASTChangeAnalyzer/chg/Sample.txt", true));
             writer.write(content.replace("]", "") + "\n");
             writer.close();
         } catch (IOException e) {

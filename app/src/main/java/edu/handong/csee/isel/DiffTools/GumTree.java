@@ -134,7 +134,6 @@ public class GumTree {
             EditScriptGenerator editScriptGenerator = new SimplifiedChawatheScriptGenerator(); // instantiates the simplified Chawathe script generator
             actions = editScriptGenerator.computeActions(mappings); // computes the edit script
         }
-	System.out.println(actions==null);
         return actions;
     }
 }
