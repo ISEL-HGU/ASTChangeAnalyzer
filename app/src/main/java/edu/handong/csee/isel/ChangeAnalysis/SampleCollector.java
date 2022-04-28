@@ -126,11 +126,9 @@ public class SampleCollector {
 
     private ArrayList<String[]> parseRecord (String record) {
         String[] contents = record.split(",");
-        contents[2] = contents[2].replace("values=[", "");
-        contents[contents.length-1] = contents[contents.length-1].replace("]]", "");
-        printSampleAnalysis(contents[2]);
+        printSampleAnalysis(contents[0]);
         ArrayList<String[]> recordInfo = new ArrayList<>();
-        for (int i=3; i<contents.length; i++) {
+        for (int i=1; i<contents.length; i++) {
             String[] data = contents[i].split("&");
             recordInfo.add(data);
         }
@@ -142,6 +140,7 @@ public class SampleCollector {
 //            BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt", true));
 //            BufferedWriter writer = new BufferedWriter(new FileWriter("../../../../../Sample.txt", true));
             BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer/server_test/Sample_paper.txt", true));
+//            BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/leechanggong/Projects/ASTChangeAnalyzer/ASTChangeAnalyzer/chg/Sample.txt", true));
             writer.write(content.replace("]", "") + "\n");
             writer.close();
         } catch (IOException e) {

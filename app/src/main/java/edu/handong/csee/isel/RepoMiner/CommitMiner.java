@@ -20,9 +20,9 @@ public class CommitMiner {
 	private File file = null;
 	private Git git;
 	private boolean completed = false;
-//	private String filePath = "/data/CGYW/clones/";
-	private String filePath = "/Users/nayeawon/Desktop/Exp/";
-//	private String filePath = "/Users/leechanggong/Projects/ASTChangeAnalyzer/clones/";
+	private String filePath = "/data/CGYW/clones/";
+//	private String filePath = "/Users/nayeawon/Desktop/Exp/";
+//	private String filePath = "/Users/leechanggong/Desktop/Exp/";
 	private String matcherGroup;
 
 	public CommitMiner(String path, boolean isGitClone) throws IOException, GitAPIException{
