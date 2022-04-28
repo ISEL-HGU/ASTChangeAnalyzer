@@ -43,6 +43,12 @@ public class Main {
 		isGitClone = cli.isGitClone();
 		chgPath = cli.getChgPath();
 		indexPath = cli.getIndexPath();
+		String hashcode = cli.getHashcode();
+
+		if (hashcode.length() == 64 && indexPath.length() > 0) {
+			new SampleCollector(indexPath, hashcode);
+			return;
+		}
 
 		if (projects.size() > 0 && cli.activateThread()) {
 			int numOfCoresInMyCPU = Runtime.getRuntime().availableProcessors()/2;
@@ -73,7 +79,7 @@ public class Main {
 				"\nL $ python3 graph.py\n");
 
 		if (indexPath.length()>1) {
-			//new SampleCollector(indexPath,20);
+			new SampleCollector(indexPath,20);
 			//BinaryReader binaryReader = new BinaryReader(indexPath);
 			//binaryReader.getHashMap();
 		}
@@ -97,7 +103,6 @@ public class Main {
 				if (isChangeMine) System.out.println("Changed Mined: " + volume);
 				else if (isGitClone) return;
 				else {
-					System.out.println(changeInfo.getHashMap().size());
 					IndexParser index = new IndexParser(savePath, changeInfo.getHashMap());
 					index.generateIndex();
 					FileOutputStream fileOut = new FileOutputStream(savePath + "/" +  changeInfo.getProjectName() + ".chg");
@@ -130,9 +135,6 @@ public class Main {
                     + File.separator + "pythonparser"
                     + File.separator + "requirements.txt";
         } else {
-//			System.setProperty("gt.pp.path", "app/pythonparser/pythonparser");
-//			cmd = "pip3 install -r app/pythonparser/requirements.txt";
-
 			System.setProperty("gt.pp.path", "/home/nayeawon/.local/bin/pythonparser");
 			cmd = "pip3 install -r ../../../../pythonparser/requirements.txt";
 

@@ -42,12 +42,10 @@ public class Processor implements Runnable {
             if (commitMine.isCompleted()) {
                 ChangeMiner changeMine = new ChangeMiner();
                 changeMine.setProperties(commitMine.getFilePath(), commitMine.getRepo(), language, DiffTool);
-                if (isChangeCount) {
-			changeMine.collect(commitMine.getCommitList());
-		}
+                if (isChangeCount) changeMine.collect(commitMine.getCommitList());
                 else { changeMine.collect(projectName, commitMine.getCommitList(), changeInfo); }
-                
-		if (isGitClone) return;
+
+                if (isGitClone) return;
                 else {
                     if (changeInfo.getHashMap().size() == 0) return;
                     writeObjectToFile(changeInfo);

@@ -18,8 +18,8 @@ public class IndexParser {
 
 
     public void generateIndex() {
-        //File file = new File(this.path + "/index.csv");
-        File file = new File(this.path + "/merge.csv");
+        File file = new File(this.path + "/index.csv");
+//        File file = new File(this.path + "/merge.csv");
         if (file.exists()) {
             appendIndex(file);
         } else {
