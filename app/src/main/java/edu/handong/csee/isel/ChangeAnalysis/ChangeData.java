@@ -25,7 +25,6 @@ public class ChangeData {
                 + action.getNode().getType().toString().replaceAll("\\:\\s\\S$", "")
                 .replaceAll("[0-9+,+0-9]", "").replaceAll("\\[", "").replaceAll("\\]","")
                 + location.replace(" ", "") + "|";
-	System.out.println(actions);
     }
 
     public String getActionLocation(Action action) {

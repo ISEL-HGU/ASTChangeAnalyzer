@@ -25,6 +25,7 @@ public class CLI {
 	private String inputPath;
 	private String chgPath;
 	private String indexPath;
+	private String hashcode;
 	private Utils utils;
 
 	
@@ -43,7 +44,8 @@ public class CLI {
 	public String getDiffTool() { return DiffTool; }
 	public String getInputPath() { return inputPath; }
 	public String getChgPath() { return chgPath; }
-	public String getIndexPath() {return indexPath; }
+	public String getIndexPath() { return indexPath; }
+	public String getHashcode() { return hashcode; }
 	public boolean activateThread() {return thread; }
 	public boolean isChangeCount() { return changeCount; }
 	public boolean isGitClone() { return gitClone; }
@@ -93,6 +95,9 @@ public class CLI {
 			if (cmd.hasOption("sample"))
 				indexPath = cmd.getOptionValue("sample");
 			else indexPath = "/data/CGYW/chg/index.csv";
+
+			if (cmd.hasOption("hashcode"))
+				hashcode = cmd.getOptionValue("hashcode");
 
 			help = cmd.hasOption("h");
 
@@ -151,6 +156,12 @@ public class CLI {
 				.desc("get 20 samples group sized as median from index.csv")
 				.hasArg()
 				.argName("path for index.csv")
+				.build());
+
+		options.addOption(Option.builder("hashcode")
+				.desc("get scope of given hashcode")
+				.hasArg()
+				.argName("computed hashcode")
 				.build());
 		
 		options.addOption(Option.builder("h").longOpt("help")

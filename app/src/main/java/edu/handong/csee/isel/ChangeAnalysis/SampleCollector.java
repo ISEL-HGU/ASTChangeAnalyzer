@@ -13,6 +13,7 @@ import java.util.*;
 public class SampleCollector {
     private String indexPath;
     private int recordNum;
+    private String hashcode;
     private HashMap<String, ArrayList<String>> hashMap;
 
     public SampleCollector (String inputPath, int recordNum) {
@@ -21,6 +22,29 @@ public class SampleCollector {
         getSample();
 //        countCSV();
 //        addPyToMLDL();
+    }
+
+    public SampleCollector (String inputPath, String hashcode) {
+        this.indexPath = inputPath;
+        this.hashcode = hashcode;
+        getSample(hashcode);
+    }
+
+    public void getSample(String hashcode) {
+        try {
+            Reader in = new FileReader(indexPath);
+            CSVParser parser = CSVFormat.EXCEL.parse(in);
+            for (CSVRecord record : parser) {
+                String rec = record.toString();
+                if (rec.contains(hashcode)) {
+                    rec = rec.substring(rec.indexOf("values") + 8, rec.length()-2);
+                    verifyInfo(rec);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void getSample() {
@@ -74,12 +98,10 @@ public class SampleCollector {
                     verifyInfo(record);
                 }
             } else {
-                for(String record : found) {
+                for (String record : found) {
                     verifyInfo(record);
                 }
             }
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -121,9 +143,11 @@ public class SampleCollector {
 
     private void printSampleAnalysis(String content) {
         try {
-            //BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt", true));
-            BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/javachg/Sample.txt", true));
-            writer.write(content + "\n");
+            BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/javachg/Sample_paper.txt", true));
+//            BufferedWriter writer = new BufferedWriter(new FileWriter("../../../../../Sample.txt", true));
+//            BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer/server_test/Sample_paper.txt", true));
+//            BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/leechanggong/Projects/ASTChangeAnalyzer/ASTChangeAnalyzer/chg/Sample.txt", true));
+            writer.write(content.replace("]", "") + "\n");
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();

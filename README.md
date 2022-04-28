@@ -40,6 +40,7 @@ It has the following features:
 
 7. `-sample` option : takes an absolute path of `index.csv` to provide 20 samples based on the median value.
 
+8. `-hashcode` option : takes an hashcode along with `-sample` option
 
 Example : `-p https://github.com/centic9/jgit-cookbook -java las -save`
 
