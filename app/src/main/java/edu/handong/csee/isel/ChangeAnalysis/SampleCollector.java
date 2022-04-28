@@ -181,7 +181,7 @@ public class SampleCollector {
                 }
             }
 
-            Reader rPy = new FileReader("/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer/python_0422.csv");
+            Reader rPy = new FileReader("/data/CGYW/chg/yw.csv");
             CSVParser parsePy = CSVFormat.EXCEL.parse(rPy);
             for (CSVRecord recordPy : parsePy) {
                 String[] contents = recordPy.toString().split(",");
@@ -204,7 +204,7 @@ public class SampleCollector {
                 }
             }
 
-            IndexParser indexParser = new IndexParser("/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer", hashMap);
+            IndexParser indexParser = new IndexParser("/data/CGYW/chg", hashMap);
             indexParser.generateIndex();
 
         } catch (IOException e) { e.printStackTrace();}
