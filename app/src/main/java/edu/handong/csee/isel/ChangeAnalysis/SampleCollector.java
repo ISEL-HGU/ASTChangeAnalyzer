@@ -19,8 +19,8 @@ public class SampleCollector {
     public SampleCollector (String inputPath, int recordNum) {
         this.indexPath = inputPath;
         this.recordNum = recordNum;
-        getSample();
-//        countCSV();
+//        getSample();
+        countCSV();
 //        addPyToMLDL();
     }
 
@@ -153,6 +153,7 @@ public class SampleCollector {
         int largest=0;
         int numGroup = 0;
         int count;
+        int singleSizeCount = 0;
         ArrayList<Integer> sizeList = new ArrayList<Integer>();
         try {
             Reader in = new FileReader(indexPath);
@@ -163,6 +164,7 @@ public class SampleCollector {
                 for (String str : record)
                     if(str.contains("~") && str.length() >= 5) count++;
                 sizeList.add(count);
+                if (count==1) singleSizeCount++;
                 if (count > largest) largest = count;
             }
             System.out.println("Number of Groups: " + numGroup);
@@ -171,6 +173,9 @@ public class SampleCollector {
             int sum=0;
             for (int i=0; i< sizeList.size(); i++) sum += sizeList.get(i);
             System.out.println("Total sum of group sizes: " + sum);
+            System.out.println("Number of group with single element: " + singleSizeCount);
+            int multipleSize = sum-singleSizeCount;
+            System.out.println("Number of group with multiple elements: " + multipleSize);
             System.out.println("Average size of Groups: " + sum/numGroup);
         } catch (IOException e) {
             e.printStackTrace();
