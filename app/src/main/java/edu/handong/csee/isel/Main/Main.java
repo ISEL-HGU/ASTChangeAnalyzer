@@ -45,7 +45,7 @@ public class Main {
 		indexPath = cli.getIndexPath();
 		String hashcode = cli.getHashcode();
 
-		if (hashcode.length() == 64 && indexPath.length() > 0) {
+		if (hashcode!=null && hashcode.length() == 64 && indexPath.length() > 0) {
 			new SampleCollector(indexPath, hashcode);
 			return;
 		}

@@ -103,8 +103,8 @@ public class GumTree {
 
         srcFile.delete();
         dstFile.delete();
-
-        return actions;
+        
+	return actions;
     }
 
     public EditScript PythonASTDiffMine(String srcFileSource, String dstFileSource) throws IOException, SyntaxException {

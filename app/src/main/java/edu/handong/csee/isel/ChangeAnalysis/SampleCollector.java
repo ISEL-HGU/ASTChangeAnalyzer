@@ -19,8 +19,8 @@ public class SampleCollector {
     public SampleCollector (String inputPath, int recordNum) {
         this.indexPath = inputPath;
         this.recordNum = recordNum;
-        getSample();
-//        countCSV();
+//        getSample();
+        countCSV();
 //        addPyToMLDL();
     }
 
@@ -210,7 +210,7 @@ public class SampleCollector {
                 }
             }
 
-            Reader rPy = new FileReader("/data/CGYW/chg/merge_1.csv");
+            Reader rPy = new FileReader("/data/CGYW/chg/merge_2.csv");
             CSVParser parsePy = CSVFormat.EXCEL.parse(rPy);
             for (CSVRecord recordPy : parsePy) {
                 String[] contents = recordPy.toString().split(",");
