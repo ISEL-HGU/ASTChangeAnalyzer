@@ -56,32 +56,38 @@ public class SampleCollector {
             in = new FileReader(indexPath);
             CSVParser parser = CSVFormat.EXCEL.parse(in);
             for (CSVRecord record : parser) {
-                sizeList.add(record.size()-1);
-            }
+            	int count = 0;
+                for (String str : record)
+                    if(str.contains("~") && str.length() >= 5) count++;
+                sizeList.add(count);
+	    }
             Collections.sort(sizeList);
             ArrayList<Integer> medianNeighbor = new ArrayList<>();
-            int half = sizeList.size()/2;
-            int median = sizeList.get(half);
-            for(int i = half - 20; i < half+20; i+=2) {
+            //int half = sizeList.size()/2;
+            //int median = sizeList.get(half);
+            //for(int i = half - 20; i < half+20; i+=2) {
+                //medianNeighbor.add(sizeList.get(i));
+            //}
+            //System.out.println("The median of group size for collected data : " + median
+            //        + "\n\n" + "Getting the " + recordNum +  " random samples from data....");
+
+            int max = sizeList.size()-1;
+            for(int i = max; i >= 10000; i= i-10000) {
                 medianNeighbor.add(sizeList.get(i));
             }
-            System.out.println("The median of group size for collected data : " + median
-                    + "\n\n" + "Getting the " + recordNum +  " random samples from data....");
+            System.out.println("The maximum of group size for collected data : " + max
+                                + "\n\n" + "Getting the " + recordNum +  " random samples from data....");
 
-//            int max = sizeList.size()-1;
-//            for(int i = max; i >= max-40; i= i-2) {
-//                medianNeighbor.add(sizeList.get(i));
-//            }
-//            System.out.println("The maximum of group size for collected data : " + max
-//                                + "\n\n" + "Getting the " + recordNum +  " random samples from data....");
-
-            in = new FileReader(indexPath);
-            CSVParser parser2 = CSVFormat.EXCEL.parse(in);
+            Reader in2 = new FileReader(indexPath);
+            CSVParser parser2 = CSVFormat.EXCEL.parse(in2);
             List<CSVRecord> list = parser2.getRecords();
 
             for (CSVRecord record : list) {
+		int cnt = 0;
                 for (int check: medianNeighbor) {
-                    if(record.size() == check)
+			for (String str : record)
+				if (str.contains("~") && str.length() >= 5) cnt++;
+                    if(cnt == check)
                         found.add(record.toString());
                 }
             }
@@ -137,9 +143,9 @@ public class SampleCollector {
 
     private void printSampleAnalysis(String content) {
         try {
-//            BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/ASTChangeAnalyzer/Statistic.txt", true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("/data/CGYW/javachg/Sample_paper.txt", true));
 //            BufferedWriter writer = new BufferedWriter(new FileWriter("../../../../../Sample.txt", true));
-            BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer/server_test/Sample_paper.txt", true));
+//            BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer/server_test/Sample_paper.txt", true));
 //            BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/leechanggong/Projects/ASTChangeAnalyzer/ASTChangeAnalyzer/chg/Sample.txt", true));
             writer.write(content.replace("]", "") + "\n");
             writer.close();
@@ -209,7 +215,7 @@ public class SampleCollector {
                 }
             }
 
-            Reader rPy = new FileReader("/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer/python_0422.csv");
+            Reader rPy = new FileReader("/data/CGYW/chg/merge_1.csv");
             CSVParser parsePy = CSVFormat.EXCEL.parse(rPy);
             for (CSVRecord recordPy : parsePy) {
                 String[] contents = recordPy.toString().split(",");
@@ -232,7 +238,7 @@ public class SampleCollector {
                 }
             }
 
-            IndexParser indexParser = new IndexParser("/Users/nayeawon/HGU/ISEL/Code/ASTChangeAnalyzer", hashMap);
+            IndexParser indexParser = new IndexParser("/data/CGYW/chg", hashMap);
             indexParser.generateIndex();
 
         } catch (IOException e) { e.printStackTrace();}
