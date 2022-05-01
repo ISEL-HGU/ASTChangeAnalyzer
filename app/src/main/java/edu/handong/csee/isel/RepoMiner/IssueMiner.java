@@ -103,7 +103,7 @@ public class IssueMiner {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         Repository repo = null;
         try {
-            repo = builder.setGitDir(new File("/data/CGYW/clones/"+projectName+"/.git")).setMustExist(true).build();
+            repo = builder.setGitDir(new File("/data/CGYW/clones/"+projectName+"/.git/.git")).setMustExist(true).build();
 
         Git git = new Git(repo);
             Iterable<RevCommit> log = null;
@@ -111,9 +111,12 @@ public class IssueMiner {
                 log = git.log().call();
 
             for (Iterator<RevCommit> iterator = log.iterator(); iterator.hasNext();) {
-            RevCommit rev = iterator.next();
-            System.out.println(rev.getFullMessage());
-        }
+            	RevCommit rev = iterator.next();
+           	 if(ID.equals(rev.getName())) {
+			System.out.println(projectName + "/" + ID + ":" + rev.getFullMessage());
+			break;
+	    	}
+            }
             } catch (GitAPIException e) {
                 e.printStackTrace();
             }
