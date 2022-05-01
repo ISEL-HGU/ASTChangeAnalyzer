@@ -5,6 +5,7 @@ import edu.handong.csee.isel.ChangeAnalysis.IndexParser;
 import edu.handong.csee.isel.ChangeAnalysis.SampleCollector;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
+import edu.handong.csee.isel.RepoMiner.IssueMiner;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,10 +46,17 @@ public class Main {
 		indexPath = cli.getIndexPath();
 		String hashcode = cli.getHashcode();
 
-		if (hashcode!=null && hashcode.length() == 64 && indexPath.length() > 0) {
-			new SampleCollector(indexPath, hashcode);
+		boolean issueMine = cli.isIssueMine();
+		if (hashcode != null) {
+			if (hashcode.length() == 64 && indexPath.length() > 0) {
+				new SampleCollector(indexPath, hashcode);
+				return;
+			}
+		} else if (issueMine) {
+			new IssueMiner(cli.getInputPath());
 			return;
 		}
+
 
 		if (projects.size() > 0 && cli.activateThread()) {
 			int numOfCoresInMyCPU = Runtime.getRuntime().availableProcessors()/2;

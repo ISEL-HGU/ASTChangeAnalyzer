@@ -178,7 +178,7 @@ public class SampleCollector {
 
             int sum=0;
             for (int i=0; i< sizeList.size(); i++) sum += sizeList.get(i);
-            System.out.println("Total sum of group sizes: " + sum);
+	    System.out.println("Total number of changes: " + sum);
             System.out.println("Number of group with single element: " + singleSizeCount);
             int multipleSize = sum-singleSizeCount;
             System.out.println("Number of group with multiple elements: " + multipleSize);
