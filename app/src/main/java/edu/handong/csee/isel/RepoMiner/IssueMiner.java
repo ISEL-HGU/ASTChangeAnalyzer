@@ -83,21 +83,39 @@ public class IssueMiner {
     public String getIssueNum (String projectName, String ID) {
         String IssueNum = "";
 
+//        FileRepositoryBuilder builder = new FileRepositoryBuilder();
+//        try (Repository repository = Git.open(new File("/data/CGYW/clones/"+projectName+"/.git")).getRepository()) {
+//
+//            Ref head = repository.findRef("refs/heads/master");
+//            System.out.println("Found head: " + head);
+//
+//            try (RevWalk walk = new RevWalk(repository)) {
+//                RevCommit commit = walk.parseCommit(head.getObjectId());
+//
+//                System.out.println("\nCommit-Message: " + commit.getFullMessage());
+//
+//                walk.dispose();
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        try (Repository repository = Git.open(new File("/data/CGYW/clones/"+projectName+"/.git")).getRepository()) {
-//                     builder.readEnvironment() // scan environment GIT_* variables
-//                .findGitDir() // scan up the file system tree
-//                .build()) {
-            Ref head = repository.findRef("refs/heads/master");
-            System.out.println("Found head: " + head);
+        Repository repo = null;
+        try {
+            repo = builder.setGitDir(new File("/data/CGYW/clones/"+projectName+"/.git")).setMustExist(true).build();
 
-            // a RevWalk allows to walk over commits based on some filtering that is defined
-            try (RevWalk walk = new RevWalk(repository)) {
-                RevCommit commit = walk.parseCommit(head.getObjectId());
+        Git git = new Git(repo);
+            Iterable<RevCommit> log = null;
+            try {
+                log = git.log().call();
 
-                System.out.println("\nCommit-Message: " + commit.getFullMessage());
-
-                walk.dispose();
+            for (Iterator<RevCommit> iterator = log.iterator(); iterator.hasNext();) {
+            RevCommit rev = iterator.next();
+            System.out.println(rev.getFullMessage());
+        }
+            } catch (GitAPIException e) {
+                e.printStackTrace();
             }
         } catch (IOException e) {
             e.printStackTrace();
