@@ -53,33 +53,26 @@ public class IssueMiner {
     public void makeIssueIndex(HashMap<String, ArrayList<String>> map, String path) {
         String newPath = path.replace(".csv","_issue.csv");
 
-        for (String key : map.keySet()) {
-            for (String contents : map.get(key)) {
-                String [] temp = contents.split("&");
-                getIssueNum(temp[0].replace("~","/").trim(),temp[1]);
+
+        try {
+            FileOutputStream fos = new FileOutputStream(newPath);
+            PrintWriter out = new PrintWriter(fos);
+
+            for (String key : map.keySet()) {
+                out.print(key);
+                for (String contents : map.get(key)) {
+                    String [] temp = contents.split("&");
+                    out.print("," + contents + getIssueNum(temp[0].replace("~","/").trim(),temp[1]));
+                }
+
+                out.print("\n");
             }
+            out.flush();
+            out.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-
-
-//        try {
-//            FileOutputStream fos = new FileOutputStream(newPath);
-//            PrintWriter out = new PrintWriter(fos);
-//
-//            for (String key : map.keySet()) {
-//                out.print(key);
-//                for (String contents : map.get(key)) {
-//                    out.print("," + contents + getIssueNum(contents.split("&")[1]));
-//                }
-//
-//                out.print("\n");
-//            }
-//            out.flush();
-//            out.close();
-//            fos.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
     }
 
     public String getIssueNum (String projectName, String ID) {
