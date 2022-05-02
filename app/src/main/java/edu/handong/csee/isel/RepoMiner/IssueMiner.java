@@ -18,10 +18,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class IssueMiner {
+    
 
+    private int totalChange;
+    private int changeWithIssue;
+	
     public IssueMiner(String path) {
         makeIssueIndex(readIndex(path),path);
-    }
+	System.out.println(changeWithIssue +"/" +totalChange+"=" +(changeWithIssue/totalChange) );
+    } 
 
     public HashMap<String, ArrayList<String>> readIndex (String indexPath) {
         HashMap<String, ArrayList<String>> file = new HashMap<String, ArrayList<String>>();
@@ -55,6 +60,7 @@ public class IssueMiner {
             for (String contents : map.get(key)) {
                 String [] temp = contents.split("&");
                 getIssueNum(temp[0].replace("~","/").trim(),temp[1]);
+		totalChange++;
             }
         }
 
@@ -100,6 +106,7 @@ public class IssueMiner {
 //            e.printStackTrace();
 //        }
 
+
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         Repository repo = null;
         try {
@@ -113,7 +120,9 @@ public class IssueMiner {
             for (Iterator<RevCommit> iterator = log.iterator(); iterator.hasNext();) {
             	RevCommit rev = iterator.next();
            	 if(ID.equals(rev.getName())) {
-			System.out.println(projectName + "/" + ID + ":" + rev.getFullMessage());
+			//System.out.println(projectName + "/" + ID + ":" + rev.getFullMessage());
+			if(rev.getFullMessage().contains("#"))
+				changeWithIssue++;
 			break;
 	    	}
             }
