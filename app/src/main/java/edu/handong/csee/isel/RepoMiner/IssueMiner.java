@@ -21,8 +21,14 @@ import java.util.regex.Pattern;
 
 public class IssueMiner {
 
+    private int total;
+    private int withIssue;
+
     public IssueMiner(String path) {
         makeIssueIndex(readIndex(path),path);
+        System.out.println("Result:" + "\n" + "Total Changes - " + total
+                + "\n" + "Changes with issues - " + withIssue
+                + "\n" + "Proportion - " + withIssue/total);
     } 
 
     public HashMap<String, ArrayList<String>> readIndex (String indexPath) {
@@ -64,7 +70,7 @@ public class IssueMiner {
                     String [] temp = contents.split("&");
                     out.print("," + contents.trim() + getIssueNum(temp[0].replace("~","/").trim(),temp[1].trim()));
                 }
-
+                total++;
                 out.print("\n");
             }
             out.flush();
@@ -98,6 +104,7 @@ public class IssueMiner {
                         while(matcher.find()) {
                             IssueNum += "~" + matcher.group(1);
                         }
+                        withIssue++;
                         break;
 	    	        }
                 }
@@ -107,7 +114,7 @@ public class IssueMiner {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(projectName + "~" + ID + ":" + IssueNum);
+
         return IssueNum;
     }
 }
