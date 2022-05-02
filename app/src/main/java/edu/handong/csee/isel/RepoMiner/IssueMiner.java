@@ -16,6 +16,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class IssueMiner {
 
@@ -83,22 +85,8 @@ public class IssueMiner {
     public String getIssueNum (String projectName, String ID) {
         String IssueNum = "";
 
-//        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-//        try (Repository repository = Git.open(new File("/data/CGYW/clones/"+projectName+"/.git")).getRepository()) {
-//
-//            Ref head = repository.findRef("refs/heads/master");
-//            System.out.println("Found head: " + head);
-//
-//            try (RevWalk walk = new RevWalk(repository)) {
-//                RevCommit commit = walk.parseCommit(head.getObjectId());
-//
-//                System.out.println("\nCommit-Message: " + commit.getFullMessage());
-//
-//                walk.dispose();
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        Pattern pattern = Pattern.compile("(#\\d+)");
+
 
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         Repository repo = null;
@@ -110,20 +98,26 @@ public class IssueMiner {
             try {
                 log = git.log().call();
 
-            for (Iterator<RevCommit> iterator = log.iterator(); iterator.hasNext();) {
-            	RevCommit rev = iterator.next();
-           	 if(ID.equals(rev.getName())) {
-			System.out.println(projectName + "/" + ID + ":" + rev.getFullMessage());
-			break;
-	    	}
-            }
+                for (Iterator<RevCommit> iterator = log.iterator(); iterator.hasNext();) {
+                    RevCommit rev = iterator.next();
+                    if(ID.equals(rev.getName())) {
+//                    System.out.println(projectName + "/" + ID + ":" + rev.getFullMessage());
+//                    break;
+                        String msg = rev.getFullMessage();
+                        Matcher matcher = pattern.matcher(msg);
+                        while(matcher.find()) {
+                            IssueNum += "~" + matcher.group(1);
+                        }
+                        break;
+	    	        }
+                }
             } catch (GitAPIException e) {
                 e.printStackTrace();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        System.out.println(projectName + "~" + ID + ":" + IssueNum);
         return IssueNum;
     }
 }
