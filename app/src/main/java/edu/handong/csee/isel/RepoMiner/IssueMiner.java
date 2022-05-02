@@ -23,7 +23,7 @@ public class IssueMiner {
 
     public IssueMiner(String path) {
         makeIssueIndex(readIndex(path),path);
-    }
+    } 
 
     public HashMap<String, ArrayList<String>> readIndex (String indexPath) {
         HashMap<String, ArrayList<String>> file = new HashMap<String, ArrayList<String>>();
@@ -86,8 +86,6 @@ public class IssueMiner {
         String IssueNum = "";
 
         Pattern pattern = Pattern.compile("(#\\d+)");
-
-
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         Repository repo = null;
         try {
@@ -97,7 +95,6 @@ public class IssueMiner {
             Iterable<RevCommit> log = null;
             try {
                 log = git.log().call();
-
                 for (Iterator<RevCommit> iterator = log.iterator(); iterator.hasNext();) {
                     RevCommit rev = iterator.next();
                     if(ID.equals(rev.getName())) {
