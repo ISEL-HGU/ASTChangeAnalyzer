@@ -33,8 +33,8 @@ public class IssueMiner {
             Reader in = new FileReader(indexPath);
             CSVParser parser = CSVFormat.EXCEL.parse(in);
             for (CSVRecord record : parser) {
+                temp = new ArrayList<String>();
                 for (String str : record) {
-                    temp = new ArrayList<String>();
                     if(str.contains("~")) {
                         temp.add(str.trim());
                     } else {
@@ -62,7 +62,7 @@ public class IssueMiner {
                 out.print(key);
                 for (String contents : map.get(key)) {
                     String [] temp = contents.split("&");
-                    out.print("," + contents + getIssueNum(temp[0].replace("~","/").trim(),temp[1]));
+                    out.print("," + contents.trim() + getIssueNum(temp[0].replace("~","/").trim(),temp[1].trim()));
                 }
 
                 out.print("\n");
