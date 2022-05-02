@@ -36,7 +36,7 @@ public class IssueMiner {
                 for (String str : record) {
                     temp = new ArrayList<String>();
                     if(str.contains("~")) {
-                        temp.add(str);
+                        temp.add(str.trim());
                     } else {
                         key = str;
                     }
