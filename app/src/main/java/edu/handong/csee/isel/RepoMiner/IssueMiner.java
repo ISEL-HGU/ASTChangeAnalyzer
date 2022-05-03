@@ -41,19 +41,20 @@ public class IssueMiner {
         ArrayList<String> temp = null;
         String key = "";
         try {
-            Reader in = new FileReader(indexPath);
-            CSVParser parser = CSVFormat.EXCEL.parse(in);
-            for (CSVRecord record : parser) {
-                temp = new ArrayList<String>();
-                for (String str : record) {
-                    if(str.contains("~")) {
-                        temp.add(str.trim());
-                    } else {
-                        key = str;
+                Reader in = new FileReader(indexPath);
+                CSVParser parser = CSVFormat.EXCEL.parse(in);
+                for (CSVRecord record : parser) {
+                    temp = new ArrayList<String>();
+                    for (String str : record) {
+                        if(str.contains("~")) {
+                            temp.add(str.trim());
+                        } else {
+                            key = str;
+                        }
                     }
+                    map.put(key,temp);
                 }
-                map.put(key,temp);
-            }
+                in.close();
             } catch (IOException e) {
             e.printStackTrace();}
 
@@ -146,15 +147,18 @@ public class IssueMiner {
         return IssueNum;
     }
     public void takeOneWithIssues () {
+        HashMap<String, ArrayList<String>> temp = map;
 
-        for (String key : map.keySet()) {
+        for (String key : temp.keySet()) {
             int i = 0;
             for (String contents : map.get(key)) {
                 if (!contents.contains("#")) {
-                    map.get(key).remove(i);
-                    i++;
+                    temp.get(key).remove(i);
+                    i--;
                 }
+                i++;
             }
         }
+        map = temp;
     }
 }
