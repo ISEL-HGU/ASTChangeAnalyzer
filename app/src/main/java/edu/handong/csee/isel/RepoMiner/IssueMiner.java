@@ -23,17 +23,21 @@ public class IssueMiner {
 
     private int total;
     private int withIssue;
+    private HashMap<String, ArrayList<String>> map = new HashMap<>();
 
     public IssueMiner(String path) {
-        mapToCsv(takeOneWithIssues(readIndex(path)),path);
+        readIndex(path);
+        takeOneWithIssues();
+        mapToCsv(path);
+
 //        makeIssueIndex(takeOneWithIssues(readIndex(path)),path);
 //        System.out.println("Result:" + "\n" + "Total Changes - " + total
 //                + "\n" + "Changes with issues - " + withIssue
 //                + "\n" + "Proportion - " + withIssue/total);
     } 
 
-    public HashMap<String, ArrayList<String>> readIndex (String indexPath) {
-        HashMap<String, ArrayList<String>> file = new HashMap<String, ArrayList<String>>();
+    public void readIndex (String indexPath) {
+        //HashMap<String, ArrayList<String>> file = new HashMap<String, ArrayList<String>>();
         ArrayList<String> temp = null;
         String key = "";
         try {
@@ -48,13 +52,13 @@ public class IssueMiner {
                         key = str;
                     }
                 }
-                file.put(key,temp);
+                map.put(key,temp);
             }
             } catch (IOException e) {
             e.printStackTrace();}
 
 
-        return file;
+
     }
 
     public void makeIssueIndex(HashMap<String, ArrayList<String>> map, String path) {
@@ -81,7 +85,7 @@ public class IssueMiner {
             e.printStackTrace();
         }
     }
-    public void mapToCsv (HashMap<String, ArrayList<String>> map, String path) {
+    public void mapToCsv (String path) {
         String newPath = path.replace(".csv","_issue.csv");
 
         try {
@@ -141,7 +145,7 @@ public class IssueMiner {
 
         return IssueNum;
     }
-    public HashMap<String, ArrayList<String>> takeOneWithIssues (HashMap<String, ArrayList<String>> map) {
+    public void takeOneWithIssues () {
 
         for (String key : map.keySet()) {
             int i = 0;
@@ -152,6 +156,5 @@ public class IssueMiner {
                 }
             }
         }
-        return map;
     }
 }
