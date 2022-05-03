@@ -148,7 +148,7 @@ public class IssueMiner {
     }
     public HashMap<String, ArrayList<String>> takeOneWithIssues () {
         HashMap<String, ArrayList<String>> temp = SerializationUtils.clone(new HashMap<>(map));
-        for (String key : temp.keySet()) {
+        for (String key : map.keySet()) {
             int i = 0;
             for (String contents : map.get(key)) {
                 if (!contents.contains("#")) {
