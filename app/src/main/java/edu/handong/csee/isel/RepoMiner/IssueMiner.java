@@ -155,6 +155,10 @@ public class IssueMiner {
                     temp.get(key).remove(i);
                     i--;
                 }
+                if (temp.get(key).size() == 0) {
+                    temp.remove(key);
+                    break;
+                }
                 i++;
             }
         }
