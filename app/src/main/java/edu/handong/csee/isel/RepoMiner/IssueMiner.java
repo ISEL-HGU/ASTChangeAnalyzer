@@ -25,10 +25,11 @@ public class IssueMiner {
     private int withIssue;
 
     public IssueMiner(String path) {
-        makeIssueIndex(readIndex(path),path);
-        System.out.println("Result:" + "\n" + "Total Changes - " + total
-                + "\n" + "Changes with issues - " + withIssue
-                + "\n" + "Proportion - " + withIssue/total);
+        mapToCsv(takeOneWithIssues(readIndex(path)),path);
+//        makeIssueIndex(takeOneWithIssues(readIndex(path)),path);
+//        System.out.println("Result:" + "\n" + "Total Changes - " + total
+//                + "\n" + "Changes with issues - " + withIssue
+//                + "\n" + "Proportion - " + withIssue/total);
     } 
 
     public HashMap<String, ArrayList<String>> readIndex (String indexPath) {
@@ -80,7 +81,30 @@ public class IssueMiner {
             e.printStackTrace();
         }
     }
+    public void mapToCsv (HashMap<String, ArrayList<String>> map, String path) {
+        String newPath = path.replace(".csv","_issue.csv");
 
+        try {
+            FileOutputStream fos = new FileOutputStream(newPath);
+            PrintWriter out = new PrintWriter(fos);
+
+            for (String key : map.keySet()) {
+                out.print(key);
+                for (String contents : map.get(key)) {
+
+                    out.print("," + contents.trim());
+                }
+
+                out.print("\n");
+            }
+            out.flush();
+            out.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
     public String getIssueNum (String projectName, String ID) {
         String IssueNum = "";
 
@@ -116,5 +140,18 @@ public class IssueMiner {
         }
 
         return IssueNum;
+    }
+    public HashMap<String, ArrayList<String>> takeOneWithIssues (HashMap<String, ArrayList<String>> map) {
+
+        for (String key : map.keySet()) {
+            int i = 0;
+            for (String contents : map.get(key)) {
+                if (!contents.contains("#")) {
+                    map.get(key).remove(i);
+                    i++;
+                }
+            }
+        }
+        return map;
     }
 }
