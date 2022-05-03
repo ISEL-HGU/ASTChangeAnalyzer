@@ -3,6 +3,7 @@ package edu.handong.csee.isel.RepoMiner;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.SerializationUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.TransportException;
@@ -27,8 +28,7 @@ public class IssueMiner {
 
     public IssueMiner(String path) {
         readIndex(path);
-        takeOneWithIssues();
-        mapToCsv(path);
+        mapToCsv(path,takeOneWithIssues());
 
 //        makeIssueIndex(takeOneWithIssues(readIndex(path)),path);
 //        System.out.println("Result:" + "\n" + "Total Changes - " + total
@@ -86,16 +86,16 @@ public class IssueMiner {
             e.printStackTrace();
         }
     }
-    public void mapToCsv (String path) {
+    public void mapToCsv (String path, HashMap<String, ArrayList<String>> temp) {
         String newPath = path.replace(".csv","_issue.csv");
 
         try {
             FileOutputStream fos = new FileOutputStream(newPath);
             PrintWriter out = new PrintWriter(fos);
 
-            for (String key : map.keySet()) {
+            for (String key : temp.keySet()) {
                 out.print(key);
-                for (String contents : map.get(key)) {
+                for (String contents : temp.get(key)) {
 
                     out.print("," + contents.trim());
                 }
@@ -146,9 +146,8 @@ public class IssueMiner {
 
         return IssueNum;
     }
-    public void takeOneWithIssues () {
-        HashMap<String, ArrayList<String>> temp = map;
-
+    public HashMap<String, ArrayList<String>> takeOneWithIssues () {
+        HashMap<String, ArrayList<String>> temp = SerializationUtils.clone(new HashMap<>(map));
         for (String key : temp.keySet()) {
             int i = 0;
             for (String contents : map.get(key)) {
@@ -159,6 +158,6 @@ public class IssueMiner {
                 i++;
             }
         }
-        map = temp;
+        return temp;
     }
 }

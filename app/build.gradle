@@ -58,4 +58,8 @@ dependencies {
 	implementation fileTree(dir: 'libs', include: ['*.jar'])
 
 	implementation 'me.tongfei:progressbar:0.9.3'
+
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+
 }
