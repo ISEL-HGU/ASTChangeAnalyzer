@@ -43,7 +43,7 @@ public class IssueMiner {
 
 //        makeIssueIndex(takeOneWithIssues(readIndex(path)),path);
 //        System.out.println("Result:" + "\n" + "Total Changes - " + total
-//                + "\n" + "Changes with issues - " + withIssue
+//                + "\n" + "Changes with issues - " + withIssue:
 //                + "\n" + "Proportion - " + withIssue/total);
     }
 
@@ -54,8 +54,8 @@ public class IssueMiner {
             Reader in = new FileReader("/data/CGYW/ASTChangeAnalyzer/data/apacheURLList.csv");
             CSVParser parser = CSVFormat.EXCEL.parse(in);
             for (CSVRecord record : parser) {
-                for(int i = 0; i < record.size(); i++) {
-                    if (i == 0) {
+		if (record.getRecordNumber() == 1 ) {
+                    for(int i = 0; i < record.size(); i++) {
                         if(record.get(i).contains("Github")) {
                             URLColumnNumber = i;
                         } else if(record.get(i).contains("KEY")) {
@@ -138,7 +138,7 @@ public class IssueMiner {
                 for (String contents : map.get(key)) {
                     String [] temp = contents.split("&");
                     String issueNum = getIssueNum(temp[0].replace("~","/").trim(),temp[1].trim());
-                    if (issueNum == null)
+                    if (issueNum == null || issueNum.length() == 0)
                         continue;
                     out.print("," + contents.trim() + issueNum);
                     countIssuePerProject(temp[0],issueNum);
@@ -241,9 +241,11 @@ public class IssueMiner {
 //                    break;
                         String msg = rev.getFullMessage();
                         Matcher matcher = pattern.matcher(msg);
-                        while(matcher.find()) {;
-                            if(matcher.group(1).toUpperCase().contains(projectKey.get("https://github.com/" + projectName).toUpperCase()))
-                                IssueNum += "~" + matcher.group(1);
+                        while(matcher.find()) {
+			    System.out.println("https://github.com/" + projectName);
+			    if (projectKey.get("https://github.com/" + projectName)!=null)
+                            	if(matcher.group(1).toUpperCase().contains(projectKey.get("https://github.com/" + projectName).toUpperCase()))
+                                	IssueNum += "~" + matcher.group(1);
                         }
                         break;
 	    	        }
