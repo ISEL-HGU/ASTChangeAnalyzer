@@ -27,6 +27,7 @@ public class IssueMiner {
     private HashMap<String, ArrayList<String>> map = new HashMap<>();
     private HashMap<String, ArrayList<String>> projectList = new HashMap<>();
     private HashMap<String, String> projectKey = new HashMap<>();
+    private HashMap<String, ArrayList<String>> newMap = new HashMap<>();
 
     public IssueMiner(String path, String readNum) {
         readIssueKeys();
@@ -37,7 +38,8 @@ public class IssueMiner {
 
         readPartial(path,nums[0],nums[1]);
         makeIssueIndex(path, nums[0], nums[1]);
-        mapToCsv(path,projectList,nums[0],nums[1]);
+        mapToCsv(path, "_" + nums[0] + "~" + nums[1], newMap);
+        mapToCsv(path,"_" + nums[0] + "~" + nums[1]+"_issuePerProject", projectList);
 //        readIndex(path);
 //        mapToCsv(path,takeOneWithIssues());
 
@@ -132,18 +134,17 @@ public class IssueMiner {
             PrintWriter out = new PrintWriter(fos);
 
             for (String key : map.keySet()) {
-                if(map.get(key).size() == 0)
-                    continue;
-                out.print(key);
+                ArrayList<String> issues = new ArrayList<>();
                 for (String contents : map.get(key)) {
                     String [] temp = contents.split("&");
                     String issueNum = getIssueNum(temp[0].replace("~","/").trim(),temp[1].trim());
                     if (issueNum == null || issueNum.length() == 0)
                         continue;
-                    out.print("," + contents.trim() + issueNum);
+                    issues.add(contents.trim() + issueNum);
                     countIssuePerProject(temp[0],issueNum);
                 }
-                out.print("\n");
+                if (issues.size()>0)
+                    newMap.put(key, issues);
             }
             out.flush();
             out.close();
@@ -191,9 +192,9 @@ public class IssueMiner {
         }
     }
 
-    public void mapToCsv (String path, HashMap<String, ArrayList<String>> temp, int from, int to) {
+    public void mapToCsv (String path, String name, HashMap<String, ArrayList<String>> temp) {
 //        String newPath = path.replace(".csv","_issue.csv");
-        String newPath = path.replace(".csv", from + "~" + to +"_issuePerProject.csv");
+        String newPath = path.replace(".csv", name + ".csv");
         try {
             FileOutputStream fos = new FileOutputStream(newPath);
             PrintWriter out = new PrintWriter(fos);
