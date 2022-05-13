@@ -19,7 +19,8 @@ public class CLI {
 	private boolean changeCount;
 	private boolean save;
 	private boolean gitClone;
-	private boolean issueMine;
+//	private boolean issueMine;
+	private String issueMine;
 	private ArrayList<String> address;
 	private String language;
 	private String DiffTool;
@@ -50,7 +51,7 @@ public class CLI {
 	public boolean activateThread() {return thread; }
 	public boolean isChangeCount() { return changeCount; }
 	public boolean isGitClone() { return gitClone; }
-	public boolean isIssueMine() { return issueMine; }
+	public String getIssueMine() { return issueMine; }
 	public Utils getUtils() { return utils; }
 	
 	private boolean parseOptions(Options options, String[] args) {
@@ -101,7 +102,7 @@ public class CLI {
 			if (cmd.hasOption("hashcode"))
 				hashcode = cmd.getOptionValue("hashcode");
 			if (cmd.hasOption("issueMine"))
-				issueMine = true;
+				issueMine = cmd.getOptionValue("issueMine");
 			help = cmd.hasOption("h");
 
 		} catch (Exception e) {
@@ -169,6 +170,8 @@ public class CLI {
 
 		options.addOption(Option.builder("issueMine")
 				.desc("generates index_issue that concats issue number of each elements commit to the original data")
+				.hasArg()
+				.argName("num,num")
 				.build());
 		
 		options.addOption(Option.builder("h").longOpt("help")

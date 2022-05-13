@@ -25,16 +25,51 @@ public class IssueMiner {
     private int total;
     private int withIssue;
     private HashMap<String, ArrayList<String>> map = new HashMap<>();
+    private HashMap<String, ArrayList<String>> projectList = new HashMap<>();
 
-    public IssueMiner(String path) {
-        readIndex(path);
-        mapToCsv(path,takeOneWithIssues());
+    public IssueMiner(String path, String readNum) {
+        int [] nums = new int [2];
+        int i = 0;
+        for(String x : readNum.split(","))
+            nums[i++] = Integer.parseInt(x.trim());
+
+        readPartial(path,nums[0],nums[1]);
+        makeIssueIndex(path, nums[0], nums[1]);
+        mapToCsv(path,projectList,nums[0],nums[1]);
+//        readIndex(path);
+//        mapToCsv(path,takeOneWithIssues());
 
 //        makeIssueIndex(takeOneWithIssues(readIndex(path)),path);
 //        System.out.println("Result:" + "\n" + "Total Changes - " + total
 //                + "\n" + "Changes with issues - " + withIssue
 //                + "\n" + "Proportion - " + withIssue/total);
-    } 
+    }
+
+    public void readPartial (String indexPath, int from, int to) {
+        ArrayList<String> temp = null;
+        String key = "";
+        int cnt = 0;
+        try {
+            Reader in = new FileReader(indexPath);
+            CSVParser parser = CSVFormat.EXCEL.parse(in);
+            for (CSVRecord record : parser) {
+                if (cnt < from) continue;
+                else if (cnt > to) break;
+                cnt++;
+                temp = new ArrayList<String>();
+                for (String str : record) {
+                    if(str.contains("~")) {
+                        temp.add(str.replace("]]", "").trim());
+                    } else {
+                        key = str;
+                    }
+                }
+                map.put(key,temp);
+            }
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();}
+    }
 
     public void readIndex (String indexPath) {
         //HashMap<String, ArrayList<String>> file = new HashMap<String, ArrayList<String>>();
@@ -62,6 +97,49 @@ public class IssueMiner {
 
     }
 
+    public void makeIssueIndex(String path, int from, int to) {
+        String newPath = path.replace(".csv", from + "~" + to+".csv");
+
+        try {
+            FileOutputStream fos = new FileOutputStream(newPath);
+            PrintWriter out = new PrintWriter(fos);
+
+            for (String key : map.keySet()) {
+                if(map.get(key).size() == 0)
+                    continue;
+                out.print(key);
+                for (String contents : map.get(key)) {
+                    String [] temp = contents.split("&");
+                    String issueNum = getIssueNum(temp[0].replace("~","/").trim(),temp[1].trim());
+                    if (issueNum == null)
+                        continue;
+                    out.print("," + contents.trim() + issueNum);
+                    countIssuePerProject(temp[0],issueNum);
+                }
+                out.print("\n");
+            }
+            out.flush();
+            out.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void countIssuePerProject (String projectName, String issueNum) {
+        String [] arr = issueNum.split("~");
+
+        if (projectList.containsKey(projectName.trim())) {
+            for (String x : arr)
+                projectList.get(projectName).add(x);
+        } else {
+            ArrayList<String> temp = new ArrayList<>();
+            for (String x : arr)
+                temp.add(x);
+            projectList.put(projectName,temp);
+        }
+    }
+
     public void makeIssueIndex(HashMap<String, ArrayList<String>> map, String path) {
         String newPath = path.replace(".csv","_issue.csv");
 
@@ -76,7 +154,6 @@ public class IssueMiner {
                     String [] temp = contents.split("&");
                     out.print("," + contents.trim() + getIssueNum(temp[0].replace("~","/").trim(),temp[1].trim()));
                 }
-                total++;
                 out.print("\n");
             }
             out.flush();
@@ -86,9 +163,10 @@ public class IssueMiner {
             e.printStackTrace();
         }
     }
-    public void mapToCsv (String path, HashMap<String, ArrayList<String>> temp) {
-        String newPath = path.replace(".csv","_issue.csv");
 
+    public void mapToCsv (String path, HashMap<String, ArrayList<String>> temp, int from, int to) {
+//        String newPath = path.replace(".csv","_issue.csv");
+        String newPath = path.replace(".csv", from + "~" + to +"_issuePerProject.csv");
         try {
             FileOutputStream fos = new FileOutputStream(newPath);
             PrintWriter out = new PrintWriter(fos);
@@ -110,10 +188,12 @@ public class IssueMiner {
         }
 
     }
+
     public String getIssueNum (String projectName, String ID) {
         String IssueNum = "";
 
-        Pattern pattern = Pattern.compile("(#\\d+)");
+//        Pattern pattern = Pattern.compile("(#\\d+)");
+        Pattern pattern = Pattern.compile("([a-zA-Z]+-\\d+)");
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         Repository repo = null;
         try {
@@ -131,9 +211,9 @@ public class IssueMiner {
                         String msg = rev.getFullMessage();
                         Matcher matcher = pattern.matcher(msg);
                         while(matcher.find()) {
-                            IssueNum += "~" + matcher.group(1);
+                            if(matcher.group(1).toUpperCase().contains(projectName.toUpperCase()))
+                                IssueNum += "~" + matcher.group(1);
                         }
-                        withIssue++;
                         break;
 	    	        }
                 }
@@ -146,6 +226,7 @@ public class IssueMiner {
 
         return IssueNum;
     }
+
     public HashMap<String, ArrayList<String>> takeOneWithIssues () {
         HashMap<String, ArrayList<String>> temp = SerializationUtils.clone(new HashMap<>(map));
         for (String key : map.keySet()) {

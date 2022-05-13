@@ -46,14 +46,14 @@ public class Main {
 		indexPath = cli.getIndexPath();
 		String hashcode = cli.getHashcode();
 
-		boolean issueMine = cli.isIssueMine();
+		String issueMine = cli.getIssueMine();
 		if (hashcode != null) {
 			if (hashcode.length() == 64 && indexPath.length() > 0) {
 				new SampleCollector(indexPath, hashcode);
 				return;
 			}
-		} else if (issueMine) {
-			new IssueMiner(cli.getInputPath());
+		} else if (issueMine != null) {
+			new IssueMiner(cli.getInputPath(),issueMine);
 			return;
 		}
 
