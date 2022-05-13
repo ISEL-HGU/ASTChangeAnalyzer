@@ -26,8 +26,10 @@ public class IssueMiner {
     private int withIssue;
     private HashMap<String, ArrayList<String>> map = new HashMap<>();
     private HashMap<String, ArrayList<String>> projectList = new HashMap<>();
+    private HashMap<String, String> projectKey = new HashMap<>();
 
     public IssueMiner(String path, String readNum) {
+        readIssueKeys();
         int [] nums = new int [2];
         int i = 0;
         for(String x : readNum.split(","))
@@ -44,6 +46,31 @@ public class IssueMiner {
 //                + "\n" + "Changes with issues - " + withIssue
 //                + "\n" + "Proportion - " + withIssue/total);
     }
+
+    public void readIssueKeys () {
+        int URLColumnNumber = 0;
+        int keyColumn = 0;
+        try {
+            Reader in = new FileReader("/data/CGYW/ASTChangeAnalyzer/data/apacheURLList.csv");
+            CSVParser parser = CSVFormat.EXCEL.parse(in);
+            for (CSVRecord record : parser) {
+                for(int i = 0; i < record.size(); i++) {
+                    if (i == 0) {
+                        if(record.get(i).contains("Github")) {
+                            URLColumnNumber = i;
+                        } else if(record.get(i).contains("KEY")) {
+                            keyColumn = i;
+                        }
+                        continue;
+                    }
+                }
+                projectKey.put(record.get(URLColumnNumber),record.get(keyColumn));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void readPartial (String indexPath, int from, int to) {
         ArrayList<String> temp = null;
@@ -173,12 +200,16 @@ public class IssueMiner {
 
             for (String key : temp.keySet()) {
                 out.print(key);
+                boolean check = false;
                 for (String contents : temp.get(key)) {
+                    if (contents != null) {
+                        check = true;
+                        out.print("," + contents.trim());
+                    }
 
-                    out.print("," + contents.trim());
                 }
-
-                out.print("\n");
+                if (check)
+                    out.print("\n");
             }
             out.flush();
             out.close();
@@ -211,7 +242,7 @@ public class IssueMiner {
                         String msg = rev.getFullMessage();
                         Matcher matcher = pattern.matcher(msg);
                         while(matcher.find()) {;
-                            if(matcher.group(1).toUpperCase().contains(projectName.toUpperCase()))
+                            if(matcher.group(1).toUpperCase().contains(projectKey.get("https://github.com/" + projectName).toUpperCase()))
                                 IssueNum += "~" + matcher.group(1);
                         }
                         break;
