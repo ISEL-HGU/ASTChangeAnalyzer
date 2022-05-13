@@ -210,7 +210,7 @@ public class IssueMiner {
 //                    break;
                         String msg = rev.getFullMessage();
                         Matcher matcher = pattern.matcher(msg);
-                        while(matcher.find()) {
+                        while(matcher.find()) {;
                             if(matcher.group(1).toUpperCase().contains(projectName.toUpperCase()))
                                 IssueNum += "~" + matcher.group(1);
                         }
