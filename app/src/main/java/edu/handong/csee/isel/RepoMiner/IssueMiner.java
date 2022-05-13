@@ -30,16 +30,18 @@ public class IssueMiner {
     private HashMap<String, ArrayList<String>> newMap = new HashMap<>();
 
     public IssueMiner(String path, String readNum) {
-        readIssueKeys();
-        int [] nums = new int [2];
-        int i = 0;
-        for(String x : readNum.split(","))
-            nums[i++] = Integer.parseInt(x.trim());
+//        readIssueKeys();
+//        int [] nums = new int [2];
+//        int i = 0;
+//        for(String x : readNum.split(","))
+//            nums[i++] = Integer.parseInt(x.trim());
 
-        readPartial(path,nums[0],nums[1]);
-        makeIssueIndex();
-        mapToCsv(path, "_" + nums[0] + "~" + nums[1], newMap);
-        mapToCsv(path,"_" + nums[0] + "~" + nums[1]+"_issuePerProject", projectList);
+        combineCSV();
+        combineProjectWithIssueCSV();
+//        readPartial(path,nums[0],nums[1]);
+//        makeIssueIndex();
+//        mapToCsv(path, "_" + nums[0] + "~" + nums[1], newMap);
+//        mapToCsv(path,"_" + nums[0] + "~" + nums[1]+"_issuePerProject", projectList);
 //        readIndex(path);
 //        mapToCsv(path,takeOneWithIssues());
 
@@ -47,6 +49,32 @@ public class IssueMiner {
 //        System.out.println("Result:" + "\n" + "Total Changes - " + total
 //                + "\n" + "Changes with issues - " + withIssue:
 //                + "\n" + "Proportion - " + withIssue/total);
+    }
+
+    public void combineCSV() {
+        HashMap<String, ArrayList<String>> csv = new HashMap<>();
+        for (int i=0; i<1000001; i+=100000) {
+            if (i==0) {
+                i++;
+                readIndex("/data/CGYW/javachg/index_java_" + 0 + "~" + 100000 +".csv", csv);
+            }
+            else readIndex("/data/CGYW/javachg/index_java_" + i + "~" + i+99999 +".csv", csv);
+        }
+        readIndex("/data/CGYW/javachg/index_java_" + 1000001 + "~" + 1156755 +".csv", csv);
+        mapToCsv("/data/CGYW/javachg/.csv", "project_commit_file_issue", csv);
+    }
+
+    public void combineProjectWithIssueCSV() {
+        HashMap<String, ArrayList<String>> csv = new HashMap<>();
+        for (int i=0; i<1000001; i+=100000) {
+            if (i==0) {
+                i++;
+                readIndex("/data/CGYW/javachg/index_java_" + 0 + "~" + 100000 +"_issuePerProject.csv", csv);
+            }
+            else readIndex("/data/CGYW/javachg/index_java_" + i + "~" + i+99999 +"_issuePerProject.csv", csv);
+        }
+        readIndex("/data/CGYW/javachg/index_java_" + 1000001 + "~" + 1156755 +"_issuePerProject.csv", csv);
+        mapToCsv("/data/CGYW/javachg/.csv", "project_issue", csv);
     }
 
     public void readIssueKeys () {
@@ -103,7 +131,7 @@ public class IssueMiner {
             e.printStackTrace();}
     }
 
-    public void readIndex (String indexPath) {
+    public void readIndex (String indexPath, HashMap<String, ArrayList<String>> csv) {
         //HashMap<String, ArrayList<String>> file = new HashMap<String, ArrayList<String>>();
         ArrayList<String> temp = null;
         String key = "";
@@ -119,14 +147,12 @@ public class IssueMiner {
                             key = str;
                         }
                     }
-                    map.put(key,temp);
+                    csv.put(key,temp);
                 }
                 in.close();
             } catch (IOException e) {
-            e.printStackTrace();}
-
-
-
+            e.printStackTrace();
+        }
     }
 
     public void makeIssueIndex() {
