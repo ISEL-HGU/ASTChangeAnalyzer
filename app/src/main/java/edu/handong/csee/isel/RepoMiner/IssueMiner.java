@@ -81,6 +81,7 @@ public class IssueMiner {
         try {
             Reader in = new FileReader(indexPath);
             CSVParser parser = CSVFormat.EXCEL.parse(in);
+	    System.out.println(parser.getRecords().size());
             for (CSVRecord record : parser) {
                 if (cnt < from) continue;
                 else if (cnt > to) break;
@@ -158,13 +159,21 @@ public class IssueMiner {
         String [] arr = issueNum.split("~");
 
         if (projectList.containsKey(projectName.trim())) {
-            for (String x : arr)
+	    int cnt = 0;
+            for (String x : arr) {
+		if (cnt++ == 0) {
+		    continue;
+		}
                 projectList.get(projectName).add(x);
+	    }
         } else {
             ArrayList<String> temp = new ArrayList<>();
-            for (String x : arr)
+	    int cnt = 0;
+            for (String x : arr){
+		if (cnt++ == 0) continue;
                 temp.add(x);
-            projectList.put(projectName,temp);
+	    }
+	    projectList.put(projectName,temp);
         }
     }
 
@@ -243,7 +252,6 @@ public class IssueMiner {
                         String msg = rev.getFullMessage();
                         Matcher matcher = pattern.matcher(msg);
                         while(matcher.find()) {
-			    System.out.println("https://github.com/" + projectName);
 			    if (projectKey.get("https://github.com/" + projectName)!=null)
                             	if(matcher.group(1).toUpperCase().contains(projectKey.get("https://github.com/" + projectName).toUpperCase()))
                                 	IssueNum += "~" + matcher.group(1);
