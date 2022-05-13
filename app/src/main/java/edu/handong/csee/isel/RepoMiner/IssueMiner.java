@@ -37,7 +37,7 @@ public class IssueMiner {
             nums[i++] = Integer.parseInt(x.trim());
 
         readPartial(path,nums[0],nums[1]);
-        makeIssueIndex(path, nums[0], nums[1]);
+        makeIssueIndex();
         mapToCsv(path, "_" + nums[0] + "~" + nums[1], newMap);
         mapToCsv(path,"_" + nums[0] + "~" + nums[1]+"_issuePerProject", projectList);
 //        readIndex(path);
@@ -81,9 +81,11 @@ public class IssueMiner {
         try {
             Reader in = new FileReader(indexPath);
             CSVParser parser = CSVFormat.EXCEL.parse(in);
-	    System.out.println(parser.getRecords().size());
             for (CSVRecord record : parser) {
-                if (cnt < from) continue;
+                if (cnt < from) {
+                    cnt++;
+                    continue;
+                }
                 else if (cnt > to) break;
                 cnt++;
                 temp = new ArrayList<String>();
@@ -127,31 +129,19 @@ public class IssueMiner {
 
     }
 
-    public void makeIssueIndex(String path, int from, int to) {
-        String newPath = path.replace(".csv", from + "~" + to+".csv");
-
-        try {
-            FileOutputStream fos = new FileOutputStream(newPath);
-            PrintWriter out = new PrintWriter(fos);
-
-            for (String key : map.keySet()) {
-                ArrayList<String> issues = new ArrayList<>();
-                for (String contents : map.get(key)) {
-                    String [] temp = contents.split("&");
-                    String issueNum = getIssueNum(temp[0].replace("~","/").trim(),temp[1].trim());
-                    if (issueNum == null || issueNum.length() == 0)
-                        continue;
-                    issues.add(contents.trim() + issueNum);
-                    countIssuePerProject(temp[0],issueNum);
-                }
-                if (issues.size()>0)
-                    newMap.put(key, issues);
+    public void makeIssueIndex() {
+        for (String key : map.keySet()) {
+            ArrayList<String> issues = new ArrayList<>();
+            for (String contents : map.get(key)) {
+                String [] temp = contents.split("&");
+                String issueNum = getIssueNum(temp[0].replace("~","/").trim(),temp[1].trim());
+                if (issueNum == null || issueNum.length() == 0)
+                    continue;
+                issues.add(contents.trim() + issueNum);
+                countIssuePerProject(temp[0],issueNum);
             }
-            out.flush();
-            out.close();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (issues.size()>0)
+                newMap.put(key, issues);
         }
     }
 
