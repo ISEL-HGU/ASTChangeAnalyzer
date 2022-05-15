@@ -78,10 +78,10 @@ public class IssueMiner {
 //            else readIndex("/data/CGYW/javachg/index_java_" + i + "~" + i+99999 +"_issuePerProject.csv", csv);
 //        }
 //        readIndex("/data/CGYW/javachg/index_java_" + 1000001 + "~" + 1156755 +"_issuePerProject.csv", csv);
-//        mapToCsv("/data/CGYW/javachg/.csv", "project_issue", csv);
+//        mapToCsv2("/data/CGYW/javachg/.csv", "project_issue", csv);
 
-        readIndex("/data/CGYW/javachg/index_java_" + 0 + "~" + 50000 +"_issuePerProject.csv", csv);
-        readIndex("/data/CGYW/javachg/index_java_" + 50001 + "~" + 100000 +"_issuePerProject.csv", csv);
+        readIndex2("/data/CGYW/javachg/index_java_" + 0 + "~" + 50000 +"_issuePerProject.csv", csv);
+        readIndex2("/data/CGYW/javachg/index_java_" + 50001 + "~" + 100000 +"_issuePerProject.csv", csv);
         mapToCsv("/data/CGYW/javachg/.csv", "index_java_0~100000" + "_issuePerProject", csv);
 
     }
@@ -160,6 +160,29 @@ public class IssueMiner {
                 }
                 in.close();
             } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void readIndex2 (String indexPath, HashMap<String, ArrayList<String>> csv) {
+        //HashMap<String, ArrayList<String>> file = new HashMap<String, ArrayList<String>>();
+        ArrayList<String> temp = null;
+        String key = "";
+        try {
+            Reader in = new FileReader(indexPath);
+            CSVParser parser = CSVFormat.EXCEL.parse(in);
+            for (CSVRecord record : parser) {
+                temp = new ArrayList<String>();
+                for (String str : record) {
+                    if(str.contains("-")) {
+                        temp.add(str.replace("]]", "").trim());
+                    } else {
+                        key = str;
+                    }
+                }
+                csv.put(key,temp);
+            }
+            in.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
