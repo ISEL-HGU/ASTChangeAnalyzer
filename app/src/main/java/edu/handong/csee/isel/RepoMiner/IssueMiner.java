@@ -53,36 +53,43 @@ public class IssueMiner {
 
     public void combineCSV() {
         HashMap<String, ArrayList<String>> csv = new HashMap<>();
-//        for (int i=0; i<1000001; i+=100000) {
-//            if (i==0) {
-//                i++;
-//                readIndex("/data/CGYW/javachg/index_java_" + 0 + "~" + 100000 +".csv", csv);
-//            }
-//            else readIndex("/data/CGYW/javachg/index_java_" + i + "~" + i+99999 +".csv", csv);
-//        }
+        for (int i=0; i<1000001; i+=100000) {
+            if (i==0) {
+                i++;
+                readIndex("/data/CGYW/javachg/index_java_" + 0 + "~" + 100000 +".csv", csv);
+            }
+            else {
+			int j = i + 99999;
+			 readIndex("/data/CGYW/javachg/index_java_" + i + "~" + j +".csv", csv);
+        	}
+	}
 //        readIndex("/data/CGYW/javachg/index_java_" + 1000001 + "~" + 1156755 +".csv", csv);
-//        mapToCsv("/data/CGYW/javachg/.csv", "project_commit_file_issue", csv);
+        mapToCsv("/data/CGYW/javachg/.csv", "project_commit_file_issue", csv);
 
-        readIndex("/data/CGYW/javachg/index_java_" + 0 + "~" + 50000 +".csv", csv);
-        readIndex("/data/CGYW/javachg/index_java_" + 50001 + "~" + 100000 +".csv", csv);
-        mapToCsv("/data/CGYW/javachg/.csv", "index_java_0~100000", csv);
+//        readIndex("/data/CGYW/javachg/index_java_" + 0 + "~" + 50000 +".csv", csv);
+//        readIndex("/data/CGYW/javachg/index_java_" + 50001 + "~" + 100000 +".csv", csv);
+//        mapToCsv("/data/CGYW/javachg/.csv", "index_java_0~100000", csv);
     }
 
     public void combineProjectWithIssueCSV() {
         HashMap<String, ArrayList<String>> csv = new HashMap<>();
-//        for (int i=0; i<1000001; i+=100000) {
-//            if (i==0) {
-//                i++;
-//                readIndex("/data/CGYW/javachg/index_java_" + 0 + "~" + 100000 +"_issuePerProject.csv", csv);
-//            }
-//            else readIndex("/data/CGYW/javachg/index_java_" + i + "~" + i+99999 +"_issuePerProject.csv", csv);
-//        }
+        for (int i=0; i<1000001; i+=100000) {
+            if (i==0) {
+                i++;
+                readIndex2("/data/CGYW/javachg/index_java_" + 0 + "~" + 100000 +"_issuePerProject.csv", csv);
+            }
+            else {
+			int j = i + 99999;
+			 readIndex2("/data/CGYW/javachg/index_java_" + i + "~" + j +"_issuePerProject.csv", csv);
+       		
+		}
+	 }
 //        readIndex("/data/CGYW/javachg/index_java_" + 1000001 + "~" + 1156755 +"_issuePerProject.csv", csv);
-//        mapToCsv2("/data/CGYW/javachg/.csv", "project_issue", csv);
+        mapToCsv("/data/CGYW/javachg/.csv", "project_issue", csv);
 
-        readIndex2("/data/CGYW/javachg/index_java_" + 0 + "~" + 50000 +"_issuePerProject.csv", csv);
-        readIndex2("/data/CGYW/javachg/index_java_" + 50001 + "~" + 100000 +"_issuePerProject.csv", csv);
-        mapToCsv("/data/CGYW/javachg/.csv", "index_java_0~100000" + "_issuePerProject", csv);
+//        readIndex2("/data/CGYW/javachg/index_java_" + 0 + "~" + 50000 +"_issuePerProject.csv", csv);
+//        readIndex2("/data/CGYW/javachg/index_java_" + 50001 + "~" + 100000 +"_issuePerProject.csv", csv);
+//        mapToCsv("/data/CGYW/javachg/.csv", "index_java_0~100000" + "_issuePerProject", csv);
 
     }
 
