@@ -92,7 +92,18 @@ public class IssueMiner {
 //        mapToCsv("/data/CGYW/javachg/.csv", "index_java_0~100000" + "_issuePerProject", csv);
 
     }
-
+    public HashMap<String, ArrayList<String>> removeDuplicate (HashMap<String, ArrayList<String>> map) {
+        HashMap<String, ArrayList<String>> temp = new HashMap<>();
+        for (String key : map.keySet()) {
+            ArrayList<String> tmpList= new ArrayList<>();
+            for (String contents : map.get(key)) {
+                if(!tmpList.contains(contents))
+                    tmpList.add(contents);
+            }
+            temp.put(key,tmpList);
+        }
+        return temp;
+    }
     public void readIssueKeys () {
         int URLColumnNumber = 0;
         int keyColumn = 0;
