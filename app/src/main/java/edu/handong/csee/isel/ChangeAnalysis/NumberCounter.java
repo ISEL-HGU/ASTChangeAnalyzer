@@ -23,6 +23,7 @@ public class NumberCounter {
 
         if (this.opt.equals("commit")) {
             readCommit();
+            System.out.println(this.count);
         }
     }
 
