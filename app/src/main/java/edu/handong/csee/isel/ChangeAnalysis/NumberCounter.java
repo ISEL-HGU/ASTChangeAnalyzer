@@ -43,11 +43,12 @@ public class NumberCounter {
                 temp = new ArrayList<String>();
                 int i = 0;
                 for (String str : record) {
-                    if(i++ == 0) {
+                    if(i != 0) {
                         temp.add(str.replace("]]", "").trim());
                     } else {
                         key = str;
                     }
+                    i++;
                 }
                 csv.put(key,temp);
             }
