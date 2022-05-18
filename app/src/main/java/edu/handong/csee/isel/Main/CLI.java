@@ -28,6 +28,7 @@ public class CLI {
 	private String chgPath;
 	private String indexPath;
 	private String hashcode;
+	private String count;
 	private Utils utils;
 
 	
@@ -53,6 +54,7 @@ public class CLI {
 	public boolean isGitClone() { return gitClone; }
 	public String getIssueMine() { return issueMine; }
 	public Utils getUtils() { return utils; }
+	public String getCount() { return count;}
 	
 	private boolean parseOptions(Options options, String[] args) {
 		CommandLineParser parser = new DefaultParser();
@@ -103,6 +105,9 @@ public class CLI {
 				hashcode = cmd.getOptionValue("hashcode");
 			if (cmd.hasOption("issueMine"))
 				issueMine = cmd.getOptionValue("issueMine");
+			if (cmd.hasOption("count"))
+				count = cmd.getOptionValue("count");
+
 			help = cmd.hasOption("h");
 
 		} catch (Exception e) {
@@ -172,6 +177,12 @@ public class CLI {
 				.desc("generates index_issue that concats issue number of each elements commit to the original data")
 				.hasArg()
 				.argName("num,num")
+				.build());
+
+		options.addOption(Option.builder("count")
+				.desc("count commit, change, and lines")
+				.hasArg()
+				.argName("what do you want to count?")
 				.build());
 		
 		options.addOption(Option.builder("h").longOpt("help")

@@ -2,6 +2,7 @@ package edu.handong.csee.isel.Main;
 
 import edu.handong.csee.isel.ChangeAnalysis.ChangeInfo;
 import edu.handong.csee.isel.ChangeAnalysis.IndexParser;
+import edu.handong.csee.isel.ChangeAnalysis.NumberCounter;
 import edu.handong.csee.isel.ChangeAnalysis.SampleCollector;
 import edu.handong.csee.isel.RepoMiner.ChangeMiner;
 import edu.handong.csee.isel.RepoMiner.CommitMiner;
@@ -25,6 +26,7 @@ public class Main {
 	private int volume = 0;
 	private String chgPath;
 	private String indexPath;
+	private String count;
 
     public static void main(String[] args) {
     	Main main = new Main();
@@ -44,6 +46,7 @@ public class Main {
 		isGitClone = cli.isGitClone();
 		chgPath = cli.getChgPath();
 		indexPath = cli.getIndexPath();
+		count = cli.getCount();
 		String hashcode = cli.getHashcode();
 
 		String issueMine = cli.getIssueMine();
@@ -54,6 +57,9 @@ public class Main {
 			}
 		} else if (issueMine != null) {
 			new IssueMiner(cli.getInputPath(),issueMine);
+			return;
+		} else if (count != null) {
+			new NumberCounter(cli.getInputPath(),count);
 			return;
 		}
 
