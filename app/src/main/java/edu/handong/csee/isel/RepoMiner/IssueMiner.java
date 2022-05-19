@@ -65,10 +65,10 @@ public class IssueMiner {
     public void mapTwoHashMaps(HashMap<String, ArrayList<String>> small, HashMap<String, ArrayList<String>> big) {
         HashMap<String, ArrayList<String>> removedElement = new HashMap<>();
         for (String key : big.keySet()) {
-            if (small.containsKey(key)) continue;
+            if (small.containsKey(key) && small.get(key).size() > 10) continue;
             else removedElement.put(key, big.get(key));
         }
-        mapToCsv("/data/CGYW/javachg/.csv", "removedElementsBetweenFinals", removedElement);
+        mapToCsv("/data/CGYW/javachg/.csv", "removedElementsBetweenTwoCSVs", removedElement);
     }
 
     public void combineCSV() {
