@@ -29,14 +29,14 @@ public class IssueMiner {
     private HashMap<String, String> projectKey = new HashMap<>();
     private HashMap<String, ArrayList<String>> newMap = new HashMap<>();
 
-    public IssueMiner(String path, String readNum) {
+    public IssueMiner(String path, String cliInput) {
 //        readIssueKeys();
 //        int [] nums = new int [2];
 //        int i = 0;
-//        for(String x : readNum.split(","))
+//        for(String x : cliInput.split(","))
 //            nums[i++] = Integer.parseInt(x.trim());
 
-        combineCSV();
+        selectElementsWithNoIssue(cliInput);
 //        combineProjectWithIssueCSV();
 //        readPartial(path,nums[0],nums[1]);
 //        makeIssueIndex();
@@ -49,6 +49,26 @@ public class IssueMiner {
 //        System.out.println("Result:" + "\n" + "Total Changes - " + total
 //                + "\n" + "Changes with issues - " + withIssue:
 //                + "\n" + "Proportion - " + withIssue/total);
+    }
+
+    public void selectElementsWithNoIssue(String inputFiles) {
+        String[] files = inputFiles.split(",");
+        HashMap<String, ArrayList<String>> srcCSV = new HashMap<>();
+        readIndex(files[0], srcCSV);
+        HashMap<String, ArrayList<String>> dstCSV = new HashMap<>();
+        readIndex(files[1], dstCSV);
+        if (srcCSV.size() > dstCSV.size()) {
+            mapTwoHashMaps(dstCSV, srcCSV); // dstCSV < srcCSV
+        } else mapTwoHashMaps(srcCSV, dstCSV); // srcCSV < dstCSV
+    }
+
+    public void mapTwoHashMaps(HashMap<String, ArrayList<String>> small, HashMap<String, ArrayList<String>> big) {
+        HashMap<String, ArrayList<String>> removedElement = new HashMap<>();
+        for (String key : big.keySet()) {
+            if (small.containsKey(key)) continue;
+            else removedElement.put(key, big.get(key));
+        }
+        mapToCsv("/data/CGYW/javachg/.csv", "removedElementsBetweenFinals", removedElement);
     }
 
     public void combineCSV() {
