@@ -1,6 +1,6 @@
 Project name,ISSUE KEY,Github
 Hadoop,HADOOP,https://github.com/apache/hadoop
-Tomcat,MTOMCAT,https://github.com/apache/tomcat
+Tomcat,TOMCAT,https://github.com/apache/tomcat
 Lucene,LUCENE,https://github.com/apache/lucene-solr
 Camel,CAMEL,https://github.com/apache/camel
 HBase,HBASE,https://github.com/apache/hbase
