@@ -105,21 +105,6 @@ public class IssueMiner {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        HashMap<String, ArrayList<String>> removedElement = new HashMap<>();
-        for (String key : big.keySet()) {
-            if (!small.containsKey(key)) {
-                removedElement.put(key, big.get(key));
-                continue;
-            }
-            ArrayList<String> smallList = small.get(key);
-            ArrayList<String> removedList = new ArrayList<>();
-            for (String smallValue : smallList) {
-                for (String value : big.get(key)) {
-                    if (!smallValue.contains(value)) removedList.add(value);
-                }
-            }
-            removedElement.put(key, removedList);
-        }
     }
 
     public void combineCSV() {
