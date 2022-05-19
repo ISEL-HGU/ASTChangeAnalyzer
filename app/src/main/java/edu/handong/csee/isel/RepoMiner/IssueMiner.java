@@ -63,6 +63,48 @@ public class IssueMiner {
     }
 
     public void mapTwoHashMaps(HashMap<String, ArrayList<String>> small, HashMap<String, ArrayList<String>> big) {
+        String newPath = "/data/CGYW/javachg/removedElementsBetweenTwoCSVs.csv";
+        try {
+            FileOutputStream fos = new FileOutputStream(newPath);
+            PrintWriter out = new PrintWriter(fos);
+            for (String key : big.keySet()) {
+                if (!small.containsKey(key)) {
+                    out.print(key);
+                    boolean check = false;
+                    for (String contents : big.get(key)) {
+                        if (contents != null) {
+                            check = true;
+                            out.print("," + contents.trim());
+                        }
+                    }
+                    if (check)
+                        out.print("\n");
+                    continue;
+                }
+                ArrayList<String> smallList = small.get(key);
+                ArrayList<String> removedList = new ArrayList<>();
+                for (String smallValue : smallList) {
+                    for (String value : big.get(key)) {
+                        if (!smallValue.contains(value)) removedList.add(value);
+                    }
+                }
+                out.print(key);
+                boolean check = false;
+                for (String contents :removedList) {
+                    if (contents != null) {
+                        check = true;
+                        out.print("," + contents.trim());
+                    }
+                }
+                if (check)
+                    out.print("\n");
+            }
+            out.flush();
+            out.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         HashMap<String, ArrayList<String>> removedElement = new HashMap<>();
         for (String key : big.keySet()) {
             if (!small.containsKey(key)) {
@@ -78,7 +120,6 @@ public class IssueMiner {
             }
             removedElement.put(key, removedList);
         }
-        mapToCsv("/data/CGYW/javachg/.csv", "removedElementsBetweenTwoCSVs", removedElement);
     }
 
     public void combineCSV() {
