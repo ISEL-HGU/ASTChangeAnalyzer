@@ -63,7 +63,6 @@ OpenJPA,OPENJPA,https://github.com/apache/openjpa
 Continuum,CONTINUUM,https://github.com/apache/continuum
 SystemML,SYSTEMML,https://github.com/apache/systemml
 SIS,SIS,https://github.com/apache/sis
-Pulsar,PULSAR,https://github.com/apache/pulsar
 Struts Framework,WW,https://github.com/apache/struts
 MyFaces,MYFACES,https://github.com/apache/myfaces
 NiFi,NIFI,https://github.com/apache/nifi
@@ -104,7 +103,6 @@ HttpComponents,HTTPCORE,https://github.com/apache/httpcomponents-core
 ZooKeeper,ZOOKEEPER,https://github.com/apache/zookeeper
 Nutch,NUTCH,https://github.com/apache/nutch
 Tez,TEZ,https://github.com/apache/tez
-Airflow,AIRFLOW,https://github.com/apache/incubator-dolphinscheduler
 REEF,REEF,https://github.com/apache/reef
 Commons Configuration,CONFIGURATION,https://github.com/apache/commons-configuration
 HttpComponents,HTTPCLIENT,https://github.com/apache/httpcomponents-client
@@ -186,7 +184,6 @@ Chukwa,CHUKWA,https://github.com/apache/chukwa
 Commons CLI,CLI,https://github.com/apache/commons-cli
 Archiva,MRM,https://github.com/apache/archiva-redback-core
 Commons Weaver,WEAVER,https://github.com/apache/commons-weaver
-Chainsaw,CHAINSAW,https://github.com/apache/chainsaw
 ServiceMix,SM,https://github.com/apache/servicemix
 Commons Email,EMAIL,https://github.com/apache/commons-email
 Aries,ARIES,https://github.com/apache/aries-rsa
@@ -220,11 +217,9 @@ Twill,TWILL,https://github.com/apache/twill
 Aries,ARIES,https://github.com/apache/aries-jpa
 DistributedLog,DL,https://github.com/apache/distributedlog
 MRUnit,MRUNIT,https://github.com/apache/attic-mrunit
-Kandula,KAND,https://github.com/apache/axis-axis2-java-kandula
 Infrastructure,INFRA,https://github.com/apache/ambari-infra
 CXF,CXFXJC,https://github.com/apache/cxf-xjc-utils
 Flex,FLEX,https://github.com/apache/flex-blazeds
 Bahir,BAHIR,https://github.com/apache/bahir-flink
 Creadur,TENTACLES,https://github.com/apache/creadur-tentacles
 Savan,SAVAN,https://github.com/apache/axis-axis2-java-savan
-Cordova,CB,https://github.com/apache/cordova
