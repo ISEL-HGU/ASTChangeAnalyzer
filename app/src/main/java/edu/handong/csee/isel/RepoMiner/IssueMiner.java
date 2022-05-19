@@ -85,7 +85,7 @@ public class IssueMiner {
                 ArrayList<String> removedList = new ArrayList<>();
                 for (String smallValue : smallList) {
                     for (String value : big.get(key)) {
-                        if (!smallValue.contains(value)) removedList.add(value);
+                        if (!removedList.contains(value) && !smallValue.contains(value)) removedList.add(value);
                     }
                 }
                 out.print(key);
