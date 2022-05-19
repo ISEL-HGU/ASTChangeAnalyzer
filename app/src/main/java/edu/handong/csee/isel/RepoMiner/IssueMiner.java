@@ -37,7 +37,7 @@ public class IssueMiner {
 //            nums[i++] = Integer.parseInt(x.trim());
 
         combineCSV();
-        combineProjectWithIssueCSV();
+//        combineProjectWithIssueCSV();
 //        readPartial(path,nums[0],nums[1]);
 //        makeIssueIndex();
 //        mapToCsv(path, "_" + nums[0] + "~" + nums[1], newMap);
@@ -63,8 +63,9 @@ public class IssueMiner {
 			 readIndex("/data/CGYW/javachg/index_java_" + i + "~" + j +".csv", csv);
         	}
 	}
-//        readIndex("/data/CGYW/javachg/index_java_" + 1000001 + "~" + 1156755 +".csv", csv);
-        mapToCsv("/data/CGYW/javachg/.csv", "project_commit_file_issue", csv);
+        readIndex("/data/CGYW/javachg/" + 1000001 + "~" + 1156754 +".csv", csv);
+        readIndex("/data/CGYW/javachg/project_commit_file_issue" +".csv", csv);
+        removeDuplicate(csv);
 
 //        readIndex("/data/CGYW/javachg/index_java_" + 0 + "~" + 50000 +".csv", csv);
 //        readIndex("/data/CGYW/javachg/index_java_" + 50001 + "~" + 100000 +".csv", csv);
@@ -94,14 +95,20 @@ public class IssueMiner {
     }
     public HashMap<String, ArrayList<String>> removeDuplicate (HashMap<String, ArrayList<String>> map) {
         HashMap<String, ArrayList<String>> temp = new HashMap<>();
+        HashMap<String, ArrayList<String>> removedElements = new HashMap<>();
         for (String key : map.keySet()) {
             ArrayList<String> tmpList= new ArrayList<>();
+            ArrayList<String> removedElementsList = new ArrayList<>();
             for (String contents : map.get(key)) {
                 if(!tmpList.contains(contents))
                     tmpList.add(contents);
+                else removedElementsList.add(contents);
             }
             temp.put(key,tmpList);
+            if (removedElementsList.size() > 2) removedElements.put(key, removedElementsList);
         }
+        if (removedElements.size() > 0)
+            mapToCsv("/data/CGYW/javachg/.csv", "removed_elements", removedElements);
         return temp;
     }
     public void readIssueKeys () {
