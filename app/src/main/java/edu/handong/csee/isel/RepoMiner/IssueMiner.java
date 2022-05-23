@@ -520,14 +520,14 @@ public class IssueMiner {
                                 else if (key.contains("SYSTEMML")) key_1 = "SYSTEMDS";
 
                                 if (key!=null) {
-                                    if(matcher.group(1).toUpperCase().contains(key)) {
+                                    if(matcher.group(1)!=null && matcher.group(1).toUpperCase().contains(key)) {
                                         IssueNum += "~" + matcher.group(1);
                                     } else if (matcher.group(0).toUpperCase().contains(key)) {
                                         IssueNum += "~" + matcher.group(0);
                                     }
                                 }
                                 if (key_1.length() > 2) {
-                                    if(matcher.group(1).toUpperCase().contains(key_1)) {
+                                    if(matcher.group(1)!=null &&matcher.group(1).toUpperCase().contains(key_1)) {
                                         IssueNum += "~" + matcher.group(1);
                                     } else if (matcher.group(0).toUpperCase().contains(key_1)) {
                                         IssueNum += "~" + matcher.group(0);
