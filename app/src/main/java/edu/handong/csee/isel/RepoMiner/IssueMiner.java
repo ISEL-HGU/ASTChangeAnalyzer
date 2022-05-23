@@ -514,7 +514,9 @@ public class IssueMiner {
                             String msg = rev.getFullMessage();
                             Matcher matcher = pattern.matcher(msg);
                             while(matcher.find()) {
-                                String key = keyList.get("https://github.com/" + projectName).toUpperCase();
+                                String key = keyList.get("https://github.com/" + projectName);
+                                if (key == null)
+                                    continue;
                                 String key_1 = "";
                                 if (key.contains("LUCENE")) key_1 = "SOLR";
                                 else if (key.contains("SYSTEMML")) key_1 = "SYSTEMDS";
