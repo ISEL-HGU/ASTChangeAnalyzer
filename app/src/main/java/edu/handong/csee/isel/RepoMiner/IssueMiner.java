@@ -1,5 +1,6 @@
 package edu.handong.csee.isel.RepoMiner;
 
+import edu.handong.csee.isel.ChangeAnalysis.NumberCounter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -25,19 +26,40 @@ public class IssueMiner {
 
     private int total;
     private int withIssue;
+    private int csvLines;
+    private String path;
     private HashMap<String, ArrayList<String>> map = new HashMap<>();
+    private ArrayList<HashMap<String, ArrayList<String>>> divided = new ArrayList<>();
+    private ArrayList<HashMap<String, ArrayList<String>>> newDivided = new ArrayList<>();
     private HashMap<String, ArrayList<String>> projectList = new HashMap<>();
     private HashMap<String, String> projectKey = new HashMap<>();
     private HashMap<String, ArrayList<String>> newMap = new HashMap<>();
 
     public IssueMiner(String path, String cliInput) {
+        this.path = path;
+        ThreadRunner threads[] = new ThreadRunner[5];
+
+
+        NumberCounter counter = new NumberCounter(path,"lines");
+        csvLines = counter.countLines()-1;
+        int divisor = csvLines/5;
+        for (int i = 1; i <6;i++) {
+            divided.add(readPartial(path,(divisor*(i-1)+1),divisor*i));
+        }
+        for (int i = 0; i<5;i++) {
+            threads[i] = new ThreadRunner(i);
+            threads[i].start();
+        }
+
+       // readPartial(path,map);
+
 //        readIssueKeys();
 //        int [] nums = new int [2];
 //        int i = 0;
 //        for(String x : cliInput.split(","))
 //            nums[i++] = Integer.parseInt(x.trim());
 
-        selectElementsWithNoIssue(cliInput);
+        //selectElementsWithNoIssue(cliInput);
 //        combineProjectWithIssueCSV();
 //        readPartial(path,nums[0],nums[1]);
 //        makeIssueIndex();
@@ -193,9 +215,9 @@ public class IssueMiner {
     }
 
 
-    public void readPartial (String indexPath, int from, int to) {
+    public HashMap<String,ArrayList<String>> readPartial (String indexPath, int from, int to) {
         ArrayList<String> temp = null;
-        String key = "";
+        HashMap <String,ArrayList<String>> dividedMap = new HashMap<>();
         int cnt = 0;
         try {
             Reader in = new FileReader(indexPath);
@@ -208,6 +230,7 @@ public class IssueMiner {
                 else if (cnt > to) break;
                 cnt++;
                 temp = new ArrayList<String>();
+                String key = "";
                 for (String str : record) {
                     if(str.contains("~")) {
                         temp.add(str.replace("]]", "").trim());
@@ -215,11 +238,13 @@ public class IssueMiner {
                         key = str;
                     }
                 }
-                map.put(key,temp);
+                if(!key.equals(""))
+                    dividedMap.put(key,temp);
             }
             in.close();
         } catch (IOException e) {
             e.printStackTrace();}
+        return dividedMap;
     }
 
     public void readIndex (String indexPath, HashMap<String, ArrayList<String>> csv) {
@@ -364,7 +389,7 @@ public class IssueMiner {
         String IssueNum = "";
 
 //        Pattern pattern = Pattern.compile("(#\\d+)");
-        Pattern pattern = Pattern.compile("([a-zA-Z]+-\\d+)");
+        Pattern pattern = Pattern.compile("([a-zA-Z]+-\\d+)|([a-zA-Z]+\\d+-\\d+)");
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         Repository repo = null;
         try {
@@ -382,9 +407,16 @@ public class IssueMiner {
                         String msg = rev.getFullMessage();
                         Matcher matcher = pattern.matcher(msg);
                         while(matcher.find()) {
-			    if (projectKey.get("https://github.com/" + projectName)!=null)
-                            	if(matcher.group(1).toUpperCase().contains(projectKey.get("https://github.com/" + projectName).toUpperCase()))
-                                	IssueNum += "~" + matcher.group(1);
+
+			                if (projectKey.get("https://github.com/" + projectName)!=null) {
+                                if(matcher.group(1).toUpperCase().contains(projectKey.get("https://github.com/" + projectName).toUpperCase())) {
+                                    IssueNum += "~" + matcher.group(1);
+                                } else if (matcher.group(0).toUpperCase().contains(projectKey.get("https://github.com/" + projectName).toUpperCase())) {
+                                    IssueNum += "~" + matcher.group(0);
+                                }
+
+                            }
+
                         }
                         break;
 	    	        }
@@ -416,5 +448,138 @@ public class IssueMiner {
             }
         }
         return temp;
+    }
+
+    public ArrayList<HashMap<String, ArrayList<String>>> getDivided() { return divided; }
+    public void addToNewDivided(HashMap<String, ArrayList<String>> a) { this.newDivided.add(a); }
+    public String getPath() { return path; }
+
+    private class ThreadRunner extends Thread {
+        private HashMap<String,ArrayList<String>> map = new HashMap<>();
+        private HashMap<String,String> keyList = new HashMap<>();
+        private int index;
+        public ThreadRunner (int index) {
+            map = getDivided().get(index);
+            this.index = index;
+        }
+        public void run() {
+            readKeyList();
+            makeIssueIndexSub(map,getPath());
+
+
+
+        }
+        public void makeIssueIndexSub(HashMap<String, ArrayList<String>> map, String path) {
+            String newPath = path.replace(".csv","_issue_"+index+".csv");
+
+            try {
+                FileOutputStream fos = new FileOutputStream(newPath);
+                PrintWriter out = new PrintWriter(fos);
+
+                for (String key : map.keySet()) {
+                    out.print(key);
+                    for (String contents : map.get(key)) {
+                        String [] temp = contents.split("&");
+                        out.print("," + contents.trim() + getIssueNumSub(temp[0].replace("~","/").trim(),temp[1].trim()));
+                    }
+                    out.print("\n");
+                }
+                out.flush();
+                out.close();
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        public String getIssueNumSub (String projectName, String ID) {
+            String IssueNum = "";
+
+//        Pattern pattern = Pattern.compile("(#\\d+)");
+            Pattern pattern = Pattern.compile("([a-zA-Z]+-\\d+)|([a-zA-Z]+\\d+-\\d+)");
+            FileRepositoryBuilder builder = new FileRepositoryBuilder();
+            Repository repo = null;
+            try {
+                repo = builder.setGitDir(new File("/data/CGYW/clones/"+projectName+"/.git/.git")).setMustExist(true).build();
+
+                Git git = new Git(repo);
+                Iterable<RevCommit> log = null;
+                try {
+                    log = git.log().call();
+                    for (Iterator<RevCommit> iterator = log.iterator(); iterator.hasNext();) {
+                        RevCommit rev = iterator.next();
+                        if(ID.equals(rev.getName())) {
+//                    System.out.println(projectName + "/" + ID + ":" + rev.getFullMessage());
+//                    break;
+                            String msg = rev.getFullMessage();
+                            Matcher matcher = pattern.matcher(msg);
+                            while(matcher.find()) {
+                                String key = keyList.get("https://github.com/" + projectName).toUpperCase();
+                                String key_1 = "";
+                                if (key.contains("LUCENE")) key_1 = "SOLR";
+                                else if (key.contains("SYSTEMML")) key_1 = "SYSTEMDS";
+
+                                if (key!=null) {
+                                    if(matcher.group(1).toUpperCase().contains(key)) {
+                                        IssueNum += "~" + matcher.group(1);
+                                    } else if (matcher.group(0).toUpperCase().contains(key)) {
+                                        IssueNum += "~" + matcher.group(0);
+                                    }
+                                }
+                                if (key_1.length() > 2) {
+                                    if(matcher.group(1).toUpperCase().contains(key_1)) {
+                                        IssueNum += "~" + matcher.group(1);
+                                    } else if (matcher.group(0).toUpperCase().contains(key_1)) {
+                                        IssueNum += "~" + matcher.group(0);
+                                    }
+                                }
+
+                            }
+                            break;
+                        }
+                    }
+                } catch (GitAPIException e) {
+                    e.printStackTrace();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return IssueNum;
+        }
+
+        public void readKeyList () {
+            try {
+                Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com/()(.*?)$");
+
+                Reader in = new FileReader("/data/CGYW/YW/ACA1/ASTChangeAnalyzer/data/apacheURLList.csv");
+//            Reader in = new FileReader("/Users/leechanggong/Projects/ASTChangeAnalyzer/ASTChangeAnalyzer/data/apacheURLList.csv");
+                CSVParser parser = CSVFormat.EXCEL.parse(in);
+                boolean a = false;
+
+                for (CSVRecord record : parser) {
+                    //ArrayList<String> temp = new ArrayList<>();
+                    int b = 0;
+                    String temp = "";
+                    for (String content:record) {
+
+                        if (!a) {
+                            a = true;
+                            break;
+
+                        }
+                        if (b == 1) {
+                            temp = content;
+                        } else if(b == 2) {
+                            keyList.put(content,temp);
+                        }
+                        b++;
+                    }
+//                listRead.add(temp);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

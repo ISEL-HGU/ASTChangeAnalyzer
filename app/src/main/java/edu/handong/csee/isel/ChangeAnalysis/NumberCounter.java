@@ -24,6 +24,8 @@ public class NumberCounter {
         if (this.opt.equals("commit")) {
             readCommit();
             System.out.println(this.count);
+        } else if (this.opt.equals("lines")) {
+            //countLines();
         }
     }
 
@@ -31,6 +33,11 @@ public class NumberCounter {
         for (String keys : csv.keySet()) {
             this.count += csv.get(keys).size();
         }
+    }
+    public int countLines () {
+        int cnt = csv.size();
+        System.out.println(cnt);
+        return cnt;
     }
     public void readCSV () {
         //HashMap<String, ArrayList<String>> file = new HashMap<String, ArrayList<String>>();
