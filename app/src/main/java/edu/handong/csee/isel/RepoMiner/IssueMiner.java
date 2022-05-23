@@ -30,15 +30,15 @@ public class IssueMiner {
     private HashMap<String, String> projectKey = new HashMap<>();
     private HashMap<String, ArrayList<String>> newMap = new HashMap<>();
 
-    public IssueMiner(String path, String readNum) {
+    public IssueMiner(String path, String cliInput) {
 //        readIssueKeys();
 //        int [] nums = new int [2];
 //        int i = 0;
-//        for(String x : readNum.split(","))
+//        for(String x : cliInput.split(","))
 //            nums[i++] = Integer.parseInt(x.trim());
 
-        combineCSV();
-        combineProjectWithIssueCSV();
+        selectElementsWithNoIssue(cliInput);
+//        combineProjectWithIssueCSV();
 //        readPartial(path,nums[0],nums[1]);
 //        makeIssueIndex();
 //        mapToCsv(path, "_" + nums[0] + "~" + nums[1], newMap);
@@ -50,6 +50,62 @@ public class IssueMiner {
 //        System.out.println("Result:" + "\n" + "Total Changes - " + total
 //                + "\n" + "Changes with issues - " + withIssue:
 //                + "\n" + "Proportion - " + withIssue/total);
+    }
+
+    public void selectElementsWithNoIssue(String inputFiles) {
+        String[] files = inputFiles.split(",");
+        HashMap<String, ArrayList<String>> srcCSV = new HashMap<>();
+        readIndex(files[0], srcCSV);
+        HashMap<String, ArrayList<String>> dstCSV = new HashMap<>();
+        readIndex(files[1], dstCSV);
+        if (srcCSV.size() > dstCSV.size()) {
+            mapTwoHashMaps(dstCSV, srcCSV); // dstCSV < srcCSV
+        } else mapTwoHashMaps(srcCSV, dstCSV); // srcCSV < dstCSV
+    }
+
+    public void mapTwoHashMaps(HashMap<String, ArrayList<String>> small, HashMap<String, ArrayList<String>> big) {
+        String newPath = "/data/CGYW/javachg/removedElementsBetweenTwoCSVs.csv";
+        try {
+            FileOutputStream fos = new FileOutputStream(newPath);
+            PrintWriter out = new PrintWriter(fos);
+            for (String key : big.keySet()) {
+                if (!small.containsKey(key)) {
+                    out.print(key);
+                    boolean check = false;
+                    for (String contents : big.get(key)) {
+                        if (contents != null) {
+                            check = true;
+                            out.print("," + contents.trim());
+                        }
+                    }
+                    if (check)
+                        out.print("\n");
+                    continue;
+                }
+                ArrayList<String> smallList = small.get(key);
+                ArrayList<String> removedList = new ArrayList<>();
+                for (String smallValue : smallList) {
+                    for (String value : big.get(key)) {
+                        if (!removedList.contains(value) && !smallValue.contains(value)) removedList.add(value);
+                    }
+                }
+                out.print(key);
+                boolean check = false;
+                for (String contents :removedList) {
+                    if (contents != null) {
+                        check = true;
+                        out.print("," + contents.trim());
+                    }
+                }
+                if (check)
+                    out.print("\n");
+            }
+            out.flush();
+            out.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void combineCSV() {
@@ -64,8 +120,9 @@ public class IssueMiner {
 			 readIndex("/data/CGYW/javachg/index_java_" + i + "~" + j +".csv", csv);
         	}
 	}
-//        readIndex("/data/CGYW/javachg/index_java_" + 1000001 + "~" + 1156755 +".csv", csv);
-        mapToCsv("/data/CGYW/javachg/.csv", "project_commit_file_issue", csv);
+        readIndex("/data/CGYW/javachg/" + 1000001 + "~" + 1156754 +".csv", csv);
+        readIndex("/data/CGYW/javachg/project_commit_file_issue" +".csv", csv);
+        removeDuplicate(csv);
 
 //        readIndex("/data/CGYW/javachg/index_java_" + 0 + "~" + 50000 +".csv", csv);
 //        readIndex("/data/CGYW/javachg/index_java_" + 50001 + "~" + 100000 +".csv", csv);
@@ -95,14 +152,20 @@ public class IssueMiner {
     }
     public HashMap<String, ArrayList<String>> removeDuplicate (HashMap<String, ArrayList<String>> map) {
         HashMap<String, ArrayList<String>> temp = new HashMap<>();
+        HashMap<String, ArrayList<String>> removedElements = new HashMap<>();
         for (String key : map.keySet()) {
             ArrayList<String> tmpList= new ArrayList<>();
+            ArrayList<String> removedElementsList = new ArrayList<>();
             for (String contents : map.get(key)) {
                 if(!tmpList.contains(contents))
                     tmpList.add(contents);
+                else removedElementsList.add(contents);
             }
             temp.put(key,tmpList);
+            if (removedElementsList.size() > 2) removedElements.put(key, removedElementsList);
         }
+        if (removedElements.size() > 0)
+            mapToCsv("/data/CGYW/javachg/.csv", "removed_elements", removedElements);
         return temp;
     }
     public void readIssueKeys () {
