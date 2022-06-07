@@ -71,14 +71,14 @@ public class CLI {
 						address = utils.csvReader(inputPath);
 					}
 					else {
-						try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(inputPath))) {
-							for (Path path : stream) {
-								if (Files.isDirectory(path)) {
-									address.add(inputPath);
-									//address.add(inputPath + "/" + path.getFileName().toString());
-								}
-							}
-						}
+						address.add(inputPath);
+//						try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(inputPath))) {
+//							for (Path path : stream) {
+//								if (Files.isDirectory(path)) {
+//									address.add(inputPath + "/" + path.getFileName().toString());
+//								}
+//							}
+//						}
 					}
 				}
 			}

@@ -64,7 +64,7 @@ public class Main {
 		}
 
 
-		if (projects.size() > 0 && cli.activateThread()) {
+		if (projects.size() > 0 && !cli.activateThread()) {
 			int numOfCoresInMyCPU = Runtime.getRuntime().availableProcessors()/2;
 			ExecutorService executor = Executors.newFixedThreadPool(numOfCoresInMyCPU);
 			ArrayList<Callable<Object>> calls = new ArrayList<>();
@@ -84,6 +84,7 @@ public class Main {
 			while (!executor.isTerminated()) {}
 			System.out.println("Finished\n");
 		} else {
+			System.out.println(projects.size());
 			if (projects.size() > 0) {
 				for (String project : projects) runWithNoThread(language, DiffTool, input, isChangeCount, isGitClone, chgPath, project);
 			}
@@ -92,11 +93,11 @@ public class Main {
 		System.out.println("For the graphical representation run graph.py file with following command" +
 				"\nL $ python3 graph.py\n");
 
-		if (indexPath.length()>1) {
-			new SampleCollector(indexPath,20);
-			//BinaryReader binaryReader = new BinaryReader(indexPath);
-			//binaryReader.getHashMap();
-		}
+//		if (indexPath.length()>1) {
+//			new SampleCollector(indexPath,20);
+//			//BinaryReader binaryReader = new BinaryReader(indexPath);
+//			//binaryReader.getHashMap();
+//		}
 
 		if (isChangeCount) System.out.println("Total Change Mined: " + ChangeMiner.count);
 
@@ -106,7 +107,6 @@ public class Main {
 	private void runWithNoThread(String language, String DiffTool, String input, boolean isChangeMine, boolean isGitClone, String savePath, String project) {
 		try {
 			ChangeInfo changeInfo = new ChangeInfo(input);
-			if (!isChangeMine) changeInfo.printStatistic();
 			CommitMiner commitMine = new CommitMiner(project, isGitClone);
 			if (commitMine.isCompleted()) {
 				ChangeMiner changeMine = new ChangeMiner();
@@ -117,12 +117,12 @@ public class Main {
 				if (isChangeMine) System.out.println("Changed Mined: " + volume);
 				else if (isGitClone) return;
 				else {
-					IndexParser index = new IndexParser(savePath, changeInfo.getHashMap());
-					index.generateIndex();
-					FileOutputStream fileOut = new FileOutputStream(savePath + "/" +  changeInfo.getProjectName() + ".chg");
-					ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-					objectOut.writeObject((ChangeInfo) changeInfo);
-					objectOut.close();
+//					IndexParser index = new IndexParser(savePath, changeInfo.getHashMap());
+//					index.generateIndex();
+//					FileOutputStream fileOut = new FileOutputStream(savePath + "/" +  changeInfo.getProjectName() + ".chg");
+//					ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+//					objectOut.writeObject((ChangeInfo) changeInfo);
+//					objectOut.close();
 				}
 			}
 		} catch (Exception e) {
