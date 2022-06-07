@@ -74,7 +74,8 @@ public class CLI {
 						try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(inputPath))) {
 							for (Path path : stream) {
 								if (Files.isDirectory(path)) {
-									address.add(inputPath + "/" + path.getFileName().toString());
+									address.add(inputPath);
+									//address.add(inputPath + "/" + path.getFileName().toString());
 								}
 							}
 						}
