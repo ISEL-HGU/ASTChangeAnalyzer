@@ -23,7 +23,7 @@ public class CommitMiner {
 //	private String filePath = "/data/CGYW/clones/";
 //	private String filePath = "/Users/nayeawon/Desktop/Exp/";
 //	private String filePath = "/Users/leechanggong/Desktop/Exp/";
-	private String filePath = "/home/leechanggong/research/";
+	private String filePath = "/home/leechanggong/chg/";
 	private String matcherGroup;
 
 	public CommitMiner(String path, boolean isGitClone) throws IOException, GitAPIException{
