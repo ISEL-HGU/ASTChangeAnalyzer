@@ -117,8 +117,8 @@ public class Main {
 				if (isChangeMine) System.out.println("Changed Mined: " + volume);
 				else if (isGitClone) return;
 				else {
-//					IndexParser index = new IndexParser(savePath, changeInfo.getHashMap());
-//					index.generateIndex();
+					IndexParser index = new IndexParser(savePath, changeInfo.getHashMap());
+					index.generateIndex();
 //					FileOutputStream fileOut = new FileOutputStream(savePath + "/" +  changeInfo.getProjectName() + ".chg");
 //					ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 //					objectOut.writeObject((ChangeInfo) changeInfo);
