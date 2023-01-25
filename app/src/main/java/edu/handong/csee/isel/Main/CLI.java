@@ -19,7 +19,7 @@ public class CLI {
 	private boolean changeCount;
 	private boolean save;
 	private boolean gitClone;
-//	private boolean issueMine;
+	private boolean readBinary;
 	private String issueMine;
 	private ArrayList<String> address;
 	private String language;
@@ -52,6 +52,7 @@ public class CLI {
 	public boolean activateThread() {return thread; }
 	public boolean isChangeCount() { return changeCount; }
 	public boolean isGitClone() { return gitClone; }
+	public boolean isReadBinary() { return readBinary; }
 	public String getIssueMine() { return issueMine; }
 	public Utils getUtils() { return utils; }
 	public String getCount() { return count;}
@@ -60,6 +61,11 @@ public class CLI {
 		CommandLineParser parser = new DefaultParser();
 		try {
 			CommandLine cmd = parser.parse(options, args);
+			if (cmd.hasOption("rb")) {
+				chgPath = cmd.getOptionValue("rb");
+				readBinary = true;
+				return true;
+			}
 			if (cmd.hasOption("p")) {
 				inputPath = cmd.getOptionValue("p");
 				if (inputPath.startsWith("https")) {
@@ -149,6 +155,11 @@ public class CLI {
 		options.addOption(Option.builder("gitClone")
 				.desc("Clone a project from a path provided at -p option")
 				.argName("URL path")
+				.build());
+
+		options.addOption(Option.builder("rb").longOpt("readBin")
+				.desc("read a binary file")
+				.argName("binary path")
 				.build());
 
 		options.addOption(Option.builder("changeCount")

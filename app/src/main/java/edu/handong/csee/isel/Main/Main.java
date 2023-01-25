@@ -37,6 +37,12 @@ public class Main {
 		checkOS();
 		CLI cli = new CLI();
 		ArrayList<String> projects = cli.CommonCLI(args);
+		//		This part is for reading chg
+		if (cli.isReadBinary()) {
+			chgPath = cli.getIndexPath();
+		}
+
+		//		This part is for making chg
 		language = cli.getLanguage();
 		if (!language.equals("JAVA"))
 			DiffTool = "GUMTREE";

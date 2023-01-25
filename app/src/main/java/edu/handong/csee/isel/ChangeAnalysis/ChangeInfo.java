@@ -18,6 +18,7 @@ public class ChangeInfo implements Serializable {
     public static final long serialVersionUID = -2073457782355550636L; // to be fixed later
     public HashMap<String, ArrayList<String>> hashMap;
     private String projectName;
+    private ChangeData changeData;
 
     public ChangeInfo(String input) {
         hashMap = new HashMap<>();
