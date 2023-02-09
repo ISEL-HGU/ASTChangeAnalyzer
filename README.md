@@ -1,6 +1,7 @@
 # ASTChangeAnalyzer
 
-A modulizable code differencing and AST extracting tool through mining Git commits.
+A modulizable code differencing and AST extracting tool through mining Git commits.</br>
+This tool's approach was statically analyzed on [2023_KCSE_ACEA](https://github.com/LuZack/2023_KCSE_ACEA)
 
 ## Description
 
@@ -12,7 +13,7 @@ Parses and generate EditScript of source codes using GumTree and LAS
 
 Generated edit script is abstracted by our own threshold including parent node type, changed node type, and edit type.
 
-For detail follow this draft[추상 구문 트리에 기반한 코드 변화 분석.pdf](https://github.com/ISEL-HGU/ASTChangeAnalyzer/files/8601054/default.pdf)
+For detail follow this draft[추상 구문 트리에 기반한 코드 변화 분석.pdf](https://drive.google.com/file/d/186PvZqiqe50WJ5rN-8ITsC4TIGz_Ivrq/view?usp=share_link)]
 
 
 (Find the details of tools : 
